@@ -14,16 +14,237 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      connections: {
+        Row: {
+          caregiver_id: string
+          created_at: string
+          id: string
+          status: Database["public"]["Enums"]["connection_status"] | null
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          caregiver_id: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["connection_status"] | null
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          caregiver_id?: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["connection_status"] | null
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connections_caregiver_id_fkey"
+            columns: ["caregiver_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "connections_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      help_requests: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          status: Database["public"]["Enums"]["request_status"] | null
+          student_id: string
+          updated_at: string
+          urgency: Database["public"]["Enums"]["urgency_level"] | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          student_id: string
+          updated_at?: string
+          urgency?: Database["public"]["Enums"]["urgency_level"] | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          student_id?: string
+          updated_at?: string
+          urgency?: Database["public"]["Enums"]["urgency_level"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "help_requests_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "help_requests_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          help_request_id: string | null
+          id: string
+          message: string | null
+          status: Database["public"]["Enums"]["notification_status"] | null
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          help_request_id?: string | null
+          id?: string
+          message?: string | null
+          status?: Database["public"]["Enums"]["notification_status"] | null
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          help_request_id?: string | null
+          id?: string
+          message?: string | null
+          status?: Database["public"]["Enums"]["notification_status"] | null
+          title?: string
+          type?: Database["public"]["Enums"]["notification_type"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_help_request_id_fkey"
+            columns: ["help_request_id"]
+            isOneToOne: false
+            referencedRelation: "help_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          student_code: string | null
+          updated_at: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["user_role"]
+          student_code?: string | null
+          updated_at?: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          student_code?: string | null
+          updated_at?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      thrive_sprites: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          options: Json | null
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          options?: Json | null
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          options?: Json | null
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thrive_sprites_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_student_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_user_role: {
+        Args: { user_uuid: string }
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      is_connected_to_student: {
+        Args: { caregiver_uuid: string; student_uuid: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      connection_status: "pending" | "active" | "blocked"
+      notification_status: "sent" | "read"
+      notification_type: "help_request" | "response" | "connection_request"
+      request_status: "open" | "answered" | "closed"
+      urgency_level: "ok" | "attention" | "urgent"
+      user_role: "student" | "caregiver" | "educator"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +371,13 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      connection_status: ["pending", "active", "blocked"],
+      notification_status: ["sent", "read"],
+      notification_type: ["help_request", "response", "connection_request"],
+      request_status: ["open", "answered", "closed"],
+      urgency_level: ["ok", "attention", "urgent"],
+      user_role: ["student", "caregiver", "educator"],
+    },
   },
 } as const
