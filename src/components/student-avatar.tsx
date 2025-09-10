@@ -1,10 +1,11 @@
 interface StudentAvatarProps {
   seed?: string;
+  style?: string;
   size?: number;
   className?: string;
 }
 
-export function StudentAvatar({ seed, size = 40, className = "" }: StudentAvatarProps) {
+export function StudentAvatar({ seed, style = 'thumbs', size = 40, className = "" }: StudentAvatarProps) {
   if (!seed) {
     return (
       <div 
@@ -16,7 +17,7 @@ export function StudentAvatar({ seed, size = 40, className = "" }: StudentAvatar
     );
   }
 
-  const avatarUrl = `https://api.dicebear.com/9.x/thumbs/svg?seed=${seed}&size=${size}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+  const avatarUrl = `https://api.dicebear.com/9.x/${style}/svg?seed=${seed}&size=${size}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
 
   return (
     <img

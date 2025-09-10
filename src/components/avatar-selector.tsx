@@ -4,21 +4,35 @@ import { Card } from "@/components/ui/card";
 import { Shuffle, Check } from "lucide-react";
 
 interface AvatarSelectorProps {
-  onSelect: (seed: string) => void;
+  onSelect: (seed: string, style: string) => void;
   selectedSeed?: string;
+  selectedStyle?: string;
 }
 
-export function AvatarSelector({ onSelect, selectedSeed }: AvatarSelectorProps) {
+export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: AvatarSelectorProps) {
+  const avatarStyles = [
+    'adventurer', 'adventurer-neutral', 'avataaars', 'avataaars-neutral',
+    'big-ears', 'big-ears-neutral', 'big-smile', 'bottts', 'bottts-neutral',
+    'croodles', 'croodles-neutral', 'fun-emoji', 'identicon', 'lorelei',
+    'lorelei-neutral', 'micah', 'miniavs', 'open-peeps', 'personas', 
+    'pixel-art', 'pixel-art-neutral', 'rings', 'shapes', 'thumbs'
+  ];
+
   const [seeds, setSeeds] = useState<string[]>(() => 
     Array.from({ length: 16 }, () => Math.random().toString(36).substring(7))
   );
 
+  const [currentStyle, setCurrentStyle] = useState(selectedStyle || 'thumbs');
+
   const generateNewSeeds = () => {
     setSeeds(Array.from({ length: 16 }, () => Math.random().toString(36).substring(7)));
+    // Also change the style randomly
+    const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+    setCurrentStyle(randomStyle);
   };
 
-  const getAvatarUrl = (seed: string) => {
-    return `https://api.dicebear.com/9.x/thumbs/svg?seed=${seed}&size=80&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+  const getAvatarUrl = (seed: string, style: string) => {
+    return `https://api.dicebear.com/9.x/${style}/svg?seed=${seed}&size=80&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
   };
 
   return (
@@ -31,30 +45,33 @@ export function AvatarSelector({ onSelect, selectedSeed }: AvatarSelectorProps) 
       </div>
 
       <div className="grid grid-cols-4 gap-3">
-        {seeds.map((seed) => (
-          <Card
-            key={seed}
-            className={`p-3 cursor-pointer transition-all hover:scale-105 ${
-              selectedSeed === seed
-                ? 'ring-2 ring-primary bg-primary/10'
-                : 'hover:shadow-soft'
-            }`}
-            onClick={() => onSelect(seed)}
-          >
-            <div className="relative">
-              <img
-                src={getAvatarUrl(seed)}
-                alt="Avatar option"
-                className="w-full h-full rounded-lg"
-              />
-              {selectedSeed === seed && (
-                <div className="absolute -top-1 -right-1 bg-primary rounded-full p-1">
-                  <Check className="h-3 w-3 text-primary-foreground" />
-                </div>
-              )}
-            </div>
-          </Card>
-        ))}
+        {seeds.map((seed) => {
+          const isSelected = selectedSeed === seed && selectedStyle === currentStyle;
+          return (
+            <Card
+              key={seed}
+              className={`p-3 cursor-pointer transition-all hover:scale-105 ${
+                isSelected
+                  ? 'ring-2 ring-primary bg-primary/10'
+                  : 'hover:shadow-soft'
+              }`}
+              onClick={() => onSelect(seed, currentStyle)}
+            >
+              <div className="relative">
+                <img
+                  src={getAvatarUrl(seed, currentStyle)}
+                  alt="Avatar option"
+                  className="w-full h-full rounded-lg"
+                />
+                {isSelected && (
+                  <div className="absolute -top-1 -right-1 bg-primary rounded-full p-1">
+                    <Check className="h-3 w-3 text-primary-foreground" />
+                  </div>
+                )}
+              </div>
+            </Card>
+          );
+        })}
       </div>
 
       <div className="text-center">

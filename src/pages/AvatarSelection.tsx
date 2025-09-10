@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function AvatarSelection() {
   const [selectedSeed, setSelectedSeed] = useState<string>("");
+  const [selectedStyle, setSelectedStyle] = useState<string>("thumbs");
   const [loading, setLoading] = useState(false);
   const { user, refreshProfile } = useAuth();
   const navigate = useNavigate();
@@ -22,7 +23,10 @@ export default function AvatarSelection() {
     try {
       const { error } = await supabase
         .from('profiles')
-        .update({ avatar_seed: selectedSeed } as any)
+        .update({ 
+          avatar_seed: selectedSeed,
+          avatar_style: selectedStyle 
+        } as any)
         .eq('user_id', user.id);
 
       if (error) throw error;
@@ -47,6 +51,11 @@ export default function AvatarSelection() {
     }
   };
 
+  const handleAvatarSelect = (seed: string, style: string) => {
+    setSelectedSeed(seed);
+    setSelectedStyle(style);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
@@ -60,8 +69,9 @@ export default function AvatarSelection() {
         <div className="max-w-2xl mx-auto">
           <Card className="p-8 bg-gradient-card shadow-medium">
             <AvatarSelector 
-              onSelect={setSelectedSeed}
+              onSelect={handleAvatarSelect}
               selectedSeed={selectedSeed}
+              selectedStyle={selectedStyle}
             />
 
             <div className="flex justify-center mt-8">

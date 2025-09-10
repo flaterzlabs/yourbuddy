@@ -143,7 +143,8 @@ export default function StudentDashboard() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-4 mb-4">
               <StudentAvatar 
-                seed={(profile as any)?.avatar_seed} 
+                seed={(profile as any)?.avatar_seed}
+                style={(profile as any)?.avatar_style}
                 size={80} 
                 className="border-4 border-primary/20"
               />

@@ -422,7 +422,8 @@ export default function CaregiverDashboard() {
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <StudentAvatar 
-                        seed={(connection.student_profile as any)?.avatar_seed} 
+                        seed={(connection.student_profile as any)?.avatar_seed}
+                        style={(connection.student_profile as any)?.avatar_style}
                         size={48}
                         className="border-2 border-primary/20"
                       />
