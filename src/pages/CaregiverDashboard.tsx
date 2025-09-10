@@ -145,15 +145,15 @@ export default function CaregiverDashboard() {
       
       if (error) throw error;
       
-      const result = data as { success: boolean; error?: string };
+      const result = data as { success: boolean; error?: string; student?: any };
       
-      if (result.success) {
+      if (result.success && result.student) {
         toast({
-          title: "Conexão criada!",
-          description: "Aguarde a aprovação do estudante.",
+          title: "Estudante conectado!",
+          description: `Conectado com ${result.student.username} (${result.student.student_code})`,
         });
         setStudentCode("");
-        fetchConnections();
+        fetchConnections(); // This will refresh the "Meus Alunos" section
       } else {
         toast({
           title: "Erro",
@@ -384,14 +384,24 @@ export default function CaregiverDashboard() {
             </Card>
           </div>
 
-          {/* Connected Students */}
-          {activeConnections.length > 0 && (
-            <Card className="mt-8 p-6 bg-gradient-card shadow-medium">
-              <div className="flex items-center gap-3 mb-6">
-                <Users className="h-6 w-6 text-primary" />
-                <h2 className="text-xl font-bold">Estudantes Conectados</h2>
-              </div>
+          {/* Meus Alunos - Always visible */}
+          <Card className="mt-8 p-6 bg-gradient-card shadow-medium">
+            <div className="flex items-center gap-3 mb-6">
+              <Users className="h-6 w-6 text-primary" />
+              <h2 className="text-xl font-bold">Meus Alunos</h2>
+            </div>
 
+            {activeConnections.length === 0 ? (
+              <div className="text-center py-8">
+                <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">
+                  Você ainda não tem alunos conectados
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Use o código do estudante para fazer a primeira conexão
+                </p>
+              </div>
+            ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {activeConnections.map((connection) => (
                   <div
@@ -413,8 +423,8 @@ export default function CaregiverDashboard() {
                   </div>
                 ))}
               </div>
-            </Card>
-          )}
+            )}
+          </Card>
         </div>
       </div>
     </div>
