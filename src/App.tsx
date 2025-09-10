@@ -36,7 +36,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function DashboardRouter() {
-  const { profile, loading } = useAuth();
+  const { profile, thriveSprite, loading } = useAuth();
   
   if (loading) {
     return (
@@ -50,9 +50,8 @@ function DashboardRouter() {
   }
   
   if (profile?.role === 'student') {
-    // Check if student has selected an avatar
-    const hasAvatar = (profile as any)?.avatar_seed;
-    if (!hasAvatar) {
+    // Check if student has selected an avatar (thrive sprite)
+    if (!thriveSprite) {
       return <Navigate to="/avatar-selection" replace />;
     }
     return <StudentDashboard />;

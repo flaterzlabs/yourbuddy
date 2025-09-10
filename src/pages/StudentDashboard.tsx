@@ -14,7 +14,7 @@ import { Database } from "@/integrations/supabase/types";
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 
 export default function StudentDashboard() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, thriveSprite, signOut } = useAuth();
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -143,8 +143,9 @@ export default function StudentDashboard() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-4 mb-4">
               <StudentAvatar 
-                seed={(profile as any)?.avatar_seed}
-                style={(profile as any)?.avatar_style}
+                imageUrl={thriveSprite?.image_url}
+                seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
+                style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
                 size={80} 
                 className="border-4 border-primary/20"
               />

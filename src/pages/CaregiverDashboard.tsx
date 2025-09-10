@@ -23,6 +23,7 @@ import { Database } from "@/integrations/supabase/types";
 
 type Connection = Database['public']['Tables']['connections']['Row'] & {
   student_profile?: Database['public']['Tables']['profiles']['Row'];
+  thrive_sprite?: Database['public']['Tables']['thrive_sprites']['Row'];
 };
 
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'] & {
@@ -50,9 +51,27 @@ export default function CaregiverDashboard() {
     
     if (error) {
       console.error('Error fetching connections:', error);
-    } else {
-      setConnections(data || []);
+      setConnections([]);
+      return;
     }
+
+    // Fetch thrive sprites separately for each student
+    const connectionsWithSprites = await Promise.all(
+      (data || []).map(async (connection) => {
+        const { data: spriteData } = await supabase
+          .from('thrive_sprites')
+          .select('*')
+          .eq('student_id', connection.student_id)
+          .single();
+        
+        return {
+          ...connection,
+          thrive_sprite: spriteData || null
+        };
+      })
+    );
+
+    setConnections(connectionsWithSprites);
   };
 
   const fetchHelpRequests = async () => {
@@ -422,8 +441,9 @@ export default function CaregiverDashboard() {
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <StudentAvatar 
-                        seed={(connection.student_profile as any)?.avatar_seed}
-                        style={(connection.student_profile as any)?.avatar_style}
+                        imageUrl={connection.thrive_sprite?.image_url}
+                        seed={connection.thrive_sprite ? (connection.thrive_sprite.options as any)?.seed : undefined}
+                        style={connection.thrive_sprite ? (connection.thrive_sprite.options as any)?.style : undefined}
                         size={48}
                         className="border-2 border-primary/20"
                       />

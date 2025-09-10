@@ -21,13 +21,17 @@ export default function AvatarSelection() {
 
     setLoading(true);
     try {
+      const getAvatarUrl = (seed: string, style: string) => {
+        return `https://api.dicebear.com/9.x/${style}/svg?seed=${seed}&size=80&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+      };
+
       const { error } = await supabase
-        .from('profiles')
-        .update({ 
-          avatar_seed: selectedSeed,
-          avatar_style: selectedStyle 
-        } as any)
-        .eq('user_id', user.id);
+        .from('thrive_sprites')
+        .upsert({ 
+          student_id: user.id,
+          image_url: getAvatarUrl(selectedSeed, selectedStyle),
+          options: { seed: selectedSeed, style: selectedStyle }
+        });
 
       if (error) throw error;
 

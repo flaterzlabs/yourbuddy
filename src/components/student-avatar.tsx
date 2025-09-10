@@ -1,11 +1,24 @@
 interface StudentAvatarProps {
+  imageUrl?: string;
   seed?: string;
   style?: string;
   size?: number;
   className?: string;
 }
 
-export function StudentAvatar({ seed, style = 'thumbs', size = 40, className = "" }: StudentAvatarProps) {
+export function StudentAvatar({ imageUrl, seed, style = 'thumbs', size = 40, className = "" }: StudentAvatarProps) {
+  // Prioritize imageUrl, then fallback to seed/style generation
+  if (imageUrl) {
+    return (
+      <img
+        src={imageUrl}
+        alt="Avatar do estudante"
+        className={`rounded-full ${className}`}
+        style={{ width: size, height: size }}
+      />
+    );
+  }
+
   if (!seed) {
     return (
       <div 

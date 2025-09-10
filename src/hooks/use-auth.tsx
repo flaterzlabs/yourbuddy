@@ -4,11 +4,13 @@ import { User, Session } from "@supabase/supabase-js";
 import { Database } from "@/integrations/supabase/types";
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
+type ThriveSprite = Database['public']['Tables']['thrive_sprites']['Row'];
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
+  thriveSprite: ThriveSprite | null;
   loading: boolean;
   signUp: (email: string, password: string, role: string, username?: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
@@ -22,6 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [thriveSprite, setThriveSprite] = useState<ThriveSprite | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
@@ -34,9 +37,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (error) throw error;
       setProfile(data);
+
+      // Also fetch thrive sprite for students
+      if (data.role === 'student') {
+        const { data: spriteData, error: spriteError } = await supabase
+          .from('thrive_sprites')
+          .select('*')
+          .eq('student_id', userId)
+          .single();
+        
+        if (!spriteError) {
+          setThriveSprite(spriteData);
+        } else {
+          setThriveSprite(null);
+        }
+      } else {
+        setThriveSprite(null);
+      }
     } catch (error) {
       console.error('Error fetching profile:', error);
       setProfile(null);
+      setThriveSprite(null);
     }
   };
 
@@ -115,6 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     session,
     profile,
+    thriveSprite,
     loading,
     signUp,
     signIn,
