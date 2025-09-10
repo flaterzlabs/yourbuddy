@@ -1,12 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BuddyLogo } from "@/components/buddy-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { RoleCard } from "@/components/role-card";
+import { useAuth } from "@/hooks/use-auth";
+import { useNavigate } from "react-router-dom";
 import { User, Users, GraduationCap } from "lucide-react";
 
 export default function Welcome() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const roles = [
     {
@@ -16,13 +27,13 @@ export default function Welcome() {
       icon: User
     },
     {
-      id: "parent",
-      title: "Pai/Mãe",
+      id: "caregiver",
+      title: "Responsável",
       description: "Quero acompanhar e ajudar meu filho",
       icon: Users
     },
     {
-      id: "teacher",
+      id: "educator",
       title: "Professor(a)",
       description: "Sou educador e quero apoiar meus alunos",
       icon: GraduationCap
@@ -31,8 +42,7 @@ export default function Welcome() {
 
   const handleContinue = () => {
     if (selectedRole) {
-      // TODO: Navigate to role-specific registration
-      console.log("Selected role:", selectedRole);
+      navigate("/auth");
     }
   };
 
@@ -77,15 +87,22 @@ export default function Welcome() {
           </div>
 
           {/* Continue Button */}
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
             <Button
               variant="hero"
               size="xl"
               onClick={handleContinue}
-              disabled={!selectedRole}
               className="px-12"
             >
-              Continuar
+              Começar
+            </Button>
+            <Button
+              variant="outline"
+              size="xl"
+              onClick={() => navigate("/auth")}
+              className="px-8"
+            >
+              Já tenho conta
             </Button>
           </div>
 

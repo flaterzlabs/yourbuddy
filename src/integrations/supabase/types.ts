@@ -225,6 +225,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_connection_by_code: {
+        Args: { input_code: string }
+        Returns: Json
+      }
       generate_student_code: {
         Args: Record<PropertyKey, never>
         Returns: string
