@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BuddyLogo } from "@/components/buddy-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { StudentAvatar } from "@/components/student-avatar";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -140,12 +141,21 @@ export default function StudentDashboard() {
         <div className="max-w-4xl mx-auto">
           {/* Welcome Section */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">
-              Olá, {profile?.username}! 👋
-            </h1>
-            <p className="text-xl text-muted-foreground">
-              Como você está se sentindo hoje?
-            </p>
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <StudentAvatar 
+                seed={(profile as any)?.avatar_seed} 
+                size={80} 
+                className="border-4 border-primary/20"
+              />
+              <div>
+                <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Olá, {profile?.username}! 👋
+                </h1>
+                <p className="text-xl text-muted-foreground">
+                  Como você está se sentindo hoje?
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">

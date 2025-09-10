@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BuddyLogo } from "@/components/buddy-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { StudentAvatar } from "@/components/student-avatar";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -15,7 +16,8 @@ import {
   CheckCircle, 
   XCircle, 
   AlertTriangle,
-  MessageSquare 
+  MessageSquare,
+  Activity 
 } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 
@@ -227,7 +229,17 @@ export default function CaregiverDashboard() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <BuddyLogo size="lg" />
+          <div className="flex items-center gap-4">
+            <BuddyLogo size="lg" />
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Olá, {profile?.username}, bem-vindo
+              </h1>
+              <p className="text-muted-foreground">
+                Painel do {profile?.role === 'educator' ? 'Professor' : 'Responsável'}
+              </p>
+            </div>
+          </div>
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <Button variant="ghost" onClick={signOut}>
@@ -406,19 +418,26 @@ export default function CaregiverDashboard() {
                 {activeConnections.map((connection) => (
                   <div
                     key={connection.id}
-                    className="p-4 bg-background/50 rounded-lg border border-border"
+                    className="p-4 bg-background/50 rounded-lg border border-border hover:shadow-soft transition-all"
                   >
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <Users className="h-6 w-6 text-primary" />
+                    <div className="flex items-center gap-3 mb-3">
+                      <StudentAvatar 
+                        seed={(connection.student_profile as any)?.avatar_seed} 
+                        size={48}
+                        className="border-2 border-primary/20"
+                      />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-foreground">
+                          {connection.student_profile?.username || 'Estudante'}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          Conectado em {new Date(connection.created_at).toLocaleDateString('pt-BR')}
+                        </p>
                       </div>
-                      <h3 className="font-semibold mb-1">
-                        {connection.student_profile?.username || 'Estudante'}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Conectado em {new Date(connection.created_at).toLocaleDateString('pt-BR')}
-                      </p>
-                      <Badge variant="secondary">Ativo</Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        <Activity className="h-3 w-3 mr-1" />
+                        Ativo
+                      </Badge>
                     </div>
                   </div>
                 ))}

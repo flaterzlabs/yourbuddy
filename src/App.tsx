@@ -9,6 +9,7 @@ import Welcome from "./pages/Welcome";
 import Auth from "./pages/Auth";
 import StudentDashboard from "./pages/StudentDashboard";
 import CaregiverDashboard from "./pages/CaregiverDashboard";
+import AvatarSelection from "./pages/AvatarSelection";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,11 @@ function DashboardRouter() {
   }
   
   if (profile?.role === 'student') {
+    // Check if student has selected an avatar
+    const hasAvatar = (profile as any)?.avatar_seed;
+    if (!hasAvatar) {
+      return <Navigate to="/avatar-selection" replace />;
+    }
     return <StudentDashboard />;
   } else if (profile?.role === 'caregiver' || profile?.role === 'educator') {
     return <CaregiverDashboard />;
@@ -68,6 +74,14 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/auth" element={<Auth />} />
+              <Route 
+                path="/avatar-selection" 
+                element={
+                  <ProtectedRoute>
+                    <AvatarSelection />
+                  </ProtectedRoute>
+                } 
+              />
               <Route 
                 path="/dashboard" 
                 element={
