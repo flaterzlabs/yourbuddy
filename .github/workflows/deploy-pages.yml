@@ -25,6 +25,15 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+
+      - name: Compute BASE_PATH for GitHub Pages
+        run: |
+          REPO_NAME="${{ github.event.repository.name }}"
+          if [[ "$REPO_NAME" == *.github.io ]]; then
+            echo "BASE_PATH=/" >> $GITHUB_ENV
+          else
+            echo "BASE_PATH=/$REPO_NAME/" >> $GITHUB_ENV
+          fi
       - run: npm ci
       - run: npm run build
       - run: cp dist/index.html dist/404.html

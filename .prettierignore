@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+.next
+.vercel
+.output
+coverage
+*.lock
+public
+supabase
