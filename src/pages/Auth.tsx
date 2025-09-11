@@ -69,6 +69,8 @@ export default function Auth() {
         if (error) throw error;
 
         toast({ title: t('auth.toast.logged'), description: t('auth.toast.welcome') });
+        // Navigate immediately for better UX; ProtectedRoute will handle loading
+        navigate('/dashboard');
       }
     } catch (error: any) {
       let message = t('auth.toast.genericError');
