@@ -6,7 +6,13 @@ interface StudentAvatarProps {
   className?: string;
 }
 
-export function StudentAvatar({ imageUrl, seed, style = 'thumbs', size = 40, className = "" }: StudentAvatarProps) {
+export function StudentAvatar({
+  imageUrl,
+  seed,
+  style = 'thumbs',
+  size = 40,
+  className = '',
+}: StudentAvatarProps) {
   // Prioritize imageUrl, then fallback to seed/style generation
   if (imageUrl) {
     return (
@@ -21,7 +27,7 @@ export function StudentAvatar({ imageUrl, seed, style = 'thumbs', size = 40, cla
 
   if (!seed) {
     return (
-      <div 
+      <div
         className={`rounded-full bg-muted flex items-center justify-center ${className}`}
         style={{ width: size, height: size }}
       >

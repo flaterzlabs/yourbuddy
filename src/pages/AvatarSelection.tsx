@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { BuddyLogo } from "@/components/buddy-logo";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { AvatarSelector } from "@/components/avatar-selector";
-import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { BuddyLogo } from '@/components/buddy-logo';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { AvatarSelector } from '@/components/avatar-selector';
+import { useAuth } from '@/hooks/use-auth';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function AvatarSelection() {
-  const [selectedSeed, setSelectedSeed] = useState<string>("");
-  const [selectedStyle, setSelectedStyle] = useState<string>("thumbs");
+  const [selectedSeed, setSelectedSeed] = useState<string>('');
+  const [selectedStyle, setSelectedStyle] = useState<string>('thumbs');
   const [loading, setLoading] = useState(false);
   const { user, refreshProfile } = useAuth();
   const navigate = useNavigate();
@@ -25,30 +25,28 @@ export default function AvatarSelection() {
         return `https://api.dicebear.com/9.x/${style}/svg?seed=${seed}&size=80&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
       };
 
-      const { error } = await supabase
-        .from('thrive_sprites')
-        .upsert({ 
-          student_id: user.id,
-          image_url: getAvatarUrl(selectedSeed, selectedStyle),
-          options: { seed: selectedSeed, style: selectedStyle }
-        });
+      const { error } = await supabase.from('thrive_sprites').upsert({
+        student_id: user.id,
+        image_url: getAvatarUrl(selectedSeed, selectedStyle),
+        options: { seed: selectedSeed, style: selectedStyle },
+      });
 
       if (error) throw error;
 
       await refreshProfile();
-      
+
       toast({
-        title: "Avatar salvo!",
-        description: "Seu ThriveSprite foi definido com sucesso.",
+        title: 'Avatar salvo!',
+        description: 'Seu ThriveSprite foi definido com sucesso.',
       });
 
-      navigate("/dashboard");
+      navigate('/dashboard');
     } catch (error) {
       console.error('Error saving avatar:', error);
       toast({
-        title: "Erro",
-        description: "Não foi possível salvar o avatar. Tente novamente.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'Não foi possível salvar o avatar. Tente novamente.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -72,7 +70,7 @@ export default function AvatarSelection() {
         {/* Avatar Selection */}
         <div className="max-w-2xl mx-auto">
           <Card className="p-8 bg-gradient-card shadow-medium">
-            <AvatarSelector 
+            <AvatarSelector
               onSelect={handleAvatarSelect}
               selectedSeed={selectedSeed}
               selectedStyle={selectedStyle}
@@ -85,7 +83,7 @@ export default function AvatarSelection() {
                 variant="hero"
                 size="lg"
               >
-                {loading ? "Salvando..." : "Continuar"}
+                {loading ? 'Salvando...' : 'Continuar'}
               </Button>
             </div>
           </Card>

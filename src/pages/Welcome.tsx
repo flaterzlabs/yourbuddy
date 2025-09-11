@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { BuddyLogo } from "@/components/buddy-logo";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { RoleCard } from "@/components/role-card";
-import { useAuth } from "@/hooks/use-auth";
-import { useNavigate } from "react-router-dom";
-import { User, Users, GraduationCap } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { BuddyLogo } from '@/components/buddy-logo';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { RoleCard } from '@/components/role-card';
+import { useAuth } from '@/hooks/use-auth';
+import { useNavigate } from 'react-router-dom';
+import { User, Users, GraduationCap } from 'lucide-react';
 
 export default function Welcome() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
@@ -15,34 +15,34 @@ export default function Welcome() {
   // Redirect if already authenticated
   useEffect(() => {
     if (user) {
-      navigate("/dashboard");
+      navigate('/dashboard');
     }
   }, [user, navigate]);
 
   const roles = [
     {
-      id: "student",
-      title: "Estudante",
-      description: "Sou uma criança que quer se comunicar melhor",
-      icon: User
+      id: 'student',
+      title: 'Estudante',
+      description: 'Sou uma criança que quer se comunicar melhor',
+      icon: User,
     },
     {
-      id: "caregiver",
-      title: "Responsável",
-      description: "Quero acompanhar e ajudar meu filho",
-      icon: Users
+      id: 'caregiver',
+      title: 'Responsável',
+      description: 'Quero acompanhar e ajudar meu filho',
+      icon: Users,
     },
     {
-      id: "educator",
-      title: "Professor(a)",
-      description: "Sou educador e quero apoiar meus alunos",
-      icon: GraduationCap
-    }
+      id: 'educator',
+      title: 'Professor(a)',
+      description: 'Sou educador e quero apoiar meus alunos',
+      icon: GraduationCap,
+    },
   ];
 
   const handleContinue = () => {
     if (selectedRole) {
-      navigate("/auth");
+      navigate('/auth');
     }
   };
 
@@ -62,8 +62,8 @@ export default function Welcome() {
               Bem-vindo ao BUDDY!
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Uma plataforma de comunicação especial para crianças atípicas, 
-              conectando estudantes com seus responsáveis e educadores de forma simples e carinhosa.
+              Uma plataforma de comunicação especial para crianças atípicas, conectando estudantes
+              com seus responsáveis e educadores de forma simples e carinhosa.
             </p>
           </div>
 
@@ -88,20 +88,10 @@ export default function Welcome() {
 
           {/* Continue Button */}
           <div className="flex justify-center gap-4">
-            <Button
-              variant="hero"
-              size="xl"
-              onClick={handleContinue}
-              className="px-12"
-            >
+            <Button variant="hero" size="xl" onClick={handleContinue} className="px-12">
               Começar
             </Button>
-            <Button
-              variant="outline"
-              size="xl"
-              onClick={() => navigate("/auth")}
-              className="px-8"
-            >
+            <Button variant="outline" size="xl" onClick={() => navigate('/auth')} className="px-8">
               Já tenho conta
             </Button>
           </div>
@@ -131,9 +121,7 @@ export default function Welcome() {
                 <GraduationCap className="h-6 w-6 text-primary" />
               </div>
               <h3 className="font-semibold mb-2">Comunicação Fácil</h3>
-              <p className="text-sm text-muted-foreground">
-                Peça ajuda de forma simples e rápida
-              </p>
+              <p className="text-sm text-muted-foreground">Peça ajuda de forma simples e rápida</p>
             </div>
           </div>
         </div>

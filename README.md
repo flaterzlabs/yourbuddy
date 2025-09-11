@@ -1,73 +1,79 @@
-# Welcome to your Lovable project
+# YourBuddy
 
-## Project info
+Aplicação web em React focada em acompanhar estudantes, responsáveis e educadores, com autenticação, seleção de avatar e dashboards dedicados. O projeto usa Vite + TypeScript, Tailwind  para uma UI consistente e acessível.
 
-**URL**: https://lovable.dev/projects/1c324e04-9ac3-4ba6-8431-b4b32e16d0ae
+## Tecnologias
 
-## How can I edit this code?
+- Vite + React + TypeScript
+- Tailwind CSS + shadcn/ui (Radix UI)
+- React Router
+- TanStack React Query
+- Supabase (auth e dados)
+- date-fns, Recharts, Sonner (toasts), next-themes
+- ESLint + Prettier
 
-There are several ways of editing your application.
+## Pré-requisitos
 
-**Use Lovable**
+- Node.js 18+ (CI usa Node 20)
+- npm (ou outro gerenciador compatível)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/1c324e04-9ac3-4ba6-8431-b4b32e16d0ae) and start prompting.
+## Como rodar localmente
 
-Changes made via Lovable will be committed automatically to this repo.
+```bash
+# 1) Instalar dependências
+npm install
 
-**Use your preferred IDE**
+# 2) (Opcional) Configurar variáveis de ambiente
+# Edite o arquivo .env se necessário (veja seção "Variáveis de ambiente")
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 3) Rodar em modo desenvolvimento
 npm run dev
+
+# 4) Acessar no navegador (Vite mostra a URL, tipicamente http://localhost:5173)
 ```
 
-**Edit a file directly in GitHub**
+### Build de produção
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Gerar build
+npm run build
 
-**Use GitHub Codespaces**
+# Servir a build localmente para teste
+npm run preview
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Scripts úteis
 
-## What technologies are used for this project?
+- `npm run dev`: inicia o servidor de desenvolvimento (Vite)
+- `npm run build`: gera a build de produção em `dist/`
+- `npm run preview`: serve a pasta `dist/` para verificação local
+- `npm run lint`: roda o ESLint
+- `npm run format`: formata o projeto com Prettier
+- `npm run format:check`: verifica formatação sem alterar arquivos
 
-This project is built with:
+## Variáveis de ambiente
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Este projeto usa Vite; variáveis expostas ao cliente devem começar com `VITE_`.
 
-## How can I deploy this project?
+Arquivo de exemplo: `.env` (já presente). Principais chaves:
 
-Simply open [Lovable](https://lovable.dev/projects/1c324e04-9ac3-4ba6-8431-b4b32e16d0ae) and click on Share -> Publish.
+- `VITE_SUPABASE_URL`: URL do projeto Supabase
+- `VITE_SUPABASE_PROJECT_ID`: ID do projeto Supabase
+- `VITE_SUPABASE_PUBLISHABLE_KEY`: chave pública (client-side)
 
-## Can I connect a custom domain to my Lovable project?
+Você pode editar `.env` diretamente para desenvolvimento. Para produção (CI/CD), configure os segredos no provedor (ex.: GitHub Actions).
 
-Yes, you can!
+## Deploy
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+O repositório inclui um workflow GitHub Actions para GitHub Pages em `.github/workflows/deploy-pages.yml`:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Build com Node 20 e cache de `npm`
+- Detecta `BASE_PATH` automaticamente conforme o nome do repositório
+- Publica o conteúdo de `dist/`
+
+Para publicar:
+
+1. Confirme que o projeto builda localmente: `npm run build`
+2. Faça push na branch `main`
+3. Verifique a aba "Actions" e a página do GitHub Pages do repositório
+

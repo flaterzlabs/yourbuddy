@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Shuffle, Check } from "lucide-react";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Shuffle, Check } from 'lucide-react';
 
 interface AvatarSelectorProps {
   onSelect: (seed: string, style: string) => void;
@@ -11,15 +11,34 @@ interface AvatarSelectorProps {
 
 export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: AvatarSelectorProps) {
   const avatarStyles = [
-    'adventurer', 'adventurer-neutral', 'avataaars', 'avataaars-neutral',
-    'big-ears', 'big-ears-neutral', 'big-smile', 'bottts', 'bottts-neutral',
-    'croodles', 'croodles-neutral', 'fun-emoji', 'identicon', 'lorelei',
-    'lorelei-neutral', 'micah', 'miniavs', 'open-peeps', 'personas', 
-    'pixel-art', 'pixel-art-neutral', 'rings', 'shapes', 'thumbs'
+    'adventurer',
+    'adventurer-neutral',
+    'avataaars',
+    'avataaars-neutral',
+    'big-ears',
+    'big-ears-neutral',
+    'big-smile',
+    'bottts',
+    'bottts-neutral',
+    'croodles',
+    'croodles-neutral',
+    'fun-emoji',
+    'identicon',
+    'lorelei',
+    'lorelei-neutral',
+    'micah',
+    'miniavs',
+    'open-peeps',
+    'personas',
+    'pixel-art',
+    'pixel-art-neutral',
+    'rings',
+    'shapes',
+    'thumbs',
   ];
 
-  const [seeds, setSeeds] = useState<string[]>(() => 
-    Array.from({ length: 16 }, () => Math.random().toString(36).substring(7))
+  const [seeds, setSeeds] = useState<string[]>(() =>
+    Array.from({ length: 16 }, () => Math.random().toString(36).substring(7)),
   );
 
   const [currentStyle, setCurrentStyle] = useState(selectedStyle || 'thumbs');
@@ -39,9 +58,7 @@ export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: Avatar
     <div className="space-y-6">
       <div className="text-center">
         <h3 className="text-xl font-bold mb-2">Escolha seu ThriveSprite!</h3>
-        <p className="text-muted-foreground">
-          Selecione o avatar que mais combina com você
-        </p>
+        <p className="text-muted-foreground">Selecione o avatar que mais combina com você</p>
       </div>
 
       <div className="grid grid-cols-4 gap-3">
@@ -51,9 +68,7 @@ export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: Avatar
             <Card
               key={seed}
               className={`p-3 cursor-pointer transition-all hover:scale-105 ${
-                isSelected
-                  ? 'ring-2 ring-primary bg-primary/10'
-                  : 'hover:shadow-soft'
+                isSelected ? 'ring-2 ring-primary bg-primary/10' : 'hover:shadow-soft'
               }`}
               onClick={() => onSelect(seed, currentStyle)}
             >
@@ -75,11 +90,7 @@ export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: Avatar
       </div>
 
       <div className="text-center">
-        <Button
-          variant="outline"
-          onClick={generateNewSeeds}
-          className="gap-2"
-        >
+        <Button variant="outline" onClick={generateNewSeeds} className="gap-2">
           <Shuffle className="h-4 w-4" />
           Gerar novos
         </Button>

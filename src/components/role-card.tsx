@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { LucideIcon } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { LucideIcon } from 'lucide-react';
 
 interface RoleCardProps {
   title: string;
@@ -12,15 +12,19 @@ interface RoleCardProps {
 
 export function RoleCard({ title, description, icon: Icon, onClick, selected }: RoleCardProps) {
   return (
-    <Card className={`p-6 cursor-pointer transition-bounce hover:scale-105 ${
-      selected 
-        ? 'bg-gradient-primary text-primary-foreground shadow-medium' 
-        : 'bg-gradient-card hover:shadow-soft'
-    }`}>
+    <Card
+      className={`p-6 cursor-pointer transition-bounce hover:scale-105 ${
+        selected
+          ? 'bg-gradient-primary text-primary-foreground shadow-medium'
+          : 'bg-gradient-card hover:shadow-soft'
+      }`}
+    >
       <div className="text-center space-y-4" onClick={onClick}>
-        <div className={`mx-auto w-16 h-16 rounded-2xl flex items-center justify-center ${
-          selected ? 'bg-white/20' : 'bg-primary/10'
-        }`}>
+        <div
+          className={`mx-auto w-16 h-16 rounded-2xl flex items-center justify-center ${
+            selected ? 'bg-white/20' : 'bg-primary/10'
+          }`}
+        >
           <Icon className={`h-8 w-8 ${selected ? 'text-white' : 'text-primary'}`} />
         </div>
         <div>

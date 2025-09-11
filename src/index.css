@@ -55,7 +55,7 @@
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
     --gradient-hero: linear-gradient(135deg, hsl(220 70% 60%), hsl(260 50% 75%));
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 20% 98%));
-    
+
     /* Shadows for depth */
     --shadow-soft: 0 4px 20px hsl(220 70% 60% / 0.1);
     --shadow-medium: 0 8px 30px hsl(220 70% 60% / 0.15);
@@ -113,7 +113,7 @@
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
     --gradient-hero: linear-gradient(135deg, hsl(220 80% 70%), hsl(260 60% 65%));
     --gradient-card: linear-gradient(145deg, hsl(230 20% 12%), hsl(230 15% 18%));
-    
+
     /* Dark mode shadows */
     --shadow-soft: 0 4px 20px hsl(0 0% 0% / 0.3);
     --shadow-medium: 0 8px 30px hsl(0 0% 0% / 0.4);

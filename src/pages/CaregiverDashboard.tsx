@@ -1,25 +1,25 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { BuddyLogo } from "@/components/buddy-logo";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { StudentAvatar } from "@/components/student-avatar";
-import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/hooks/use-toast";
-import { 
-  UserPlus, 
-  Users, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { BuddyLogo } from '@/components/buddy-logo';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { StudentAvatar } from '@/components/student-avatar';
+import { useAuth } from '@/hooks/use-auth';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
+import {
+  UserPlus,
+  Users,
+  Clock,
+  CheckCircle,
+  XCircle,
   AlertTriangle,
   MessageSquare,
-  Activity 
-} from "lucide-react";
-import { Database } from "@/integrations/supabase/types";
+  Activity,
+} from 'lucide-react';
+import { Database } from '@/integrations/supabase/types';
 
 type Connection = Database['public']['Tables']['connections']['Row'] & {
   student_profile?: Database['public']['Tables']['profiles']['Row'];
@@ -34,21 +34,23 @@ export default function CaregiverDashboard() {
   const { user, profile, signOut } = useAuth();
   const [connections, setConnections] = useState<Connection[]>([]);
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
-  const [studentCode, setStudentCode] = useState("");
+  const [studentCode, setStudentCode] = useState('');
   const [loading, setLoading] = useState(false);
 
   const fetchConnections = async () => {
     if (!user) return;
-    
+
     const { data, error } = await supabase
       .from('connections')
-      .select(`
+      .select(
+        `
         *,
         student_profile:profiles!connections_student_id_fkey (*)
-      `)
+      `,
+      )
       .eq('caregiver_id', user.id)
       .order('created_at', { ascending: false });
-    
+
     if (error) {
       console.error('Error fetching connections:', error);
       setConnections([]);
@@ -63,12 +65,12 @@ export default function CaregiverDashboard() {
           .select('*')
           .eq('student_id', connection.student_id)
           .single();
-        
+
         return {
           ...connection,
-          thrive_sprite: spriteData || null
+          thrive_sprite: spriteData || null,
         };
-      })
+      }),
     );
 
     setConnections(connectionsWithSprites);
@@ -76,25 +78,27 @@ export default function CaregiverDashboard() {
 
   const fetchHelpRequests = async () => {
     if (!user) return;
-    
+
     const activeStudents = connections
-      .filter(c => c.status === 'active')
-      .map(c => c.student_id);
-    
+      .filter((c) => c.status === 'active')
+      .map((c) => c.student_id);
+
     if (activeStudents.length === 0) {
       setHelpRequests([]);
       return;
     }
-    
+
     const { data, error } = await supabase
       .from('help_requests')
-      .select(`
+      .select(
+        `
         *,
         student_profile:profiles!help_requests_student_id_fkey (*)
-      `)
+      `,
+      )
       .in('student_id', activeStudents)
       .order('created_at', { ascending: false });
-    
+
     if (error) {
       console.error('Error fetching help requests:', error);
     } else {
@@ -123,11 +127,11 @@ export default function CaregiverDashboard() {
         {
           event: '*',
           schema: 'public',
-          table: 'help_requests'
+          table: 'help_requests',
         },
         () => {
           fetchHelpRequests();
-        }
+        },
       )
       .subscribe();
 
@@ -139,11 +143,11 @@ export default function CaregiverDashboard() {
           event: '*',
           schema: 'public',
           table: 'connections',
-          filter: `caregiver_id=eq.${user.id}`
+          filter: `caregiver_id=eq.${user.id}`,
         },
         () => {
           fetchConnections();
-        }
+        },
       )
       .subscribe();
 
@@ -156,38 +160,38 @@ export default function CaregiverDashboard() {
   const handleConnectStudent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!studentCode.trim()) return;
-    
+
     setLoading(true);
-    
+
     try {
       const { data, error } = await supabase.rpc('create_connection_by_code', {
-        input_code: studentCode.toUpperCase()
+        input_code: studentCode.toUpperCase(),
       });
-      
+
       if (error) throw error;
-      
+
       const result = data as { success: boolean; error?: string; student?: any };
-      
+
       if (result.success && result.student) {
         toast({
-          title: "Estudante conectado!",
+          title: 'Estudante conectado!',
           description: `Conectado com ${result.student.username} (${result.student.student_code})`,
         });
-        setStudentCode("");
+        setStudentCode('');
         fetchConnections(); // This will refresh the "Meus Alunos" section
       } else {
         toast({
-          title: "Erro",
-          description: result.error || "Código inválido",
-          variant: "destructive",
+          title: 'Erro',
+          description: result.error || 'Código inválido',
+          variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Error connecting to student:', error);
       toast({
-        title: "Erro",
-        description: "Não foi possível conectar. Tente novamente.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'Não foi possível conectar. Tente novamente.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -198,50 +202,59 @@ export default function CaregiverDashboard() {
     try {
       const { error } = await supabase
         .from('help_requests')
-        .update({ 
+        .update({
           status: action,
           resolved_by: user?.id,
-          resolved_at: new Date().toISOString()
+          resolved_at: new Date().toISOString(),
         })
         .eq('id', requestId);
-      
+
       if (error) throw error;
-      
+
       toast({
-        title: action === 'answered' ? "Marcado como respondido" : "Pedido finalizado",
-        description: "O estudante foi notificado.",
+        title: action === 'answered' ? 'Marcado como respondido' : 'Pedido finalizado',
+        description: 'O estudante foi notificado.',
       });
     } catch (error) {
       console.error('Error updating help request:', error);
       toast({
-        title: "Erro",
-        description: "Não foi possível atualizar o pedido.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'Não foi possível atualizar o pedido.',
+        variant: 'destructive',
       });
     }
   };
 
-  const getStatusColor = (status: string): "default" | "destructive" | "secondary" | "outline" => {
+  const getStatusColor = (status: string): 'default' | 'destructive' | 'secondary' | 'outline' => {
     switch (status) {
-      case 'open': return 'destructive';
-      case 'answered': return 'secondary';
-      case 'closed': return 'outline';
-      case 'pending': return 'destructive';
-      case 'active': return 'secondary';
-      default: return 'secondary';
+      case 'open':
+        return 'destructive';
+      case 'answered':
+        return 'secondary';
+      case 'closed':
+        return 'outline';
+      case 'pending':
+        return 'destructive';
+      case 'active':
+        return 'secondary';
+      default:
+        return 'secondary';
     }
   };
 
   const getUrgencyEmoji = (urgency: string) => {
     switch (urgency) {
-      case 'attention': return '🟡';
-      case 'urgent': return '🔴';
-      default: return '🟢';
+      case 'attention':
+        return '🟡';
+      case 'urgent':
+        return '🔴';
+      default:
+        return '🟢';
     }
   };
 
-  const activeConnections = connections.filter(c => c.status === 'active');
-  const openHelpRequests = helpRequests.filter(r => r.status === 'open');
+  const activeConnections = connections.filter((c) => c.status === 'active');
+  const openHelpRequests = helpRequests.filter((r) => r.status === 'open');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -286,9 +299,7 @@ export default function CaregiverDashboard() {
                   <UserPlus className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="text-xl font-bold mb-2">Conectar Estudante</h2>
-                <p className="text-muted-foreground text-sm">
-                  Digite o código do estudante
-                </p>
+                <p className="text-muted-foreground text-sm">Digite o código do estudante</p>
               </div>
 
               <form onSubmit={handleConnectStudent} className="space-y-4">
@@ -299,7 +310,7 @@ export default function CaregiverDashboard() {
                   className="text-center text-lg font-mono"
                   maxLength={8}
                 />
-                
+
                 <Button
                   type="submit"
                   variant="hero"
@@ -307,7 +318,7 @@ export default function CaregiverDashboard() {
                   disabled={loading || !studentCode.trim()}
                   className="w-full"
                 >
-                  {loading ? "Conectando..." : "Conectar"}
+                  {loading ? 'Conectando...' : 'Conectar'}
                 </Button>
               </form>
 
@@ -338,9 +349,7 @@ export default function CaregiverDashboard() {
                 {helpRequests.length === 0 ? (
                   <div className="text-center py-8">
                     <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">
-                      Nenhum pedido de ajuda ainda
-                    </p>
+                    <p className="text-muted-foreground">Nenhum pedido de ajuda ainda</p>
                   </div>
                 ) : (
                   helpRequests.map((request) => (
@@ -350,7 +359,9 @@ export default function CaregiverDashboard() {
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <span className="text-lg">{getUrgencyEmoji(request.urgency || 'ok')}</span>
+                          <span className="text-lg">
+                            {getUrgencyEmoji(request.urgency || 'ok')}
+                          </span>
                           <div>
                             <h4 className="font-semibold">
                               {request.student_profile?.username || 'Estudante'}
@@ -425,9 +436,7 @@ export default function CaregiverDashboard() {
             {activeConnections.length === 0 ? (
               <div className="text-center py-8">
                 <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">
-                  Você ainda não tem alunos conectados
-                </p>
+                <p className="text-muted-foreground">Você ainda não tem alunos conectados</p>
                 <p className="text-sm text-muted-foreground mt-2">
                   Use o código do estudante para fazer a primeira conexão
                 </p>
@@ -440,10 +449,18 @@ export default function CaregiverDashboard() {
                     className="p-4 bg-background/50 rounded-lg border border-border hover:shadow-soft transition-all"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <StudentAvatar 
+                      <StudentAvatar
                         imageUrl={connection.thrive_sprite?.image_url}
-                        seed={connection.thrive_sprite ? (connection.thrive_sprite.options as any)?.seed : undefined}
-                        style={connection.thrive_sprite ? (connection.thrive_sprite.options as any)?.style : undefined}
+                        seed={
+                          connection.thrive_sprite
+                            ? (connection.thrive_sprite.options as any)?.seed
+                            : undefined
+                        }
+                        style={
+                          connection.thrive_sprite
+                            ? (connection.thrive_sprite.options as any)?.style
+                            : undefined
+                        }
                         size={48}
                         className="border-2 border-primary/20"
                       />
