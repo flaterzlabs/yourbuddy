@@ -1,0 +1,68 @@
+{
+  "general": {
+    "loading": "Carregando...",
+    "loadingProfile": "Carregando perfil..."
+  },
+  "nav": {
+    "home": "Início"
+  },
+  "welcome": {
+    "title": "Bem-vindo ao BUDDY!",
+    "subtitle": "Uma plataforma de comunicação especial para crianças atípicas, conectando estudantes com seus responsáveis e educadores de forma simples e carinhosa.",
+    "chooseRole": "Como você gostaria de usar o BUDDY?",
+    "start": "Começar",
+    "haveAccount": "Já tenho conta",
+    "features": {
+      "avatarTitle": "Avatar Personalizado",
+      "avatarDesc": "Crie seu ThriveSprite único e divertido",
+      "secureTitle": "Conexão Segura",
+      "secureDesc": "Conecte-se com responsáveis via código único",
+      "easyTitle": "Comunicação Fácil",
+      "easyDesc": "Peça ajuda de forma simples e rápida"
+    }
+  },
+  "roles": {
+    "student": {
+      "title": "Estudante",
+      "desc": "Sou uma criança que quer se comunicar melhor"
+    },
+    "caregiver": {
+      "title": "Responsável",
+      "desc": "Quero acompanhar e ajudar meu filho"
+    },
+    "educator": {
+      "title": "Professor(a)",
+      "desc": "Sou educador e quero apoiar meus alunos"
+    }
+  },
+  "auth": {
+    "signup": "Criar Conta",
+    "login": "Entrar",
+    "joinBuddy": "Junte-se à comunidade BUDDY",
+    "accessBuddy": "Acesse sua conta BUDDY",
+    "howUse": "Como você vai usar o BUDDY?",
+    "username": "Nome de usuário",
+    "usernamePlaceholder": "Como quer ser chamado?",
+    "email": "Email",
+    "password": "Senha",
+    "processing": "Processando...",
+    "toggleToLogin": "Já tem conta? Faça login",
+    "toggleToSignup": "Não tem conta? Cadastre-se",
+    "toast": {
+      "created": "Conta criada!",
+      "verify": "Verifique seu email para confirmar a conta.",
+      "logged": "Login realizado!",
+      "welcome": "Bem-vindo ao BUDDY!",
+      "errorTitle": "Erro",
+      "genericError": "Ocorreu um erro. Tente novamente.",
+      "invalidCreds": "Email ou senha incorretos.",
+      "alreadyRegistered": "Este email já está cadastrado. Faça login.",
+      "weakPassword": "A senha deve ter pelo menos 6 caracteres."
+    }
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Ops! Página não encontrada",
+    "back": "Voltar para o início"
+  }
+}

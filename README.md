@@ -1,35 +1,39 @@
-# YourBuddy
+# YourBuddy / SeuBuddy
 
-Aplicação web em React focada em acompanhar estudantes, responsáveis e educadores, com autenticação, seleção de avatar e dashboards dedicados. O projeto usa Vite + TypeScript, Tailwind  para uma UI consistente e acessível.
+EN: A React web app to support students, caregivers, and educators, with authentication, avatar selection, and dedicated dashboards. Built with Vite + TypeScript, Tailwind, and shadcn/ui (Radix UI) for a consistent, accessible UI.
 
-## Tecnologias
+PT: Aplicação web em React para acompanhar estudantes, responsáveis e educadores, com autenticação, seleção de avatar e dashboards dedicados. Construída com Vite + TypeScript, Tailwind e shadcn/ui (Radix UI) para uma UI consistente e acessível.
+
+## Tecnologias / Tech Stack
 
 - Vite + React + TypeScript
 - Tailwind CSS + shadcn/ui (Radix UI)
 - React Router
 - TanStack React Query
-- Supabase (auth e dados)
+- Supabase (auth & data)
 - date-fns, Recharts, Sonner (toasts), next-themes
 - ESLint + Prettier
+- i18n: i18next + react-i18next
 
-## Pré-requisitos
+## Pré-requisitos / Prerequisites
 
-- Node.js 18+ (CI usa Node 20)
-- npm (ou outro gerenciador compatível)
+- Node.js 18+ (CI uses Node 20)
+- npm (or another compatible package manager)
 
-## Como rodar localmente
+## Como rodar localmente / Run locally
 
 ```bash
-# 1) Instalar dependências
+# 1) Instalar dependências / Install deps
 npm install
 
-# 2) (Opcional) Configurar variáveis de ambiente
+# 2) (Opcional) Configurar variáveis de ambiente / Configure .env
 # Edite o arquivo .env se necessário (veja seção "Variáveis de ambiente")
 
-# 3) Rodar em modo desenvolvimento
+# 3) Rodar em modo desenvolvimento / Start dev
 npm run dev
 
-# 4) Acessar no navegador (Vite mostra a URL, tipicamente http://localhost:5173)
+# 4) Acessar no navegador / Open in browser
+# Vite mostra a URL (tipicamente http://localhost:5173)
 ```
 
 ### Build de produção
@@ -50,6 +54,30 @@ npm run preview
 - `npm run lint`: roda o ESLint
 - `npm run format`: formata o projeto com Prettier
 - `npm run format:check`: verifica formatação sem alterar arquivos
+
+## Internacionalização / Internationalization (i18n)
+
+- Idiomas disponíveis / Available languages: Português (`pt`) e English (`en`).
+- Alternar idioma / Switch language: use o botão `PT/EN` no topo da UI.
+- Arquivos de tradução / Translation files:
+  - `src/locales/pt/common.json`
+  - `src/locales/en/common.json`
+- Configuração / Setup: `src/i18n.ts` (i18next + react-i18next + language detector).
+
+Adicionar novas chaves / Add new keys:
+
+1. Adicione a chave em ambos os arquivos `common.json` (pt/en).
+2. Use no código com `useTranslation` e `t('path.to.key')`.
+3. Exemplo:
+
+```tsx
+import { useTranslation } from 'react-i18next';
+
+const Example = () => {
+  const { t } = useTranslation();
+  return <span>{t('welcome.title')}</span>;
+};
+```
 
 ## Variáveis de ambiente
 
@@ -76,4 +104,3 @@ Para publicar:
 1. Confirme que o projeto builda localmente: `npm run build`
 2. Faça push na branch `main`
 3. Verifique a aba "Actions" e a página do GitHub Pages do repositório
-

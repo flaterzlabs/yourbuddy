@@ -1,0 +1,68 @@
+{
+  "general": {
+    "loading": "Loading...",
+    "loadingProfile": "Loading profile..."
+  },
+  "nav": {
+    "home": "Home"
+  },
+  "welcome": {
+    "title": "Welcome to BUDDY!",
+    "subtitle": "A special communication platform for neurodivergent children, connecting students with their caregivers and educators in a simple and caring way.",
+    "chooseRole": "How would you like to use BUDDY?",
+    "start": "Get started",
+    "haveAccount": "I already have an account",
+    "features": {
+      "avatarTitle": "Personalized Avatar",
+      "avatarDesc": "Create your unique and fun ThriveSprite",
+      "secureTitle": "Secure Connection",
+      "secureDesc": "Connect with caregivers via a unique code",
+      "easyTitle": "Easy Communication",
+      "easyDesc": "Ask for help in a simple and fast way"
+    }
+  },
+  "roles": {
+    "student": {
+      "title": "Student",
+      "desc": "I am a child who wants to communicate better"
+    },
+    "caregiver": {
+      "title": "Caregiver",
+      "desc": "I want to monitor and help my child"
+    },
+    "educator": {
+      "title": "Educator",
+      "desc": "I am an educator and want to support my students"
+    }
+  },
+  "auth": {
+    "signup": "Create Account",
+    "login": "Sign In",
+    "joinBuddy": "Join the BUDDY community",
+    "accessBuddy": "Access your BUDDY account",
+    "howUse": "How will you use BUDDY?",
+    "username": "Username",
+    "usernamePlaceholder": "What should we call you?",
+    "email": "Email",
+    "password": "Password",
+    "processing": "Processing...",
+    "toggleToLogin": "Already have an account? Log in",
+    "toggleToSignup": "Don't have an account? Sign up",
+    "toast": {
+      "created": "Account created!",
+      "verify": "Check your email to confirm your account.",
+      "logged": "Logged in!",
+      "welcome": "Welcome to BUDDY!",
+      "errorTitle": "Error",
+      "genericError": "An error occurred. Please try again.",
+      "invalidCreds": "Invalid email or password.",
+      "alreadyRegistered": "This email is already registered. Please log in.",
+      "weakPassword": "Password should be at least 6 characters."
+    }
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "back": "Return to Home"
+  }
+}

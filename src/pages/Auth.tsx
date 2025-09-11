@@ -5,14 +5,17 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { LanguageToggle } from '@/components/language-toggle';
 import { RoleCard } from '@/components/role-card';
 import { useAuth } from '@/hooks/use-auth';
 import { toast } from '@/hooks/use-toast';
 import { User, Users, GraduationCap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function Auth() {
+  const { t } = useTranslation();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,20 +36,20 @@ export default function Auth() {
   const roles = [
     {
       id: 'student',
-      title: 'Estudante',
-      description: 'Sou uma criança que quer se comunicar melhor',
+      title: t('roles.student.title'),
+      description: t('roles.student.desc'),
       icon: User,
     },
     {
       id: 'caregiver',
-      title: 'Responsável',
-      description: 'Quero acompanhar e ajudar meu filho',
+      title: t('roles.caregiver.title'),
+      description: t('roles.caregiver.desc'),
       icon: Users,
     },
     {
       id: 'educator',
-      title: 'Professor(a)',
-      description: 'Sou educador e quero apoiar meus alunos',
+      title: t('roles.educator.title'),
+      description: t('roles.educator.desc'),
       icon: GraduationCap,
     },
   ];
@@ -60,35 +63,25 @@ export default function Auth() {
         const { error } = await signUp(email, password, selectedRole, username);
         if (error) throw error;
 
-        toast({
-          title: 'Conta criada!',
-          description: 'Verifique seu email para confirmar a conta.',
-        });
+        toast({ title: t('auth.toast.created'), description: t('auth.toast.verify') });
       } else {
         const { error } = await signIn(email, password);
         if (error) throw error;
 
-        toast({
-          title: 'Login realizado!',
-          description: 'Bem-vindo ao BUDDY!',
-        });
+        toast({ title: t('auth.toast.logged'), description: t('auth.toast.welcome') });
       }
     } catch (error: any) {
-      let message = 'Ocorreu um erro. Tente novamente.';
+      let message = t('auth.toast.genericError');
 
       if (error.message?.includes('Invalid login credentials')) {
-        message = 'Email ou senha incorretos.';
+        message = t('auth.toast.invalidCreds');
       } else if (error.message?.includes('User already registered')) {
-        message = 'Este email já está cadastrado. Faça login.';
+        message = t('auth.toast.alreadyRegistered');
       } else if (error.message?.includes('Password should be at least')) {
-        message = 'A senha deve ter pelo menos 6 caracteres.';
+        message = t('auth.toast.weakPassword');
       }
 
-      toast({
-        title: 'Erro',
-        description: message,
-        variant: 'destructive',
-      });
+      toast({ title: t('auth.toast.errorTitle'), description: message, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -100,7 +93,10 @@ export default function Auth() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <BuddyLogo size="lg" />
-          <ThemeToggle />
+          <div className="flex gap-2">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Auth Form */}
@@ -108,19 +104,17 @@ export default function Auth() {
           <Card className="p-8 bg-gradient-card shadow-medium">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2 bg-gradient-hero bg-clip-text text-transparent">
-                {isSignUp ? 'Criar Conta' : 'Entrar'}
+                {isSignUp ? t('auth.signup') : t('auth.login')}
               </h1>
               <p className="text-muted-foreground">
-                {isSignUp ? 'Junte-se à comunidade BUDDY' : 'Acesse sua conta BUDDY'}
+                {isSignUp ? t('auth.joinBuddy') : t('auth.accessBuddy')}
               </p>
             </div>
 
             {/* Role Selection for Sign Up */}
             {isSignUp && (
               <div className="mb-6">
-                <Label className="text-sm font-medium mb-4 block">
-                  Como você vai usar o BUDDY?
-                </Label>
+                <Label className="text-sm font-medium mb-4 block">{t('auth.howUse')}</Label>
                 <div className="grid gap-3">
                   {roles.map((role) => (
                     <RoleCard
@@ -139,20 +133,20 @@ export default function Auth() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {isSignUp && (
                 <div>
-                  <Label htmlFor="username">Nome de usuário</Label>
+                  <Label htmlFor="username">{t('auth.username')}</Label>
                   <Input
                     id="username"
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Como quer ser chamado?"
+                    placeholder={t('auth.usernamePlaceholder')}
                     className="mt-1"
                   />
                 </div>
               )}
 
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('auth.email')}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -165,7 +159,7 @@ export default function Auth() {
               </div>
 
               <div>
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password">{t('auth.password')}</Label>
                 <Input
                   id="password"
                   type="password"
@@ -178,7 +172,7 @@ export default function Auth() {
               </div>
 
               <Button type="submit" variant="hero" size="lg" disabled={loading} className="w-full">
-                {loading ? 'Processando...' : isSignUp ? 'Criar Conta' : 'Entrar'}
+                {loading ? t('auth.processing') : isSignUp ? t('auth.signup') : t('auth.login')}
               </Button>
             </form>
 
@@ -188,7 +182,7 @@ export default function Auth() {
                 onClick={() => setIsSignUp(!isSignUp)}
                 className="text-primary hover:underline"
               >
-                {isSignUp ? 'Já tem conta? Faça login' : 'Não tem conta? Cadastre-se'}
+                {isSignUp ? t('auth.toggleToLogin') : t('auth.toggleToSignup')}
               </button>
             </div>
           </Card>

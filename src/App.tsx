@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
+import { useTranslation } from 'react-i18next';
 import Welcome from './pages/Welcome';
 import Auth from './pages/Auth';
 import StudentDashboard from './pages/StudentDashboard';
@@ -16,13 +17,14 @@ const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
+  const { t } = useTranslation();
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando...</p>
+          <p className="text-muted-foreground">{t('general.loading')}</p>
         </div>
       </div>
     );
@@ -37,13 +39,14 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function DashboardRouter() {
   const { profile, thriveSprite, loading } = useAuth();
+  const { t } = useTranslation();
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando perfil...</p>
+          <p className="text-muted-foreground">{t('general.loadingProfile')}</p>
         </div>
       </div>
     );
