@@ -103,6 +103,7 @@
   "caregiverDash": {
     "title": "Caregiver Dashboard",
     "titleEducator": "Educator Dashboard",
+    "headerHello": "Hello, {{name}}, welcome",
     "subtitle": "Track and support your connected students",
     "connectStudentTitle": "Connect Student",
     "enterCode": "Enter the student code",

@@ -270,10 +270,10 @@ export default function CaregiverDashboard() {
             <BuddyLogo size="lg" />
             <div>
               <h1 className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Olá, {profile?.username}, bem-vindo
+                {t('caregiverDash.headerHello', { name: profile?.username })}
               </h1>
               <p className="text-muted-foreground">
-                Painel do {profile?.role === 'educator' ? 'Professor' : 'Responsável'}
+                {profile?.role === 'educator' ? t('caregiverDash.titleEducator') : t('caregiverDash.title')}
               </p>
             </div>
           </div>

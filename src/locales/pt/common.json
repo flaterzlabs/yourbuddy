@@ -103,6 +103,7 @@
   "caregiverDash": {
     "title": "Painel do Responsável",
     "titleEducator": "Painel do Educador",
+    "headerHello": "Olá, {{name}}, bem-vindo",
     "subtitle": "Acompanhe e apoie seus estudantes conectados",
     "connectStudentTitle": "Conectar Estudante",
     "enterCode": "Digite o código do estudante",

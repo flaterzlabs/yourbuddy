@@ -44,9 +44,7 @@ export default function Welcome() {
   ];
 
   const handleContinue = () => {
-    if (selectedRole) {
-      navigate('/auth');
-    }
+    navigate('/auth', { state: { signUp: true, selectedRole } });
   };
 
   return (

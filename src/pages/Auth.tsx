@@ -10,7 +10,7 @@ import { RoleCard } from '@/components/role-card';
 import { useAuth } from '@/hooks/use-auth';
 import { toast } from '@/hooks/use-toast';
 import { User, Users, GraduationCap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,6 +25,7 @@ export default function Auth() {
 
   const { signUp, signIn, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation() as { state?: { signUp?: boolean; selectedRole?: string } };
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -32,6 +33,16 @@ export default function Auth() {
       navigate('/dashboard');
     }
   }, [user, navigate]);
+
+  // Open in SignUp mode when navigated from Welcome with intent
+  useEffect(() => {
+    if (location?.state?.signUp) {
+      setIsSignUp(true);
+      if (location.state.selectedRole) {
+        setSelectedRole(location.state.selectedRole);
+      }
+    }
+  }, [location?.state]);
 
   const roles = [
     {
