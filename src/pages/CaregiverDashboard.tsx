@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { LanguageToggle } from '@/components/language-toggle';
 import { StudentAvatar } from '@/components/student-avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,6 +21,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
+import { useTranslation } from 'react-i18next';
 
 type Connection = Database['public']['Tables']['connections']['Row'] & {
   student_profile?: Database['public']['Tables']['profiles']['Row'];
@@ -31,6 +33,7 @@ type HelpRequest = Database['public']['Tables']['help_requests']['Row'] & {
 };
 
 export default function CaregiverDashboard() {
+  const { t, i18n } = useTranslation();
   const { user, profile, signOut } = useAuth();
   const [connections, setConnections] = useState<Connection[]>([]);
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
@@ -273,9 +276,10 @@ export default function CaregiverDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <LanguageToggle />
             <ThemeToggle />
             <Button variant="ghost" onClick={signOut}>
-              Sair
+              {t('common.logout')}
             </Button>
           </div>
         </div>
@@ -284,11 +288,12 @@ export default function CaregiverDashboard() {
           {/* Welcome Section */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">
-              Painel do {profile?.role === 'caregiver' ? 'Responsável' : 'Educador'} 👨‍👩‍👧‍👦
+              {profile?.role === 'caregiver'
+                ? t('caregiverDash.title')
+                : t('caregiverDash.titleEducator')}{' '}
+              👨‍👩‍👧‍👦
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Acompanhe e apoie seus estudantes conectados
-            </p>
+            <p className="text-xl text-muted-foreground">{t('caregiverDash.subtitle')}</p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
@@ -298,15 +303,15 @@ export default function CaregiverDashboard() {
                 <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <UserPlus className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="text-xl font-bold mb-2">Conectar Estudante</h2>
-                <p className="text-muted-foreground text-sm">Digite o código do estudante</p>
+                <h2 className="text-xl font-bold mb-2">{t('caregiverDash.connectStudentTitle')}</h2>
+                <p className="text-muted-foreground text-sm">{t('caregiverDash.enterCode')}</p>
               </div>
 
               <form onSubmit={handleConnectStudent} className="space-y-4">
                 <Input
                   value={studentCode}
                   onChange={(e) => setStudentCode(e.target.value.toUpperCase())}
-                  placeholder="CÓDIGO DO ESTUDANTE"
+                  placeholder={t('caregiverDash.codePlaceholder') || ''}
                   className="text-center text-lg font-mono"
                   maxLength={8}
                 />
@@ -318,7 +323,7 @@ export default function CaregiverDashboard() {
                   disabled={loading || !studentCode.trim()}
                   className="w-full"
                 >
-                  {loading ? 'Conectando...' : 'Conectar'}
+                  {loading ? t('caregiverDash.connecting') : t('caregiverDash.connect')}
                 </Button>
               </form>
 
@@ -326,11 +331,15 @@ export default function CaregiverDashboard() {
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
                   <div className="text-2xl font-bold text-primary">{activeConnections.length}</div>
-                  <div className="text-xs text-muted-foreground">Conectados</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('caregiverDash.statConnected')}
+                  </div>
                 </div>
                 <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
                   <div className="text-2xl font-bold text-warning">{openHelpRequests.length}</div>
-                  <div className="text-xs text-muted-foreground">Pedidos Abertos</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t('caregiverDash.statOpenRequests')}
+                  </div>
                 </div>
               </div>
             </Card>
@@ -339,9 +348,11 @@ export default function CaregiverDashboard() {
             <Card className="lg:col-span-2 p-6 bg-gradient-card shadow-medium">
               <div className="flex items-center gap-3 mb-6">
                 <AlertTriangle className="h-6 w-6 text-warning" />
-                <h2 className="text-xl font-bold">Pedidos de Ajuda</h2>
+                <h2 className="text-xl font-bold">{t('caregiverDash.helpRequests')}</h2>
                 {openHelpRequests.length > 0 && (
-                  <Badge variant="destructive">{openHelpRequests.length} abertos</Badge>
+                  <Badge variant="destructive">
+                    {t('caregiverDash.openCount', { count: openHelpRequests.length })}
+                  </Badge>
                 )}
               </div>
 
@@ -349,7 +360,7 @@ export default function CaregiverDashboard() {
                 {helpRequests.length === 0 ? (
                   <div className="text-center py-8">
                     <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">Nenhum pedido de ajuda ainda</p>
+                    <p className="text-muted-foreground">{t('caregiverDash.emptyHelp')}</p>
                   </div>
                 ) : (
                   helpRequests.map((request) => (
@@ -364,10 +375,11 @@ export default function CaregiverDashboard() {
                           </span>
                           <div>
                             <h4 className="font-semibold">
-                              {request.student_profile?.username || 'Estudante'}
+                              {request.student_profile?.username ||
+                                t('caregiverDash.studentFallback')}
                             </h4>
                             <p className="text-sm text-muted-foreground">
-                              {new Date(request.created_at).toLocaleString('pt-BR')}
+                              {new Date(request.created_at).toLocaleString(i18n.language)}
                             </p>
                           </div>
                         </div>
@@ -375,19 +387,19 @@ export default function CaregiverDashboard() {
                           {request.status === 'open' && (
                             <>
                               <Clock className="h-3 w-3 mr-1" />
-                              Aguardando
+                              {t('studentDash.status.waiting')}
                             </>
                           )}
                           {request.status === 'answered' && (
                             <>
                               <CheckCircle className="h-3 w-3 mr-1" />
-                              Respondido
+                              {t('studentDash.status.answered')}
                             </>
                           )}
                           {request.status === 'closed' && (
                             <>
                               <XCircle className="h-3 w-3 mr-1" />
-                              Finalizado
+                              {t('studentDash.status.closed')}
                             </>
                           )}
                         </Badge>
@@ -407,7 +419,7 @@ export default function CaregiverDashboard() {
                             onClick={() => handleHelpRequestAction(request.id, 'answered')}
                           >
                             <CheckCircle className="h-4 w-4 mr-1" />
-                            Responder
+                            {t('caregiverDash.respond')}
                           </Button>
                           <Button
                             size="sm"
@@ -415,7 +427,7 @@ export default function CaregiverDashboard() {
                             onClick={() => handleHelpRequestAction(request.id, 'closed')}
                           >
                             <XCircle className="h-4 w-4 mr-1" />
-                            Finalizar
+                            {t('caregiverDash.finish')}
                           </Button>
                         </div>
                       )}
@@ -430,15 +442,15 @@ export default function CaregiverDashboard() {
           <Card className="mt-8 p-6 bg-gradient-card shadow-medium">
             <div className="flex items-center gap-3 mb-6">
               <Users className="h-6 w-6 text-primary" />
-              <h2 className="text-xl font-bold">Meus Alunos</h2>
+              <h2 className="text-xl font-bold">{t('caregiverDash.myStudents')}</h2>
             </div>
 
             {activeConnections.length === 0 ? (
               <div className="text-center py-8">
                 <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">Você ainda não tem alunos conectados</p>
+                <p className="text-muted-foreground">{t('caregiverDash.noStudents')}</p>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Use o código do estudante para fazer a primeira conexão
+                  {t('caregiverDash.useCodeToConnect')}
                 </p>
               </div>
             ) : (
@@ -466,15 +478,18 @@ export default function CaregiverDashboard() {
                       />
                       <div className="flex-1">
                         <h3 className="font-semibold text-foreground">
-                          {connection.student_profile?.username || 'Estudante'}
+                          {connection.student_profile?.username ||
+                            t('caregiverDash.studentFallback')}
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                          Conectado em {new Date(connection.created_at).toLocaleDateString('pt-BR')}
+                          {t('caregiverDash.connectedOn', {
+                            date: new Date(connection.created_at).toLocaleDateString(i18n.language),
+                          })}
                         </p>
                       </div>
                       <Badge variant="secondary" className="text-xs">
                         <Activity className="h-3 w-3 mr-1" />
-                        Ativo
+                        {t('caregiverDash.active')}
                       </Badge>
                     </div>
                   </div>

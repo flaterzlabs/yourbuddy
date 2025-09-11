@@ -4,16 +4,19 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { LanguageToggle } from '@/components/language-toggle';
 import { StudentAvatar } from '@/components/student-avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Hand, Copy, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
+import { useTranslation } from 'react-i18next';
 
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 
 export default function StudentDashboard() {
+  const { t, i18n } = useTranslation();
   const { user, profile, thriveSprite, signOut } = useAuth();
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [loading, setLoading] = useState(false);
@@ -76,18 +79,15 @@ export default function StudentDashboard() {
 
       if (error) throw error;
 
-      toast({
-        title: 'Pedido enviado!',
-        description: 'Seus responsáveis foram notificados.',
-      });
+      toast({ title: t('studentDash.sentTitle'), description: t('studentDash.sentDesc') });
 
       setMessage('');
       setUrgency('ok');
     } catch (error) {
       console.error('Error creating help request:', error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível enviar o pedido. Tente novamente.',
+        title: t('auth.toast.errorTitle'),
+        description: t('studentDash.sendError'),
         variant: 'destructive',
       });
     } finally {
@@ -98,10 +98,7 @@ export default function StudentDashboard() {
   const copyStudentCode = () => {
     if (profile?.student_code) {
       navigator.clipboard.writeText(profile.student_code);
-      toast({
-        title: 'Código copiado!',
-        description: 'Compartilhe este código com seus responsáveis.',
-      });
+      toast({ title: t('studentDash.copiedTitle'), description: t('studentDash.copiedDesc') });
     }
   };
 
@@ -136,9 +133,10 @@ export default function StudentDashboard() {
         <div className="flex justify-between items-center mb-8">
           <BuddyLogo size="lg" />
           <div className="flex items-center gap-4">
+            <LanguageToggle />
             <ThemeToggle />
             <Button variant="ghost" onClick={signOut}>
-              Sair
+              {t('common.logout')}
             </Button>
           </div>
         </div>
@@ -156,9 +154,9 @@ export default function StudentDashboard() {
               />
               <div>
                 <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  Olá, {profile?.username}! 👋
+                  {t('studentDash.hello', { name: profile?.username })}
                 </h1>
-                <p className="text-xl text-muted-foreground">Como você está se sentindo hoje?</p>
+                <p className="text-xl text-muted-foreground">{t('studentDash.feelingToday')}</p>
               </div>
             </div>
           </div>
@@ -170,16 +168,14 @@ export default function StudentDashboard() {
                 <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Hand className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2">Precisa de Ajuda?</h2>
-                <p className="text-muted-foreground">
-                  Seus responsáveis serão notificados imediatamente
-                </p>
+                <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
+                <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
               </div>
 
               <form onSubmit={handleHelpRequest} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Como você está se sentindo?
+                    {t('studentDash.howFeeling')}
                   </label>
                   <div className="grid grid-cols-3 gap-2">
                     <Button
@@ -188,7 +184,7 @@ export default function StudentDashboard() {
                       onClick={() => setUrgency('ok')}
                       className="text-sm"
                     >
-                      🟢 Bem
+                      {t('studentDash.feelings.ok')}
                     </Button>
                     <Button
                       type="button"
@@ -196,7 +192,7 @@ export default function StudentDashboard() {
                       onClick={() => setUrgency('attention')}
                       className="text-sm"
                     >
-                      🟡 Preciso
+                      {t('studentDash.feelings.attention')}
                     </Button>
                     <Button
                       type="button"
@@ -204,19 +200,19 @@ export default function StudentDashboard() {
                       onClick={() => setUrgency('urgent')}
                       className="text-sm"
                     >
-                      🔴 Urgente
+                      {t('studentDash.feelings.urgent')}
                     </Button>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Quer contar mais alguma coisa? (opcional)
+                    {t('studentDash.moreDetails')}
                   </label>
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="O que está acontecendo?"
+                    placeholder={t('studentDash.messagePlaceholder') || ''}
                     className="w-full p-3 rounded-xl border border-border bg-background"
                     rows={3}
                   />
@@ -229,7 +225,7 @@ export default function StudentDashboard() {
                   disabled={loading}
                   className="w-full"
                 >
-                  {loading ? 'Enviando...' : '🆘 Pedir Ajuda'}
+                  {loading ? t('studentDash.sending') : t('studentDash.sendHelp')}
                 </Button>
               </form>
             </Card>
@@ -238,7 +234,7 @@ export default function StudentDashboard() {
             <div className="space-y-6">
               {/* Student Code */}
               <Card className="p-6 bg-gradient-card shadow-medium">
-                <h3 className="text-xl font-bold mb-4">Seu Código de Conexão</h3>
+                <h3 className="text-xl font-bold mb-4">{t('studentDash.studentCodeTitle')}</h3>
                 <div className="bg-background/50 p-4 rounded-xl border border-border">
                   <div className="flex items-center justify-between">
                     <code className="text-2xl font-mono font-bold text-primary">
@@ -250,17 +246,18 @@ export default function StudentDashboard() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mt-3">
-                  Compartilhe este código com seus responsáveis para que eles possam se conectar com
-                  você.
+                  {t('studentDash.studentCodeHint')}
                 </p>
               </Card>
 
               {/* Recent Help Requests */}
               <Card className="p-6 bg-gradient-card shadow-medium">
-                <h3 className="text-xl font-bold mb-4">Seus Pedidos Recentes</h3>
+                <h3 className="text-xl font-bold mb-4">{t('studentDash.recentRequests')}</h3>
                 <div className="space-y-3 max-h-64 overflow-y-auto">
                   {helpRequests.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">Nenhum pedido ainda</p>
+                    <p className="text-muted-foreground text-center py-4">
+                      {t('studentDash.noneYet')}
+                    </p>
                   ) : (
                     helpRequests.slice(0, 5).map((request) => (
                       <div
@@ -274,25 +271,25 @@ export default function StudentDashboard() {
                               {request.status === 'open' && (
                                 <>
                                   <Clock className="h-3 w-3 mr-1" />
-                                  Aguardando
+                                  {t('studentDash.status.waiting')}
                                 </>
                               )}
                               {request.status === 'answered' && (
                                 <>
                                   <CheckCircle className="h-3 w-3 mr-1" />
-                                  Respondido
+                                  {t('studentDash.status.answered')}
                                 </>
                               )}
                               {request.status === 'closed' && (
                                 <>
                                   <XCircle className="h-3 w-3 mr-1" />
-                                  Finalizado
+                                  {t('studentDash.status.closed')}
                                 </>
                               )}
                             </Badge>
                           </div>
                           <span className="text-xs text-muted-foreground">
-                            {new Date(request.created_at).toLocaleDateString()}
+                            {new Date(request.created_at).toLocaleDateString(i18n.language)}
                           </span>
                         </div>
                         {request.message && (

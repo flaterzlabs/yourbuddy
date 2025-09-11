@@ -64,5 +64,61 @@
     "title": "404",
     "message": "Oops! Page not found",
     "back": "Return to Home"
+  },
+  "common": {
+    "logout": "Sign out"
+  },
+  "studentDash": {
+    "hello": "Hello, {{name}}! 👋",
+    "feelingToday": "How are you feeling today?",
+    "needHelpTitle": "Need Help?",
+    "caregiversNotified": "Your caregivers will be notified immediately",
+    "howFeeling": "How are you feeling?",
+    "feelings": {
+      "ok": "🟢 Good",
+      "attention": "🟡 Need",
+      "urgent": "🔴 Urgent"
+    },
+    "moreDetails": "Want to say anything else? (optional)",
+    "messagePlaceholder": "What is happening?",
+    "sendHelp": "🆘 Ask for Help",
+    "sending": "Sending...",
+    "sentTitle": "Request sent!",
+    "sentDesc": "Your caregivers have been notified.",
+    "sendError": "Could not send the request. Please try again.",
+    "studentCodeTitle": "Your Connection Code",
+    "studentCodeHint": "Share this code with your caregivers so they can connect with you.",
+    "copiedTitle": "Code copied!",
+    "copiedDesc": "Share this code with your caregivers.",
+    "recentRequests": "Your Recent Requests",
+    "noneYet": "No requests yet",
+    "status": {
+      "waiting": "Waiting",
+      "answered": "Answered",
+      "closed": "Closed"
+    }
+  },
+  "caregiverDash": {
+    "title": "Caregiver Dashboard",
+    "titleEducator": "Educator Dashboard",
+    "subtitle": "Track and support your connected students",
+    "connectStudentTitle": "Connect Student",
+    "enterCode": "Enter the student code",
+    "codePlaceholder": "STUDENT CODE",
+    "connecting": "Connecting...",
+    "connect": "Connect",
+    "statConnected": "Connected",
+    "statOpenRequests": "Open Requests",
+    "helpRequests": "Help Requests",
+    "openCount": "{{count}} open",
+    "emptyHelp": "No help requests yet",
+    "respond": "Respond",
+    "finish": "Finish",
+    "myStudents": "My Students",
+    "noStudents": "You have no connected students yet",
+    "useCodeToConnect": "Use the student code to make the first connection",
+    "studentFallback": "Student",
+    "connectedOn": "Connected on {{date}}",
+    "active": "Active"
   }
 }
