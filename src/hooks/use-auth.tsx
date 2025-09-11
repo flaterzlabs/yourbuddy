@@ -36,29 +36,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('*')
+        .select(`
+          *,
+          thrive_sprite:thrive_sprites!thrive_sprites_student_id_fkey (*)
+        `)
         .eq('user_id', userId)
         .single();
 
       if (error) throw error;
-      setProfile(data);
-
-      // Also fetch thrive sprite for students
-      if (data.role === 'student') {
-        const { data: spriteData, error: spriteError } = await supabase
-          .from('thrive_sprites')
-          .select('*')
-          .eq('student_id', userId)
-          .single();
-
-        if (!spriteError) {
-          setThriveSprite(spriteData);
-        } else {
-          setThriveSprite(null);
-        }
-      } else {
-        setThriveSprite(null);
-      }
+      setProfile(data as any);
+      // Set sprite if present (students) or null otherwise
+      // @ts-ignore - embedded relation
+      setThriveSprite((data as any)?.thrive_sprite ?? null);
     } catch (error) {
       console.error('Error fetching profile:', error);
       setProfile(null);
@@ -73,41 +62,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    // Set up auth state listener
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setLoading(true);
+    (async () => {
+      console.time('auth:init');
+      // 1) Initialize from existing session first (avoids duplicate fetch)
+      const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
       setUser(session?.user ?? null);
-
       if (session?.user) {
+        console.time('auth:fetchProfile');
         await fetchProfile(session.user.id);
+        console.timeEnd('auth:fetchProfile');
       } else {
         setProfile(null);
         setThriveSprite(null);
       }
-
       setLoading(false);
-    });
+      console.timeEnd('auth:init');
 
-    // Check for existing session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setLoading(true);
-      setSession(session);
-      setUser(session?.user ?? null);
+      // 2) Subscribe to auth state changes (ignore INITIAL_SESSION)
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        async (event, nextSession) => {
+          if (event === 'INITIAL_SESSION') return;
+          console.log('[auth] event:', event);
+          setLoading(true);
+          setSession(nextSession);
+          setUser(nextSession?.user ?? null);
+          if (nextSession?.user) {
+            console.time('auth:fetchProfile');
+            await fetchProfile(nextSession.user.id);
+            console.timeEnd('auth:fetchProfile');
+          } else {
+            setProfile(null);
+            setThriveSprite(null);
+          }
+          setLoading(false);
+        },
+      );
 
-      if (session?.user) {
-        await fetchProfile(session.user.id);
-      } else {
-        setProfile(null);
-        setThriveSprite(null);
-      }
-
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+      return () => subscription.unsubscribe();
+    })();
   }, []);
 
   const signUp = async (email: string, password: string, role: string, username?: string) => {

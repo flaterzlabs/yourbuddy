@@ -26,6 +26,7 @@ export default function StudentDashboard() {
   const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent'>('ok');
 
   const fetchHelpRequests = async () => {
+    console.time('student:fetchHelpRequests');
     if (!user) return;
 
     const { data, error } = await supabase
@@ -39,6 +40,7 @@ export default function StudentDashboard() {
     } else {
       setHelpRequests(data || []);
     }
+    console.timeEnd('student:fetchHelpRequests');
   };
 
   useEffect(() => {

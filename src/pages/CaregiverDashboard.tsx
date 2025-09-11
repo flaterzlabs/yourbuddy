@@ -43,6 +43,7 @@ export default function CaregiverDashboard() {
   const [loading, setLoading] = useState(false);
 
   const fetchConnections = async () => {
+    console.time('caregiver:fetchConnections');
     if (!user) return;
 
     const { data, error } = await supabase
@@ -50,7 +51,10 @@ export default function CaregiverDashboard() {
       .select(
         `
         *,
-        student_profile:profiles!connections_student_id_fkey (*)
+        student_profile:profiles!connections_student_id_fkey (
+          *,
+          thrive_sprite:thrive_sprites!thrive_sprites_student_id_fkey (*)
+        )
       `,
       )
       .eq('caregiver_id', user.id)
@@ -59,29 +63,22 @@ export default function CaregiverDashboard() {
     if (error) {
       console.error('Error fetching connections:', error);
       setConnections([]);
+      console.timeEnd('caregiver:fetchConnections');
       return;
     }
 
-    // Fetch thrive sprites separately for each student
-    const connectionsWithSprites = await Promise.all(
-      (data || []).map(async (connection) => {
-        const { data: spriteData } = await supabase
-          .from('thrive_sprites')
-          .select('*')
-          .eq('student_id', connection.student_id)
-          .single();
-
-        return {
-          ...connection,
-          thrive_sprite: spriteData || null,
-        };
-      }),
-    );
+    // Flatten embedded sprite for compatibility with existing rendering
+    const connectionsWithSprites = (data || []).map((c: any) => ({
+      ...c,
+      thrive_sprite: c?.student_profile?.thrive_sprite ?? null,
+    }));
 
     setConnections(connectionsWithSprites);
+    console.timeEnd('caregiver:fetchConnections');
   };
 
   const fetchHelpRequests = async () => {
+    console.time('caregiver:fetchHelpRequests');
     if (!user) return;
 
     const activeStudents = connections
@@ -90,6 +87,7 @@ export default function CaregiverDashboard() {
 
     if (activeStudents.length === 0) {
       setHelpRequests([]);
+      console.timeEnd('caregiver:fetchHelpRequests');
       return;
     }
 
@@ -109,6 +107,7 @@ export default function CaregiverDashboard() {
     } else {
       setHelpRequests(data || []);
     }
+    console.timeEnd('caregiver:fetchHelpRequests');
   };
 
   useEffect(() => {
