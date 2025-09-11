@@ -115,6 +115,8 @@
     "helpRequests": "Help Requests",
     "openCount": "{{count}} open",
     "emptyHelp": "No help requests yet",
+    "newHelpTitle": "New help request",
+    "newHelpFrom": "from {{name}}",
     "respond": "Respond",
     "finish": "Finish",
     "myStudents": "My Students",

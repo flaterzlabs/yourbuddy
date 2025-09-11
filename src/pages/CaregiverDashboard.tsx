@@ -123,24 +123,9 @@ export default function CaregiverDashboard() {
   useEffect(() => {
     if (!user) return;
 
-    // Subscribe to realtime updates
-    const helpRequestsChannel = supabase
-      .channel('help-requests-caregiver')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'help_requests',
-        },
-        () => {
-          fetchHelpRequests();
-        },
-      )
-      .subscribe();
-
+    // Subscribe to connection changes for this caregiver
     const connectionsChannel = supabase
-      .channel('connections-caregiver')
+      .channel(`connections-caregiver-${user.id}`)
       .on(
         'postgres_changes',
         {
@@ -156,10 +141,72 @@ export default function CaregiverDashboard() {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(helpRequestsChannel);
       supabase.removeChannel(connectionsChannel);
     };
   }, [user?.id]);
+
+  // Broadcast-based realtime notification (fallback independent of DB replication)
+  useEffect(() => {
+    if (!user) return;
+    const activeIds = new Set(
+      connections.filter((c) => c.status === 'active').map((c) => c.student_id),
+    );
+    const ch = supabase
+      .channel('help-requests-broadcast')
+      .on('broadcast', { event: 'new-help' }, (e: any) => {
+        const rec = e?.payload;
+        if (!rec || !activeIds.has(rec.student_id)) return;
+        const conn = connections.find((c) => c.student_id === rec.student_id);
+        const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
+        toast({
+          title: t('caregiverDash.newHelpTitle'),
+          description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
+        });
+        fetchHelpRequests();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(ch);
+    };
+  }, [user?.id, connections.map((c) => `${c.student_id}:${c.status}`).join('|')]);
+
+  // Subscribe to help_requests changes and react for active students
+  useEffect(() => {
+    if (!user) return;
+    const activeIds = new Set(
+      connections.filter((c) => c.status === 'active').map((c) => c.student_id),
+    );
+    const helpRequestsChannel = supabase
+      .channel(`help-requests-caregiver-${user.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'help_requests',
+        },
+        (payload) => {
+          const rec: any = payload.new || payload.old;
+          if (!rec || !activeIds.has(rec.student_id)) return;
+
+          if (payload.eventType === 'INSERT') {
+            const conn = connections.find((c) => c.student_id === rec.student_id);
+            const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
+            toast({
+              title: t('caregiverDash.newHelpTitle'),
+              description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
+            });
+          }
+          fetchHelpRequests();
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(helpRequestsChannel);
+    };
+  }, [user?.id, connections.map((c) => `${c.student_id}:${c.status}`).join('|')]);
 
   const handleConnectStudent = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,6 +266,8 @@ export default function CaregiverDashboard() {
         title: action === 'answered' ? 'Marcado como respondido' : 'Pedido finalizado',
         description: 'O estudante foi notificado.',
       });
+      // Atualiza imediatamente enquanto o realtime notifica
+      fetchHelpRequests();
     } catch (error) {
       console.error('Error updating help request:', error);
       toast({

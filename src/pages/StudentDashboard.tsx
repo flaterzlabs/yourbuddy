@@ -85,6 +85,24 @@ export default function StudentDashboard() {
 
       toast({ title: t('studentDash.sentTitle'), description: t('studentDash.sentDesc') });
 
+      // Notify caregivers via realtime broadcast (fallback independent of DB replication)
+      try {
+        await supabase
+          .channel('help-requests-broadcast')
+          .send({
+            type: 'broadcast',
+            event: 'new-help',
+            payload: {
+              student_id: user.id,
+              urgency,
+              message: message || null,
+              created_at: new Date().toISOString(),
+            },
+          });
+      } catch (e) {
+        // best-effort: ignore broadcast failures
+      }
+
       setMessage('');
       setUrgency('ok');
     } catch (error) {

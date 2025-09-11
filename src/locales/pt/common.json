@@ -115,6 +115,8 @@
     "helpRequests": "Pedidos de Ajuda",
     "openCount": "{{count}} abertos",
     "emptyHelp": "Nenhum pedido de ajuda ainda",
+    "newHelpTitle": "Novo pedido de ajuda",
+    "newHelpFrom": "de {{name}}",
     "respond": "Responder",
     "finish": "Finalizar",
     "myStudents": "Meus Alunos",
