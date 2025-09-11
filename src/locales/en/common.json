@@ -123,4 +123,19 @@
     "connectedOn": "Connected on {{date}}",
     "active": "Active"
   }
+  ,
+  "avatar": {
+    "title": "Choose your ThriveSprite!",
+    "subtitle": "Select the avatar that best matches you",
+    "generateNew": "Generate new",
+    "continue": "Continue",
+    "saving": "Saving...",
+    "randomPick": "Random pick",
+    "toast": {
+      "savedTitle": "Avatar saved!",
+      "savedDesc": "Your ThriveSprite has been set.",
+      "errorTitle": "Error",
+      "errorDesc": "Couldn't save the avatar. Please try again."
+    }
+  }
 }
