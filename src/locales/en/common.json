@@ -53,6 +53,8 @@
       "verify": "Check your email to confirm your account.",
       "logged": "Logged in!",
       "welcome": "Welcome to BUDDY!",
+      "loggedOut": "Signed out",
+      "seeYou": "See you soon!",
       "errorTitle": "Error",
       "genericError": "An error occurred. Please try again.",
       "invalidCreds": "Invalid email or password.",

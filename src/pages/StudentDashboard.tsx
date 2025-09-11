@@ -12,12 +12,14 @@ import { toast } from '@/hooks/use-toast';
 import { Hand, Copy, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 
 export default function StudentDashboard() {
   const { t, i18n } = useTranslation();
   const { user, profile, thriveSprite, signOut } = useAuth();
+  const navigate = useNavigate();
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -135,7 +137,14 @@ export default function StudentDashboard() {
           <div className="flex items-center gap-4">
             <LanguageToggle />
             <ThemeToggle />
-            <Button variant="ghost" onClick={signOut}>
+            <Button
+              variant="ghost"
+              onClick={async () => {
+                await signOut();
+                toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
+                navigate('/auth');
+              }}
+            >
               {t('common.logout')}
             </Button>
           </div>

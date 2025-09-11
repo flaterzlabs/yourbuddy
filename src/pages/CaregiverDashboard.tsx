@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 type Connection = Database['public']['Tables']['connections']['Row'] & {
   student_profile?: Database['public']['Tables']['profiles']['Row'];
@@ -35,6 +36,7 @@ type HelpRequest = Database['public']['Tables']['help_requests']['Row'] & {
 export default function CaregiverDashboard() {
   const { t, i18n } = useTranslation();
   const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
   const [connections, setConnections] = useState<Connection[]>([]);
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [studentCode, setStudentCode] = useState('');
@@ -278,7 +280,14 @@ export default function CaregiverDashboard() {
           <div className="flex items-center gap-4">
             <LanguageToggle />
             <ThemeToggle />
-            <Button variant="ghost" onClick={signOut}>
+            <Button
+              variant="ghost"
+              onClick={async () => {
+                await signOut();
+                toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
+                navigate('/auth');
+              }}
+            >
               {t('common.logout')}
             </Button>
           </div>

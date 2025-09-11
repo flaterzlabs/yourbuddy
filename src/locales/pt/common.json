@@ -53,6 +53,8 @@
       "verify": "Verifique seu email para confirmar a conta.",
       "logged": "Login realizado!",
       "welcome": "Bem-vindo ao BUDDY!",
+      "loggedOut": "Você saiu",
+      "seeYou": "Até breve!",
       "errorTitle": "Erro",
       "genericError": "Ocorreu um erro. Tente novamente.",
       "invalidCreds": "Email ou senha incorretos.",
