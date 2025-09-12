@@ -55,6 +55,30 @@ npm run preview
 - `npm run format`: formata o projeto com Prettier
 - `npm run format:check`: verifica formatação sem alterar arquivos
 
+## Testes
+
+Foram adicionados testes unitários de frontend com Vitest e Testing Library.
+
+- Ambiente: `jsdom`
+- Configuração: `vite.config.ts` (chave `test`) e `src/test/setup.ts`
+- Exemplos:
+  - `src/lib/utils.test.ts` — utilitário de classes
+  - `src/pages/Welcome.test.tsx` — fluxo do botão “Get started”
+
+Instalação (dependências de dev):
+
+```bash
+npm i -D vitest @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom
+```
+
+Comandos:
+
+```bash
+npm test             # roda os testes uma vez
+npm run test:watch   # modo watch
+npm run test:coverage # cobertura
+```
+
 ## Internacionalização / Internationalization (i18n)
 
 - Idiomas disponíveis / Available languages: Português (`pt`) e English (`en`).
