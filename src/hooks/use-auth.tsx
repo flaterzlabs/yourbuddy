@@ -32,12 +32,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [thriveSprite, setThriveSprite] = useState<ThriveSprite | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastFetchedUserId, setLastFetchedUserId] = useState<string | null>(null);
+  const [isProcessingAuth, setIsProcessingAuth] = useState(false);
 
-  const fetchProfile = async (userId: string) => {
-    // Avoid unnecessary refetches for the same user
-    if (lastFetchedUserId === userId && profile) return;
+  const fetchProfile = async (userId: string, force = false) => {
+    // Avoid unnecessary refetches for the same user unless forced
+    if (!force && lastFetchedUserId === userId && profile) {
+      console.log('[auth] skipping fetchProfile - already have data for user', userId);
+      return;
+    }
     
     try {
+      console.log('[auth] fetching profile for user', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select(`
@@ -63,11 +68,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshProfile = async () => {
     if (user) {
-      await fetchProfile(user.id);
+      await fetchProfile(user.id, true); // Force refresh
     }
   };
 
   useEffect(() => {
+    let authTimeout: NodeJS.Timeout;
+    let isPageVisible = true;
+
     (async () => {
       console.time('auth:init');
       // 1) Initialize from existing session first (avoids duplicate fetch)
@@ -85,35 +93,84 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
       console.timeEnd('auth:init');
 
-      // 2) Subscribe to auth state changes (ignore INITIAL_SESSION)
+      // Handle page visibility changes
+      const handleVisibilityChange = () => {
+        isPageVisible = !document.hidden;
+        console.log('[auth] page visibility changed:', isPageVisible);
+        
+        // Don't trigger auth state changes when page becomes hidden
+        if (!isPageVisible) {
+          if (authTimeout) {
+            clearTimeout(authTimeout);
+          }
+        }
+      };
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+
+      // 2) Subscribe to auth state changes with debounce
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         async (event, nextSession) => {
           if (event === 'INITIAL_SESSION') return;
-          console.log('[auth] event:', event);
           
-          // Don't reload if it's the same user and we already have data
-          if (event === 'SIGNED_IN' && nextSession?.user?.id === lastFetchedUserId && profile) {
-            console.log('[auth] skipping reload for same user');
+          console.log('[auth] event:', event, 'isPageVisible:', isPageVisible, 'isProcessingAuth:', isProcessingAuth);
+          
+          // Skip processing if we're already processing or page is hidden
+          if (isProcessingAuth || !isPageVisible) {
+            console.log('[auth] skipping auth processing');
             return;
           }
           
-          setLoading(true);
-          setSession(nextSession);
-          setUser(nextSession?.user ?? null);
-          if (nextSession?.user) {
-            console.time('auth:fetchProfile');
-            await fetchProfile(nextSession.user.id);
-            console.timeEnd('auth:fetchProfile');
-          } else {
-            setProfile(null);
-            setThriveSprite(null);
-            setLastFetchedUserId(null);
+          // Clear any existing timeout
+          if (authTimeout) {
+            clearTimeout(authTimeout);
           }
-          setLoading(false);
+          
+          // Debounce auth state changes
+          authTimeout = setTimeout(async () => {
+            // Double-check we should still process
+            if (!isPageVisible || isProcessingAuth) return;
+            
+            const currentUserId = nextSession?.user?.id;
+            const hasDataForUser = currentUserId && currentUserId === lastFetchedUserId && profile;
+            
+            // Don't reload if it's the same user and we already have data
+            if (event === 'SIGNED_IN' && hasDataForUser) {
+              console.log('[auth] skipping reload - same user, have data');
+              return;
+            }
+            
+            setIsProcessingAuth(true);
+            setLoading(true);
+            
+            try {
+              setSession(nextSession);
+              setUser(nextSession?.user ?? null);
+              
+              if (nextSession?.user) {
+                console.time('auth:fetchProfile');
+                await fetchProfile(nextSession.user.id);
+                console.timeEnd('auth:fetchProfile');
+              } else {
+                setProfile(null);
+                setThriveSprite(null);
+                setLastFetchedUserId(null);
+              }
+            } finally {
+              setLoading(false);
+              setIsProcessingAuth(false);
+            }
+          }, 300); // 300ms debounce
         },
       );
 
-      return () => subscription.unsubscribe();
+      return () => {
+        subscription.unsubscribe();
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        if (authTimeout) {
+          clearTimeout(authTimeout);
+        }
+      };
     })();
   }, []);
 
