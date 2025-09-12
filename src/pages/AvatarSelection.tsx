@@ -45,10 +45,8 @@ export default function AvatarSelection() {
     'thumbs',
   ];
 
-  const handleSaveAvatar = async (seedParam?: string, styleParam?: string) => {
-    const seed = seedParam ?? selectedSeed;
-    const style = styleParam ?? selectedStyle;
-    if (!seed || !user) return;
+  const handleSaveAvatar = async () => {
+    if (!selectedSeed || !user) return;
 
     setLoading(true);
     try {
@@ -58,8 +56,50 @@ export default function AvatarSelection() {
 
       const { error } = await supabase.from('thrive_sprites').upsert({
         student_id: user.id,
-        image_url: getAvatarUrl(seed, style),
-        options: { seed, style },
+        image_url: getAvatarUrl(selectedSeed, selectedStyle),
+        options: { seed: selectedSeed, style: selectedStyle },
+      });
+
+      if (error) throw error;
+
+      await refreshProfile();
+
+      toast({
+        title: t('avatar.toast.savedTitle'),
+        description: t('avatar.toast.savedDesc'),
+      });
+
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error saving avatar:', error);
+      toast({
+        title: t('avatar.toast.errorTitle'),
+        description: t('avatar.toast.errorDesc'),
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRandomAvatar = async () => {
+    const randomSeed = Math.random().toString(36).substring(7);
+    const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+    setSelectedSeed(randomSeed);
+    setSelectedStyle(randomStyle);
+    
+    if (!user) return;
+
+    setLoading(true);
+    try {
+      const getAvatarUrl = (seed: string, style: string) => {
+        return `https://api.dicebear.com/9.x/${style}/svg?seed=${seed}&size=80&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+      };
+
+      const { error } = await supabase.from('thrive_sprites').upsert({
+        student_id: user.id,
+        image_url: getAvatarUrl(randomSeed, randomStyle),
+        options: { seed: randomSeed, style: randomStyle },
       });
 
       if (error) throw error;
@@ -123,13 +163,7 @@ export default function AvatarSelection() {
                 variant="outline"
                 size="lg"
                 disabled={loading}
-                onClick={async () => {
-                  const randomSeed = Math.random().toString(36).substring(7);
-                  const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
-                  setSelectedSeed(randomSeed);
-                  setSelectedStyle(randomStyle);
-                  await handleSaveAvatar(randomSeed, randomStyle);
-                }}
+                onClick={handleRandomAvatar}
               >
                 {t('avatar.randomPick')}
               </Button>

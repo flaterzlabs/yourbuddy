@@ -31,8 +31,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [thriveSprite, setThriveSprite] = useState<ThriveSprite | null>(null);
   const [loading, setLoading] = useState(true);
+  const [lastFetchedUserId, setLastFetchedUserId] = useState<string | null>(null);
 
   const fetchProfile = async (userId: string) => {
+    // Avoid unnecessary refetches for the same user
+    if (lastFetchedUserId === userId && profile) return;
+    
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -48,10 +52,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Set sprite if present (students) or null otherwise
       // @ts-ignore - embedded relation
       setThriveSprite((data as any)?.thrive_sprite ?? null);
+      setLastFetchedUserId(userId);
     } catch (error) {
       console.error('Error fetching profile:', error);
       setProfile(null);
       setThriveSprite(null);
+      setLastFetchedUserId(null);
     }
   };
 
@@ -84,6 +90,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         async (event, nextSession) => {
           if (event === 'INITIAL_SESSION') return;
           console.log('[auth] event:', event);
+          
+          // Don't reload if it's the same user and we already have data
+          if (event === 'SIGNED_IN' && nextSession?.user?.id === lastFetchedUserId && profile) {
+            console.log('[auth] skipping reload for same user');
+            return;
+          }
+          
           setLoading(true);
           setSession(nextSession);
           setUser(nextSession?.user ?? null);
@@ -94,6 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           } else {
             setProfile(null);
             setThriveSprite(null);
+            setLastFetchedUserId(null);
           }
           setLoading(false);
         },
