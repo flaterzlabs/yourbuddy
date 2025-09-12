@@ -43,6 +43,8 @@
     "howUse": "How will you use BUDDY?",
     "username": "Username",
     "usernamePlaceholder": "What should we call you?",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "Your password",
     "email": "Email",
     "password": "Password",
     "processing": "Processing...",

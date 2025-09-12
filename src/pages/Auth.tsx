@@ -165,7 +165,7 @@ export default function Auth() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seu@email.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   className="mt-1"
                   required
                 />
@@ -178,7 +178,7 @@ export default function Auth() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Sua senha"
+                  placeholder={t('auth.passwordPlaceholder')}
                   className="mt-1"
                   required
                 />
