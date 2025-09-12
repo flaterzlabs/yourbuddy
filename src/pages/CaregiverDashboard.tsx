@@ -274,14 +274,14 @@ export default function CaregiverDashboard() {
       if (request?.student_id) {
         try {
           await supabase
-            .channel('help-status-updates')
+            .channel(`help-status-student-${request.student_id}`)
             .send({
               type: 'broadcast',
-              event: 'status-change',
+              event: 'status-update',
               payload: {
                 request_id: requestId,
                 student_id: request.student_id,
-                new_status: action,
+                status: action,
                 updated_at: new Date().toISOString(),
               },
             });

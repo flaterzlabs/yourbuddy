@@ -47,20 +47,25 @@ export default function StudentDashboard() {
   useEffect(() => {
     fetchHelpRequests();
 
+    if (!user?.id) return;
+
     // Subscribe to realtime updates with status change notifications
     const channel = supabase
-      .channel('help-requests-updates')
+      .channel(`help-requests-student-${user.id}`)
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
           table: 'help_requests',
-          filter: `student_id=eq.${user?.id}`,
         },
         (payload) => {
           const newRecord = payload.new as HelpRequest;
           const oldRecord = payload.old as HelpRequest;
+          
+          // Filter for this student's requests only
+          const relevantRecord = newRecord || oldRecord;
+          if (!relevantRecord || relevantRecord.student_id !== user.id) return;
           
           // Check for status changes to show notifications
           if (payload.eventType === 'UPDATE' && newRecord && oldRecord) {
@@ -84,10 +89,35 @@ export default function StudentDashboard() {
       )
       .subscribe();
 
+    // Also listen to broadcast channel for immediate notifications
+    const broadcastChannel = supabase
+      .channel(`help-status-student-${user.id}`)
+      .on('broadcast', { event: 'status-update' }, (payload: any) => {
+        const data = payload.payload;
+        if (!data || data.student_id !== user.id) return;
+        
+        // Show notification for status changes
+        if (data.status === 'answered') {
+          toast({
+            title: t('studentDash.helpAnswered'),
+            description: t('studentDash.helpAnsweredDesc'),
+          });
+        } else if (data.status === 'closed') {
+          toast({
+            title: t('studentDash.helpClosed'),
+            description: t('studentDash.helpClosedDesc'),
+          });
+        }
+        
+        fetchHelpRequests();
+      })
+      .subscribe();
+
     return () => {
       supabase.removeChannel(channel);
+      supabase.removeChannel(broadcastChannel);
     };
-  }, [user?.id]);
+  }, [user?.id, t]);
 
   const handleHelpRequest = async (e: React.FormEvent) => {
     e.preventDefault();
