@@ -100,7 +100,11 @@
       "waiting": "Aguardando",
       "answered": "Respondido",
       "closed": "Finalizado"
-    }
+    },
+    "helpAnswered": "Ajuda recebida! ✅",
+    "helpAnsweredDesc": "Um responsável respondeu ao seu pedido.",
+    "helpClosed": "Pedido finalizado 🎯", 
+    "helpClosedDesc": "Seu pedido de ajuda foi resolvido."
   },
   "caregiverDash": {
     "title": "Painel do Responsável",

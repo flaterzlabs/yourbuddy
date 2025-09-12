@@ -34,11 +34,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [lastFetchedUserId, setLastFetchedUserId] = useState<string | null>(null);
   const [isProcessingAuth, setIsProcessingAuth] = useState(false);
 
+  // Cache management for smoother tab switching
+  const getCachedData = (userId: string) => {
+    try {
+      const cached = sessionStorage.getItem(`auth_cache_${userId}`);
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const setCachedData = (userId: string, data: { profile: Profile | null; thriveSprite: ThriveSprite | null }) => {
+    try {
+      sessionStorage.setItem(`auth_cache_${userId}`, JSON.stringify(data));
+    } catch {
+      // Ignore cache errors
+    }
+  };
+
   const fetchProfile = async (userId: string, force = false) => {
-    // Avoid unnecessary refetches for the same user unless forced
+    // Check cache first if not forcing
     if (!force && lastFetchedUserId === userId && profile) {
       console.log('[auth] skipping fetchProfile - already have data for user', userId);
       return;
+    }
+
+    // Try loading from cache first to avoid flickering
+    if (!force) {
+      const cached = getCachedData(userId);
+      if (cached && cached.profile) {
+        console.log('[auth] loading from cache for user', userId);
+        setProfile(cached.profile);
+        setThriveSprite(cached.thriveSprite);
+        setLastFetchedUserId(userId);
+        setLoading(false); // Important: set loading to false immediately with cached data
+      }
     }
     
     try {
@@ -53,11 +83,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       if (error) throw error;
-      setProfile(data as any);
-      // Set sprite if present (students) or null otherwise
-      // @ts-ignore - embedded relation
-      setThriveSprite((data as any)?.thrive_sprite ?? null);
+      
+      const profileData = data as any;
+      const spriteData = profileData?.thrive_sprite ?? null;
+      
+      setProfile(profileData);
+      setThriveSprite(spriteData);
       setLastFetchedUserId(userId);
+      
+      // Update cache
+      setCachedData(userId, { profile: profileData, thriveSprite: spriteData });
     } catch (error) {
       console.error('Error fetching profile:', error);
       setProfile(null);
@@ -82,15 +117,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
       setUser(session?.user ?? null);
+      
       if (session?.user) {
-        console.time('auth:fetchProfile');
-        await fetchProfile(session.user.id);
-        console.timeEnd('auth:fetchProfile');
+        // Check cache first to avoid flickering
+        const cached = getCachedData(session.user.id);
+        if (cached?.profile) {
+          console.log('[auth] init: loading from cache');
+          setProfile(cached.profile);
+          setThriveSprite(cached.thriveSprite);
+          setLastFetchedUserId(session.user.id);
+          setLoading(false);
+          
+          // Still fetch fresh data in background but don't show loading
+          fetchProfile(session.user.id, false);
+        } else {
+          console.time('auth:fetchProfile');
+          await fetchProfile(session.user.id);
+          console.timeEnd('auth:fetchProfile');
+        }
       } else {
         setProfile(null);
         setThriveSprite(null);
       }
-      setLoading(false);
+      
+      if (!session?.user || !getCachedData(session?.user?.id)?.profile) {
+        setLoading(false);
+      }
       console.timeEnd('auth:init');
 
       // Handle page visibility changes

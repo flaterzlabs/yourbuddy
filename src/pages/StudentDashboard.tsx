@@ -24,6 +24,7 @@ export default function StudentDashboard() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent'>('ok');
+  const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
 
   const fetchHelpRequests = async () => {
     console.time('student:fetchHelpRequests');
@@ -46,7 +47,7 @@ export default function StudentDashboard() {
   useEffect(() => {
     fetchHelpRequests();
 
-    // Subscribe to realtime updates
+    // Subscribe to realtime updates with status change notifications
     const channel = supabase
       .channel('help-requests-updates')
       .on(
@@ -57,7 +58,27 @@ export default function StudentDashboard() {
           table: 'help_requests',
           filter: `student_id=eq.${user?.id}`,
         },
-        () => {
+        (payload) => {
+          const newRecord = payload.new as HelpRequest;
+          const oldRecord = payload.old as HelpRequest;
+          
+          // Check for status changes to show notifications
+          if (payload.eventType === 'UPDATE' && newRecord && oldRecord) {
+            if (oldRecord.status === 'open' && newRecord.status === 'answered') {
+              toast({
+                title: t('studentDash.helpAnswered'),
+                description: t('studentDash.helpAnsweredDesc'),
+              });
+              setLastStatusChange({id: newRecord.id, status: 'answered'});
+            } else if (oldRecord.status !== 'closed' && newRecord.status === 'closed') {
+              toast({
+                title: t('studentDash.helpClosed'),
+                description: t('studentDash.helpClosedDesc'),
+              });
+              setLastStatusChange({id: newRecord.id, status: 'closed'});
+            }
+          }
+          
           fetchHelpRequests();
         },
       )
@@ -74,16 +95,37 @@ export default function StudentDashboard() {
 
     setLoading(true);
 
+    // Optimistic update - add request immediately to UI
+    const optimisticRequest: HelpRequest = {
+      id: `temp-${Date.now()}`, // Temporary ID
+      student_id: user.id,
+      message: message || null,
+      urgency,
+      status: 'open',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      resolved_by: null,
+      resolved_at: null,
+    };
+
+    // Add to UI immediately
+    setHelpRequests(prev => [optimisticRequest, ...prev]);
+
     try {
-      const { error } = await supabase.from('help_requests').insert({
+      const { data, error } = await supabase.from('help_requests').insert({
         student_id: user.id,
         message: message || undefined,
         urgency,
-      });
+      }).select().single();
 
       if (error) throw error;
 
       toast({ title: t('studentDash.sentTitle'), description: t('studentDash.sentDesc') });
+
+      // Replace optimistic request with real one
+      setHelpRequests(prev => prev.map(req => 
+        req.id === optimisticRequest.id ? data : req
+      ));
 
       // Notify caregivers via realtime broadcast (fallback independent of DB replication)
       try {
@@ -107,6 +149,10 @@ export default function StudentDashboard() {
       setUrgency('ok');
     } catch (error) {
       console.error('Error creating help request:', error);
+      
+      // Remove optimistic request on error
+      setHelpRequests(prev => prev.filter(req => req.id !== optimisticRequest.id));
+      
       toast({
         title: t('auth.toast.errorTitle'),
         description: t('studentDash.sendError'),

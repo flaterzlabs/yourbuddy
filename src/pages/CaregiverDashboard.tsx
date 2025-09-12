@@ -251,6 +251,9 @@ export default function CaregiverDashboard() {
 
   const handleHelpRequestAction = async (requestId: string, action: 'answered' | 'closed') => {
     try {
+      // Find the request to get student info for notification
+      const request = helpRequests.find(r => r.id === requestId);
+      
       const { error } = await supabase
         .from('help_requests')
         .update({
@@ -266,6 +269,28 @@ export default function CaregiverDashboard() {
         title: action === 'answered' ? 'Marcado como respondido' : 'Pedido finalizado',
         description: 'O estudante foi notificado.',
       });
+
+      // Notify the student via broadcast
+      if (request?.student_id) {
+        try {
+          await supabase
+            .channel('help-status-updates')
+            .send({
+              type: 'broadcast',
+              event: 'status-change',
+              payload: {
+                request_id: requestId,
+                student_id: request.student_id,
+                new_status: action,
+                updated_at: new Date().toISOString(),
+              },
+            });
+        } catch (e) {
+          // Best effort - ignore broadcast failures
+          console.log('Broadcast notification failed:', e);
+        }
+      }
+
       // Atualiza imediatamente enquanto o realtime notifica
       fetchHelpRequests();
     } catch (error) {
