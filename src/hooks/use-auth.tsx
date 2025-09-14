@@ -13,12 +13,11 @@ interface AuthContextType {
   thriveSprite: ThriveSprite | null;
   loading: boolean;
   signUp: (
-    email: string,
+    username: string,
     password: string,
     role: string,
-    username?: string,
   ) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (username: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -226,7 +225,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })();
   }, []);
 
-  const signUp = async (email: string, password: string, role: string, username?: string) => {
+  const signUp = async (username: string, password: string, role: string) => {
+    const email = `${username}@buddy.internal`;
     const redirectUrl = `${window.location.origin}/`;
 
     const { error } = await supabase.auth.signUp({
@@ -236,7 +236,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         emailRedirectTo: redirectUrl,
         data: {
           role,
-          username: username || email.split('@')[0],
+          username,
         },
       },
     });
@@ -244,7 +244,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error };
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (username: string, password: string) => {
+    const email = `${username}@buddy.internal`;
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
