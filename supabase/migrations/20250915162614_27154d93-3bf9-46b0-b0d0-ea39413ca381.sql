@@ -1,4 +1,10 @@
--- Adiciona códigos para cuidadores e permite conexões por esses códigos
+-- Adiciona a coluna caregiver_code em public.profiles.
+-- Atualiza handle_new_user() para criar o profile do usuário no signup,
+-- gerando student_code para alunos e caregiver_code para cuidadores/educadores.
+-- Cria create_student_connection_by_caregiver_code(code), que permite ao aluno autenticado
+-- localizar um cuidador/educador pelo código, evitar duplicidade e criar conexão (status 'active').
+-- Atualiza a RLS em public.connections para permitir INSERT somente quando auth.uid() = student_id.
+-- Efeito: cuidadores compartilham um código e alunos se conectam usando esse código, com RLS garantindo auto-serviço seguro.
 -- Add caregiver_code column to profiles table
 ALTER TABLE public.profiles 
 ADD COLUMN caregiver_code VARCHAR(8);

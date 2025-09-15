@@ -1,5 +1,10 @@
--- Garante que estudantes só vejam perfis de cuidadores conectados
--- Create function to check if a student is connected to a caregiver
+-- Cria a função is_student_connected_to_caregiver(student_uuid, caregiver_uuid)
+-- que verifica se há conexão 'active' entre estudante e cuidador na tabela public.connections.
+-- Adiciona uma policy de RLS em public.profiles permitindo SELECT, para usuários autenticados,
+-- apenas de perfis com role IN ('caregiver','educator') quando o estudante logado
+-- estiver conectado ao cuidador/educador consultado.
+-- Efeito: estudantes só enxergam perfis de cuidadores/educadores aos quais estão conectados.
+
 CREATE OR REPLACE FUNCTION public.is_student_connected_to_caregiver(student_uuid uuid, caregiver_uuid uuid)
 RETURNS boolean
 LANGUAGE sql
