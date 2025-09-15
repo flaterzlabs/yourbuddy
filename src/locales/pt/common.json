@@ -117,6 +117,7 @@
     "connect": "Conectar",
     "statConnected": "Conectados",
     "statOpenRequests": "Pedidos Abertos",
+    "statClosedRequests": "Pedidos Finalizados",
     "helpRequests": "Pedidos de Ajuda",
     "openCount": "{{count}} abertos",
     "emptyHelp": "Nenhum pedido de ajuda ainda",

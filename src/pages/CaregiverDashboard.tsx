@@ -342,6 +342,9 @@ export default function CaregiverDashboard() {
 
   const activeConnections = connections.filter((c) => c.status === 'active');
   const openHelpRequests = helpRequests.filter((r) => r.status === 'open');
+  const closedHelpRequests = helpRequests.filter(
+    (r) => r.status === 'answered' || r.status === 'closed',
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -445,7 +448,7 @@ export default function CaregiverDashboard() {
               </div>
 
               {/* Stats Cards */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
                   <div className="text-3xl font-bold text-primary">{activeConnections.length}</div>
                   <div className="text-sm text-muted-foreground">
@@ -456,6 +459,14 @@ export default function CaregiverDashboard() {
                   <div className="text-3xl font-bold text-warning">{openHelpRequests.length}</div>
                   <div className="text-sm text-muted-foreground">
                     {t('caregiverDash.statOpenRequests')}
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                  <div className="text-3xl font-bold text-emerald-500">
+                    {closedHelpRequests.length}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {t('caregiverDash.statClosedRequests')}
                   </div>
                 </div>
               </div>
