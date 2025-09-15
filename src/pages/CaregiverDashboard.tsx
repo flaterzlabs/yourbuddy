@@ -339,16 +339,11 @@ export default function CaregiverDashboard() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col items-center gap-2">
             <BuddyLogo size="lg" />
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                {t('caregiverDash.headerHello', { name: profile?.username })}
-              </h1>
-              <p className="text-muted-foreground">
-                {profile?.role === 'educator' ? t('caregiverDash.titleEducator') : t('caregiverDash.title')}
-              </p>
-            </div>
+            <h2 className="text-lg font-semibold text-muted-foreground">
+              {profile?.role === 'educator' ? t('caregiverDash.titleEducator') : t('caregiverDash.title')}
+            </h2>
           </div>
           <div className="flex items-center gap-4">
             <LanguageToggle />
@@ -367,13 +362,10 @@ export default function CaregiverDashboard() {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          {/* Welcome Section */}
-          <div className="text-center mb-8">
+          {/* Welcome Section - Centered */}
+          <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">
-              {profile?.role === 'caregiver'
-                ? t('caregiverDash.title')
-                : t('caregiverDash.titleEducator')}{' '}
-              👨‍👩‍👧‍👦
+              {t('caregiverDash.headerHello', { name: profile?.username })}
             </h1>
             <p className="text-xl text-muted-foreground">{t('caregiverDash.subtitle')}</p>
           </div>
