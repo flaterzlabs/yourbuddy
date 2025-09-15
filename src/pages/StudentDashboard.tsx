@@ -249,32 +249,24 @@ export default function StudentDashboard() {
         <div className="max-w-2xl mx-auto">
           {/* Welcome Section */}
           <div className="text-center mb-8">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <StudentAvatar
-                imageUrl={thriveSprite?.image_url}
-                seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
-                style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
-                size={80}
-                className="border-4 border-primary/20"
-              />
-              <div>
-                <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  {t('studentDash.hello', { name: profile?.username })}
-                </h1>
-                <p className="text-xl text-muted-foreground">{t('studentDash.feelingToday')}</p>
-              </div>
+            <div className="mb-4">
+              <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                {t('studentDash.hello', { name: profile?.username })}
+              </h1>
+              <p className="text-xl text-muted-foreground">{t('studentDash.feelingToday')}</p>
             </div>
           </div>
 
           {/* Help Request Form - Centralized */}
           <Card className="p-6 bg-gradient-card shadow-medium mb-8">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="flex items-center justify-center mx-auto mb-4">
                 <StudentAvatar
                   imageUrl={thriveSprite?.image_url}
                   seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
                   style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
-                  size={32}
+                  size={120}
+                  className="border-2 border-success rounded-full"
                 />
               </div>
               <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
