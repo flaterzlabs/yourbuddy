@@ -10,7 +10,7 @@ import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Hand, Copy, Clock, CheckCircle, XCircle, Users } from 'lucide-react';
+import { Hand, Copy, Clock, CheckCircle, XCircle, Users, GraduationCap } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -425,10 +425,16 @@ export default function StudentDashboard() {
                     className="flex items-center justify-between p-4 bg-background/50 rounded-lg border border-border"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-semibold text-primary">
-                          {connection.profiles?.username?.charAt(0)?.toUpperCase() || '?'}
-                        </span>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        connection.profiles?.role === 'educator' 
+                          ? 'bg-blue-500/10 text-blue-600' 
+                          : 'bg-green-500/10 text-green-600'
+                      }`}>
+                        {connection.profiles?.role === 'educator' ? (
+                          <GraduationCap className="h-5 w-5" />
+                        ) : (
+                          <Users className="h-5 w-5" />
+                        )}
                       </div>
                       <div>
                         <h4 className="font-medium">

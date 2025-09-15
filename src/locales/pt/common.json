@@ -128,7 +128,8 @@
     "useCodeToConnect": "Use o código do estudante para fazer a primeira conexão",
     "studentFallback": "Estudante",
     "connectedOn": "Conectado em {{date}}",
-    "active": "Ativo"
+    "active": "Ativo",
+    "connectedCaregivers": "Responsáveis Conectados"
   }
   ,
   "avatar": {
