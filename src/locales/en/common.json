@@ -102,7 +102,8 @@
     "helpAnswered": "Help received! ✅",
     "helpAnsweredDesc": "A caregiver has responded to your request.",
     "helpClosed": "Request completed 🎯", 
-    "helpClosedDesc": "Your help request has been resolved."
+    "helpClosedDesc": "Your help request has been resolved.",
+    "connectedCaregivers": "Connected Caregivers"
   },
   "caregiverDash": {
     "title": "Caregiver Dashboard",
