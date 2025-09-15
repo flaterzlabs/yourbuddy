@@ -246,7 +246,7 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           {/* Welcome Section */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-4 mb-4">
@@ -266,147 +266,134 @@ export default function StudentDashboard() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Help Request Form */}
-            <Card className="p-6 bg-gradient-card shadow-medium">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Hand className="h-8 w-8 text-primary" />
+          {/* Help Request Form - Centralized */}
+          <Card className="p-6 bg-gradient-card shadow-medium mb-8">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <StudentAvatar
+                  imageUrl={thriveSprite?.image_url}
+                  seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
+                  style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
+                  size={32}
+                />
+              </div>
+              <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
+              <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
+            </div>
+
+            <form onSubmit={handleHelpRequest} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  {t('studentDash.howFeeling')}
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <Button
+                    type="button"
+                    variant={urgency === 'ok' ? 'default' : 'outline'}
+                    onClick={() => setUrgency('ok')}
+                    className="text-sm"
+                  >
+                    {t('studentDash.feelings.ok')}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={urgency === 'attention' ? 'default' : 'outline'}
+                    onClick={() => setUrgency('attention')}
+                    className="text-sm"
+                  >
+                    {t('studentDash.feelings.attention')}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={urgency === 'urgent' ? 'default' : 'outline'}
+                    onClick={() => setUrgency('urgent')}
+                    className="text-sm"
+                  >
+                    {t('studentDash.feelings.urgent')}
+                  </Button>
                 </div>
-                <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
-                <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
               </div>
 
-              <form onSubmit={handleHelpRequest} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    {t('studentDash.howFeeling')}
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <Button
-                      type="button"
-                      variant={urgency === 'ok' ? 'default' : 'outline'}
-                      onClick={() => setUrgency('ok')}
-                      className="text-sm"
-                    >
-                      {t('studentDash.feelings.ok')}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={urgency === 'attention' ? 'default' : 'outline'}
-                      onClick={() => setUrgency('attention')}
-                      className="text-sm"
-                    >
-                      {t('studentDash.feelings.attention')}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={urgency === 'urgent' ? 'default' : 'outline'}
-                      onClick={() => setUrgency('urgent')}
-                      className="text-sm"
-                    >
-                      {t('studentDash.feelings.urgent')}
-                    </Button>
-                  </div>
-                </div>
+              <Button
+                type="submit"
+                variant="hero"
+                size="lg"
+                disabled={loading}
+                className="w-full"
+              >
+                {loading ? t('studentDash.sending') : t('studentDash.sendHelp')}
+              </Button>
+            </form>
+          </Card>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    {t('studentDash.moreDetails')}
-                  </label>
-                  <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder={t('studentDash.messagePlaceholder') || ''}
-                    className="w-full p-3 rounded-xl border border-border bg-background"
-                    rows={3}
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  variant="hero"
-                  size="lg"
-                  disabled={loading}
-                  className="w-full"
-                >
-                  {loading ? t('studentDash.sending') : t('studentDash.sendHelp')}
-                </Button>
-              </form>
-            </Card>
-
-            {/* Student Code & Status */}
-            <div className="space-y-6">
-              {/* Student Code */}
-              <Card className="p-6 bg-gradient-card shadow-medium">
-                <h3 className="text-xl font-bold mb-4">{t('studentDash.studentCodeTitle')}</h3>
-                <div className="bg-background/50 p-4 rounded-xl border border-border">
-                  <div className="flex items-center justify-between">
-                    <code className="text-2xl font-mono font-bold text-primary">
-                      {profile?.student_code || '...'}
-                    </code>
-                    <Button variant="outline" size="sm" onClick={copyStudentCode}>
-                      <Copy className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground mt-3">
-                  {t('studentDash.studentCodeHint')}
+          {/* Recent Help Requests - Below main form */}
+          <Card className="p-6 bg-gradient-card shadow-medium mb-8">
+            <h3 className="text-xl font-bold mb-4">{t('studentDash.recentRequests')}</h3>
+            <div className="space-y-3 max-h-64 overflow-y-auto">
+              {helpRequests.length === 0 ? (
+                <p className="text-muted-foreground text-center py-4">
+                  {t('studentDash.noneYet')}
                 </p>
-              </Card>
-
-              {/* Recent Help Requests */}
-              <Card className="p-6 bg-gradient-card shadow-medium">
-                <h3 className="text-xl font-bold mb-4">{t('studentDash.recentRequests')}</h3>
-                <div className="space-y-3 max-h-64 overflow-y-auto">
-                  {helpRequests.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">
-                      {t('studentDash.noneYet')}
-                    </p>
-                  ) : (
-                    helpRequests.slice(0, 5).map((request) => (
-                      <div
-                        key={request.id}
-                        className="p-3 bg-background/50 rounded-lg border border-border"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
-                            <Badge variant={getStatusColor(request.status || 'open')}>
-                              {request.status === 'open' && (
-                                <>
-                                  <Clock className="h-3 w-3 mr-1" />
-                                  {t('studentDash.status.waiting')}
-                                </>
-                              )}
-                              {request.status === 'answered' && (
-                                <>
-                                  <CheckCircle className="h-3 w-3 mr-1" />
-                                  {t('studentDash.status.answered')}
-                                </>
-                              )}
-                              {request.status === 'closed' && (
-                                <>
-                                  <XCircle className="h-3 w-3 mr-1" />
-                                  {t('studentDash.status.closed')}
-                                </>
-                              )}
-                            </Badge>
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            {new Date(request.created_at).toLocaleDateString(i18n.language)}
-                          </span>
-                        </div>
-                        {request.message && (
-                          <p className="text-sm text-muted-foreground">{request.message}</p>
-                        )}
+              ) : (
+                helpRequests.slice(0, 5).map((request) => (
+                  <div
+                    key={request.id}
+                    className="p-3 bg-background/50 rounded-lg border border-border"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
+                        <Badge variant={getStatusColor(request.status || 'open')}>
+                          {request.status === 'open' && (
+                            <>
+                              <Clock className="h-3 w-3 mr-1" />
+                              {t('studentDash.status.waiting')}
+                            </>
+                          )}
+                          {request.status === 'answered' && (
+                            <>
+                              <CheckCircle className="h-3 w-3 mr-1" />
+                              {t('studentDash.status.answered')}
+                            </>
+                          )}
+                          {request.status === 'closed' && (
+                            <>
+                              <XCircle className="h-3 w-3 mr-1" />
+                              {t('studentDash.status.closed')}
+                            </>
+                          )}
+                        </Badge>
                       </div>
-                    ))
-                  )}
-                </div>
-              </Card>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(request.created_at).toLocaleDateString(i18n.language)}
+                      </span>
+                    </div>
+                    {request.message && (
+                      <p className="text-sm text-muted-foreground">{request.message}</p>
+                    )}
+                  </div>
+                ))
+              )}
             </div>
-          </div>
+          </Card>
+
+          {/* Student Code - Footer */}
+          <Card className="p-4 bg-gradient-card shadow-medium">
+            <div className="text-center">
+              <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('studentDash.studentCodeTitle')}</h3>
+              <div className="flex items-center justify-center gap-2">
+                <code className="text-lg font-mono font-bold text-primary">
+                  {profile?.student_code || '...'}
+                </code>
+                <Button variant="outline" size="sm" onClick={copyStudentCode}>
+                  <Copy className="h-3 w-3" />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                {t('studentDash.studentCodeHint')}
+              </p>
+            </div>
+          </Card>
         </div>
       </div>
     </div>
