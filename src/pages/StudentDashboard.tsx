@@ -398,14 +398,16 @@ export default function StudentDashboard() {
 
           {/* Recent Help Requests - Below main form */}
           <Card className="p-6 bg-gradient-card shadow-medium mb-8">
-            <h3 className="text-xl font-bold mb-4">{t('studentDash.recentRequests')}</h3>
-            <div className="space-y-3 max-h-64 overflow-y-auto">
+            <h3 className="text-xl font-bold mb-4">
+              {t('studentDash.recentRequests')} ({helpRequests.length.toString().padStart(2, '0')})
+            </h3>
+            <div className="space-y-3 max-h-48 overflow-y-auto">
               {helpRequests.length === 0 ? (
                 <p className="text-muted-foreground text-center py-4">
                   {t('studentDash.noneYet')}
                 </p>
               ) : (
-                helpRequests.slice(0, 5).map((request) => (
+                helpRequests.map((request) => (
                   <div
                     key={request.id}
                     className="p-3 bg-background/50 rounded-lg border border-border"
