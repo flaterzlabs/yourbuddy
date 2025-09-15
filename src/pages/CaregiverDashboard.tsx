@@ -368,50 +368,45 @@ export default function CaregiverDashboard() {
               {t('caregiverDash.headerHello', { name: profile?.username })}
             </h1>
             <p className="text-xl text-muted-foreground">{t('caregiverDash.subtitle')}</p>
+            
+            {/* Display Caregiver Code */}
+            {profile?.caregiver_code && (
+              <div className="bg-gradient-card p-6 rounded-lg border shadow-medium mt-6 max-w-md mx-auto">
+                <div className="text-center">
+                  <p className="text-sm text-muted-foreground mb-2">Seu código de conexão:</p>
+                  <Badge variant="outline" className="font-mono text-lg px-4 py-2">
+                    {profile.caregiver_code}
+                  </Badge>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Compartilhe este código com seus alunos para que eles se conectem
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Connect Student Form */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Stats Overview */}
             <Card className="p-6 bg-gradient-card shadow-medium">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <UserPlus className="h-8 w-8 text-primary" />
+                  <Users className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="text-xl font-bold mb-2">{t('caregiverDash.connectStudentTitle')}</h2>
-                <p className="text-muted-foreground text-sm">{t('caregiverDash.enterCode')}</p>
+                <h2 className="text-xl font-bold mb-2">Visão Geral</h2>
+                <p className="text-muted-foreground text-sm">Estatísticas dos seus alunos</p>
               </div>
 
-              <form onSubmit={handleConnectStudent} className="space-y-4">
-                <Input
-                  value={studentCode}
-                  onChange={(e) => setStudentCode(e.target.value.toUpperCase())}
-                  placeholder={t('caregiverDash.codePlaceholder') || ''}
-                  className="text-center text-lg font-mono"
-                  maxLength={8}
-                />
-
-                <Button
-                  type="submit"
-                  variant="hero"
-                  size="lg"
-                  disabled={loading || !studentCode.trim()}
-                  className="w-full"
-                >
-                  {loading ? t('caregiverDash.connecting') : t('caregiverDash.connect')}
-                </Button>
-              </form>
-
               {/* Stats Cards */}
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
-                  <div className="text-2xl font-bold text-primary">{activeConnections.length}</div>
-                  <div className="text-xs text-muted-foreground">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                  <div className="text-3xl font-bold text-primary">{activeConnections.length}</div>
+                  <div className="text-sm text-muted-foreground">
                     {t('caregiverDash.statConnected')}
                   </div>
                 </div>
-                <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
-                  <div className="text-2xl font-bold text-warning">{openHelpRequests.length}</div>
-                  <div className="text-xs text-muted-foreground">
+                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                  <div className="text-3xl font-bold text-warning">{openHelpRequests.length}</div>
+                  <div className="text-sm text-muted-foreground">
                     {t('caregiverDash.statOpenRequests')}
                   </div>
                 </div>
@@ -419,7 +414,7 @@ export default function CaregiverDashboard() {
             </Card>
 
             {/* Help Requests */}
-            <Card className="lg:col-span-2 p-6 bg-gradient-card shadow-medium">
+            <Card className="p-6 bg-gradient-card shadow-medium">
               <div className="flex items-center gap-3 mb-6">
                 <AlertTriangle className="h-6 w-6 text-warning" />
                 <h2 className="text-xl font-bold">{t('caregiverDash.helpRequests')}</h2>

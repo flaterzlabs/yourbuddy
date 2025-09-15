@@ -6,25 +6,65 @@ import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageToggle } from '@/components/language-toggle';
 import { StudentAvatar } from '@/components/student-avatar';
+import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Hand, Copy, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Hand, Copy, Clock, CheckCircle, XCircle, Users } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 
+type Connection = Database['public']['Tables']['connections']['Row'] & {
+  profiles: {
+    username: string;
+    role: string;
+  };
+};
+
 export default function StudentDashboard() {
   const { t, i18n } = useTranslation();
   const { user, profile, thriveSprite, signOut } = useAuth();
   const navigate = useNavigate();
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
+  const [connections, setConnections] = useState<Connection[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent'>('ok');
   const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
+
+  const fetchConnections = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('connections')
+        .select(`
+          *,
+          profiles!connections_caregiver_id_fkey (
+            username,
+            role
+          )
+        `)
+        .eq('student_id', user.id)
+        .eq('status', 'active');
+
+      if (error) throw error;
+      setConnections(data || []);
+    } catch (error) {
+      console.error('Error fetching connections:', error);
+    }
+  };
+
+  const handleConnectionAdded = () => {
+    fetchConnections();
+    toast({
+      title: "Conexão estabelecida!",
+      description: "Você foi conectado com sucesso ao professor/responsável.",
+    });
+  };
 
   const fetchHelpRequests = async () => {
     console.time('student:fetchHelpRequests');
@@ -46,6 +86,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     fetchHelpRequests();
+    fetchConnections();
 
     if (!user?.id) return;
 
@@ -231,6 +272,7 @@ export default function StudentDashboard() {
         <div className="flex justify-between items-center mb-8">
           <BuddyLogo size="lg" />
           <div className="flex items-center gap-4">
+            <SettingsModal onConnectionAdded={handleConnectionAdded} />
             <LanguageToggle />
             <ThemeToggle />
             <Button
@@ -369,23 +411,27 @@ export default function StudentDashboard() {
             </div>
           </Card>
 
-          {/* Student Code - Footer */}
-          <Card className="p-4 bg-gradient-card shadow-medium">
-            <div className="text-center">
-              <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('studentDash.studentCodeTitle')}</h3>
-              <div className="flex items-center justify-center gap-2">
-                <code className="text-lg font-mono font-bold text-primary">
-                  {profile?.student_code || '...'}
-                </code>
-                <Button variant="outline" size="sm" onClick={copyStudentCode}>
-                  <Copy className="h-3 w-3" />
-                </Button>
+          {/* Connected Teachers/Parents Section */}
+          {connections.length > 0 && (
+            <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t p-4">
+              <div className="max-w-2xl mx-auto">
+                <div className="flex items-center gap-2 mb-2">
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Professores/Responsáveis Conectados</span>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  {connections.map((connection) => (
+                    <Badge key={connection.id} variant="secondary" className="px-3 py-1">
+                      {connection.profiles.username}
+                      <span className="ml-1 text-xs text-muted-foreground">
+                        ({connection.profiles.role === 'educator' ? 'Professor' : 'Responsável'})
+                      </span>
+                    </Badge>
+                  ))}
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                {t('studentDash.studentCodeHint')}
-              </p>
             </div>
-          </Card>
+          )}
         </div>
       </div>
     </div>

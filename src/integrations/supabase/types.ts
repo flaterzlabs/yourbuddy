@@ -157,6 +157,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          caregiver_code: string | null
           created_at: string
           id: string
           role: Database["public"]["Enums"]["user_role"]
@@ -166,6 +167,7 @@ export type Database = {
           username: string
         }
         Insert: {
+          caregiver_code?: string | null
           created_at?: string
           id?: string
           role: Database["public"]["Enums"]["user_role"]
@@ -175,6 +177,7 @@ export type Database = {
           username: string
         }
         Update: {
+          caregiver_code?: string | null
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["user_role"]
@@ -226,6 +229,10 @@ export type Database = {
     }
     Functions: {
       create_connection_by_code: {
+        Args: { input_code: string }
+        Returns: Json
+      }
+      create_student_connection_by_caregiver_code: {
         Args: { input_code: string }
         Returns: Json
       }
