@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 
 type Connection = Database['public']['Tables']['connections']['Row'] & {
-  profiles: {
+  caregiver_profile: {
     username: string;
     role: string;
   };
@@ -39,11 +39,11 @@ export default function StudentDashboard() {
     if (!user) return;
 
     try {
-        const { data, error } = await supabase
+      const { data, error } = await supabase
         .from('connections')
         .select(`
           *,
-          profiles!caregiver_id (
+          caregiver_profile:profiles!caregiver_id (
             username,
             role
           )
@@ -51,7 +51,12 @@ export default function StudentDashboard() {
         .eq('student_id', user.id)
         .eq('status', 'active');
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching connections:', error);
+        throw error;
+      }
+      
+      console.log('Connections data:', data); // Debug log
       setConnections(data || []);
     } catch (error) {
       console.error('Error fetching connections:', error);
@@ -426,11 +431,11 @@ export default function StudentDashboard() {
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        connection.profiles?.role === 'educator' 
+                        connection.caregiver_profile?.role === 'educator' 
                           ? 'bg-blue-500/10 text-blue-600' 
                           : 'bg-green-500/10 text-green-600'
                       }`}>
-                        {connection.profiles?.role === 'educator' ? (
+                        {connection.caregiver_profile?.role === 'educator' ? (
                           <GraduationCap className="h-5 w-5" />
                         ) : (
                           <Users className="h-5 w-5" />
@@ -438,7 +443,7 @@ export default function StudentDashboard() {
                       </div>
                       <div>
                         <h4 className="font-medium">
-                          {connection.profiles?.username || 'Professor/Responsável'}
+                          {connection.caregiver_profile?.username || 'Professor/Responsável'}
                         </h4>
                         <p className="text-sm text-muted-foreground">
                           Conectado em {new Date(connection.created_at).toLocaleDateString(i18n.language)}
@@ -446,7 +451,7 @@ export default function StudentDashboard() {
                       </div>
                     </div>
                     <Badge variant="secondary" className="px-3 py-1">
-                      {connection.profiles?.role === 'educator' ? 'Professor' : 'Responsável'}
+                      {connection.caregiver_profile?.role === 'educator' ? 'Professor' : 'Responsável'}
                     </Badge>
                   </div>
                 ))}
