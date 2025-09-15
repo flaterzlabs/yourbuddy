@@ -130,9 +130,15 @@
     "studentFallback": "Estudante",
     "connectedOn": "Conectado em {{date}}",
     "active": "Ativo",
-    "connectedCaregivers": "Responsáveis Conectados"
-  }
-  ,
+    "connectedCaregivers": "Responsáveis Conectados",
+    "copyCode": "Copiar código",
+    "copied": "Copiado!",
+    "copyHelper": "Clique para copiar e compartilhar rapidamente",
+    "copySuccessTitle": "Código copiado!",
+    "copySuccessDesc": "Agora é só colar onde quiser compartilhar.",
+    "copyErrorTitle": "Erro ao copiar",
+    "copyErrorDesc": "Não conseguimos copiar o código. Tente novamente."
+  },
   "avatar": {
     "title": "Escolha seu ThriveSprite!",
     "subtitle": "Selecione o avatar que mais combina com você",

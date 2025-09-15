@@ -130,9 +130,15 @@
     "studentFallback": "Student",
     "connectedOn": "Connected on {{date}}",
     "active": "Active",
-    "connectedCaregivers": "Connected Caregivers"
-  }
-  ,
+    "connectedCaregivers": "Connected Caregivers",
+    "copyCode": "Copy code",
+    "copied": "Copied!",
+    "copyHelper": "Use the button to copy and share quickly",
+    "copySuccessTitle": "Code copied!",
+    "copySuccessDesc": "Paste it wherever you need to share.",
+    "copyErrorTitle": "Copy failed",
+    "copyErrorDesc": "We couldn't copy the code. Try again."
+  },
   "avatar": {
     "title": "Choose your ThriveSprite!",
     "subtitle": "Select the avatar that best matches you",

@@ -19,6 +19,8 @@ import {
   AlertTriangle,
   MessageSquare,
   Activity,
+  Copy,
+  Check,
 } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
@@ -41,6 +43,13 @@ export default function CaregiverDashboard() {
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [studentCode, setStudentCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied'>('idle');
+
+  useEffect(() => {
+    if (copyStatus !== 'copied') return;
+    const timeout = setTimeout(() => setCopyStatus('idle'), 2000);
+    return () => clearTimeout(timeout);
+  }, [copyStatus]);
 
   const fetchConnections = async () => {
     console.time('caregiver:fetchConnections');
@@ -372,12 +381,51 @@ export default function CaregiverDashboard() {
             {/* Display Caregiver Code */}
             {profile?.caregiver_code && (
               <div className="bg-gradient-card p-6 rounded-lg border shadow-medium mt-6 max-w-md mx-auto">
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-2">Seu código de conexão:</p>
-                  <Badge variant="outline" className="font-mono text-lg px-4 py-2">
-                    {profile.caregiver_code}
-                  </Badge>
-                  <p className="text-xs text-muted-foreground mt-2">
+                <div className="text-center space-y-3">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-2">Seu código de conexão:</p>
+                    <Badge variant="outline" className="font-mono text-lg px-4 py-2">
+                      {profile.caregiver_code}
+                    </Badge>
+                  </div>
+                  <div className="flex flex-col items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={async () => {
+                        if (!profile?.caregiver_code) return;
+                        try {
+                          await navigator.clipboard.writeText(profile.caregiver_code);
+                          setCopyStatus('copied');
+                          toast({
+                            title: t('caregiverDash.copySuccessTitle'),
+                            description: t('caregiverDash.copySuccessDesc'),
+                          });
+                        } catch (error) {
+                          console.error('Erro ao copiar código do cuidador', error);
+                          toast({
+                            title: t('caregiverDash.copyErrorTitle'),
+                            description: t('caregiverDash.copyErrorDesc'),
+                            variant: 'destructive',
+                          });
+                        }
+                      }}
+                      className="inline-flex items-center gap-2"
+                    >
+                      {copyStatus === 'copied' ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                      {copyStatus === 'copied'
+                        ? t('caregiverDash.copied')
+                        : t('caregiverDash.copyCode')}
+                    </Button>
+                    <p className="text-xs text-muted-foreground">
+                      {t('caregiverDash.copyHelper')}
+                    </p>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
                     Compartilhe este código com seus alunos para que eles se conectem
                   </p>
                 </div>
