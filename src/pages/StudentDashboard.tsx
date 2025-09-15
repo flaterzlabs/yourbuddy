@@ -413,24 +413,39 @@ export default function StudentDashboard() {
 
           {/* Connected Teachers/Parents Section */}
           {connections.length > 0 && (
-            <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t p-4">
-              <div className="max-w-2xl mx-auto">
-                <div className="flex items-center gap-2 mb-2">
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium">Professores/Responsáveis Conectados</span>
-                </div>
-                <div className="flex gap-2 flex-wrap">
-                  {connections.map((connection) => (
-                    <Badge key={connection.id} variant="secondary" className="px-3 py-1">
-                      {connection.profiles?.username || 'Professor/Responsável'}
-                      <span className="ml-1 text-xs text-muted-foreground">
-                        ({connection.profiles?.role === 'educator' ? 'Professor' : 'Responsável'})
-                      </span>
+            <Card className="p-6 bg-gradient-card shadow-medium">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                {t('studentDash.connectedCaregivers')}
+              </h3>
+              <div className="space-y-3">
+                {connections.map((connection) => (
+                  <div
+                    key={connection.id}
+                    className="flex items-center justify-between p-4 bg-background/50 rounded-lg border border-border"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">
+                          {connection.profiles?.username?.charAt(0)?.toUpperCase() || '?'}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="font-medium">
+                          {connection.profiles?.username || 'Professor/Responsável'}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          Conectado em {new Date(connection.created_at).toLocaleDateString(i18n.language)}
+                        </p>
+                      </div>
+                    </div>
+                    <Badge variant="secondary" className="px-3 py-1">
+                      {connection.profiles?.role === 'educator' ? 'Professor' : 'Responsável'}
                     </Badge>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-            </div>
+            </Card>
           )}
         </div>
       </div>
