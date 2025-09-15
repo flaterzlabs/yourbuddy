@@ -248,6 +248,10 @@ export type Database = {
         Args: { caregiver_uuid: string; student_uuid: string }
         Returns: boolean
       }
+      is_student_connected_to_caregiver: {
+        Args: { caregiver_uuid: string; student_uuid: string }
+        Returns: boolean
+      }
     }
     Enums: {
       connection_status: "pending" | "active" | "blocked"
