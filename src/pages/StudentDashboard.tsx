@@ -39,11 +39,11 @@ export default function StudentDashboard() {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+        const { data, error } = await supabase
         .from('connections')
         .select(`
           *,
-          profiles!connections_caregiver_id_fkey (
+          profiles!caregiver_id (
             username,
             role
           )
@@ -422,9 +422,9 @@ export default function StudentDashboard() {
                 <div className="flex gap-2 flex-wrap">
                   {connections.map((connection) => (
                     <Badge key={connection.id} variant="secondary" className="px-3 py-1">
-                      {connection.profiles.username}
+                      {connection.profiles?.username || 'Professor/Responsável'}
                       <span className="ml-1 text-xs text-muted-foreground">
-                        ({connection.profiles.role === 'educator' ? 'Professor' : 'Responsável'})
+                        ({connection.profiles?.role === 'educator' ? 'Professor' : 'Responsável'})
                       </span>
                     </Badge>
                   ))}
