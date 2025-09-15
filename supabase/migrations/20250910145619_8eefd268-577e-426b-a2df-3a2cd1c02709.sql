@@ -1,3 +1,4 @@
+-- Ajusta o search_path das funções para sanar alertas de segurança
 -- Fix security warning: Update functions to have immutable search_path
 CREATE OR REPLACE FUNCTION public.get_user_role(user_uuid UUID)
 RETURNS user_role

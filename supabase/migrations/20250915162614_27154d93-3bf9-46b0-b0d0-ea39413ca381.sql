@@ -1,3 +1,4 @@
+-- Adiciona códigos para cuidadores e permite conexões por esses códigos
 -- Add caregiver_code column to profiles table
 ALTER TABLE public.profiles 
 ADD COLUMN caregiver_code VARCHAR(8);

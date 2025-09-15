@@ -1,3 +1,4 @@
+-- Cria RPC de conexão por código e habilita eventos em tempo real nas tabelas principais
 -- Create missing RPC function for connection by code
 CREATE OR REPLACE FUNCTION public.create_connection_by_code(input_code TEXT)
 RETURNS JSON

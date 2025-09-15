@@ -1,3 +1,4 @@
+-- Garante que estudantes só vejam perfis de cuidadores conectados
 -- Create function to check if a student is connected to a caregiver
 CREATE OR REPLACE FUNCTION public.is_student_connected_to_caregiver(student_uuid uuid, caregiver_uuid uuid)
 RETURNS boolean

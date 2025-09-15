@@ -1,3 +1,4 @@
+-- Atualiza a RPC para ativar conexões imediatamente e devolver dados do estudante
 -- Update the create_connection_by_code function to set connections as active immediately
 -- and return student information for immediate display
 CREATE OR REPLACE FUNCTION public.create_connection_by_code(input_code text)

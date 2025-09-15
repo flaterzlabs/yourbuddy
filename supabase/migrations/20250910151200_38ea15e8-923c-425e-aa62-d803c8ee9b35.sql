@@ -1,3 +1,4 @@
+-- Adiciona a RPC de conexão por código e garante replica identity para realtime
 -- Create missing RPC function for connection by code
 CREATE OR REPLACE FUNCTION public.create_connection_by_code(input_code TEXT)
 RETURNS JSON

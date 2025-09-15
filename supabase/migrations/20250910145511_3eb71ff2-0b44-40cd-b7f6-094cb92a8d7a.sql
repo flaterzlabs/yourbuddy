@@ -1,3 +1,4 @@
+-- Configura a estrutura inicial com tipos, tabelas, políticas RLS e gatilhos essenciais do app
 -- Create custom types
 CREATE TYPE public.user_role AS ENUM ('student', 'caregiver', 'educator');
 CREATE TYPE public.connection_status AS ENUM ('pending', 'active', 'blocked');
