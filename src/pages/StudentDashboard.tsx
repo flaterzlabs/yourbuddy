@@ -39,25 +39,48 @@ export default function StudentDashboard() {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+      // First get connections
+      const { data: connectionsData, error: connectionsError } = await supabase
         .from('connections')
-        .select(`
-          *,
-          caregiver_profile:profiles!caregiver_id (
-            username,
-            role
-          )
-        `)
+        .select('*')
         .eq('student_id', user.id)
         .eq('status', 'active');
 
-      if (error) {
-        console.error('Error fetching connections:', error);
-        throw error;
+      if (connectionsError) {
+        console.error('Error fetching connections:', connectionsError);
+        throw connectionsError;
       }
-      
-      console.log('Connections data:', data); // Debug log
-      setConnections(data || []);
+
+      if (!connectionsData || connectionsData.length === 0) {
+        setConnections([]);
+        return;
+      }
+
+      // Get caregiver IDs
+      const caregiverIds = connectionsData.map(conn => conn.caregiver_id);
+
+      // Fetch caregiver profiles
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('user_id, username, role')
+        .in('user_id', caregiverIds);
+
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+        throw profilesError;
+      }
+
+      // Combine the data
+      const connectionsWithProfiles = connectionsData.map(connection => ({
+        ...connection,
+        caregiver_profile: profilesData?.find(profile => profile.user_id === connection.caregiver_id) || {
+          username: 'Professor/Responsável',
+          role: 'caregiver'
+        }
+      }));
+
+      console.log('Connected caregivers:', connectionsWithProfiles);
+      setConnections(connectionsWithProfiles);
     } catch (error) {
       console.error('Error fetching connections:', error);
     }
