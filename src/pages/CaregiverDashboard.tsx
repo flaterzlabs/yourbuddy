@@ -489,18 +489,10 @@ export default function CaregiverDashboard() {
                         <div className="flex gap-2">
                           <Button
                             size="sm"
-                            variant="default"
-                            onClick={() => handleHelpRequestAction(request.id, 'answered')}
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            {t('caregiverDash.respond')}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="secondary"
+                            variant="success"
                             onClick={() => handleHelpRequestAction(request.id, 'closed')}
                           >
-                            <XCircle className="h-4 w-4 mr-1" />
+                            <CheckCircle className="h-4 w-4 mr-1" />
                             {t('caregiverDash.finish')}
                           </Button>
                         </div>
