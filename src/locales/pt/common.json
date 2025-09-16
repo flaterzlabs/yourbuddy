@@ -118,6 +118,8 @@
     "statConnected": "Conectados",
     "statOpenRequests": "Pedidos Abertos",
     "statClosedRequests": "Pedidos Finalizados",
+    "requestsPerMonth": "Pedidos de ajuda por mês",
+    "chartRequestsLabel": "Pedidos",
     "helpRequests": "Pedidos de Ajuda",
     "openCount": "{{count}} abertos",
     "emptyHelp": "Nenhum pedido de ajuda ainda",

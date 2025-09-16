@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -25,6 +25,9 @@ import {
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { subMonths } from 'date-fns';
 
 type Connection = Database['public']['Tables']['connections']['Row'] & {
   student_profile?: Database['public']['Tables']['profiles']['Row'];
@@ -345,6 +348,37 @@ export default function CaregiverDashboard() {
   const closedHelpRequests = helpRequests.filter(
     (r) => r.status === 'answered' || r.status === 'closed',
   );
+  const helpRequestsByMonth = useMemo(() => {
+    const months: { key: string; date: Date }[] = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const date = subMonths(now, i);
+      months.push({ key: `${date.getFullYear()}-${date.getMonth()}`, date });
+    }
+
+    const counters = new Map<string, number>();
+    helpRequests.forEach((request) => {
+      if (!request.created_at) return;
+      const created = new Date(request.created_at);
+      const key = `${created.getFullYear()}-${created.getMonth()}`;
+      counters.set(key, (counters.get(key) ?? 0) + 1);
+    });
+
+    return months.map(({ key, date }) => ({
+      month: date.toLocaleDateString(i18n.language, { month: 'short' }),
+      fullLabel: date.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' }),
+      requests: counters.get(key) ?? 0,
+    }));
+  }, [helpRequests, i18n.language]);
+  const monthlyChartConfig = useMemo(
+    () => ({
+      requests: {
+        label: t('caregiverDash.chartRequestsLabel'),
+        color: 'hsl(var(--primary))',
+      },
+    }),
+    [t],
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -447,32 +481,47 @@ export default function CaregiverDashboard() {
                 <p className="text-muted-foreground text-sm">Estatísticas dos seus alunos</p>
               </div>
 
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
-                  <div className="text-3xl font-bold text-primary">{activeConnections.length}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {t('caregiverDash.statConnected')}
-                  </div>
-                </div>
-                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
-                  <div className="text-3xl font-bold text-warning">{openHelpRequests.length}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {t('caregiverDash.statOpenRequests')}
-                  </div>
-                </div>
-                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
-                  <div className="text-3xl font-bold text-emerald-500">
-                    {closedHelpRequests.length}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    {t('caregiverDash.statClosedRequests')}
-                  </div>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                <div className="text-3xl font-bold text-primary">{activeConnections.length}</div>
+                <div className="text-sm text-muted-foreground">
+                  {t('caregiverDash.statConnected')}
                 </div>
               </div>
-            </Card>
+              <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                <div className="text-3xl font-bold text-warning">{openHelpRequests.length}</div>
+                <div className="text-sm text-muted-foreground">
+                  {t('caregiverDash.statOpenRequests')}
+                </div>
+              </div>
+              <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                <div className="text-3xl font-bold text-emerald-500">
+                  {closedHelpRequests.length}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {t('caregiverDash.statClosedRequests')}
+                </div>
+              </div>
+            </div>
 
-            {/* Help Requests */}
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold mb-4">
+                {t('caregiverDash.requestsPerMonth')}
+              </h3>
+              <ChartContainer config={monthlyChartConfig} className="w-full h-64">
+                <BarChart data={helpRequestsByMonth}>
+                  <CartesianGrid vertical={false} strokeDasharray="4 4" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                  <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                  <ChartTooltip content={<ChartTooltipContent labelKey="fullLabel" />} />
+                  <Bar dataKey="requests" fill="var(--color-requests)" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ChartContainer>
+            </div>
+          </Card>
+
+          {/* Help Requests */}
             <Card className="p-6 bg-gradient-card shadow-medium">
               <div className="flex items-center gap-3 mb-6">
                 <AlertTriangle className="h-6 w-6 text-warning" />
