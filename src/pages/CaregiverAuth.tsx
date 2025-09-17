@@ -19,6 +19,7 @@ export default function CaregiverAuth() {
   const [isSignUp, setIsSignUp] = useState(true);
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [selectedRole, setSelectedRole] = useState<string>('caregiver');
   const [loading, setLoading] = useState(false);
 
@@ -53,12 +54,12 @@ export default function CaregiverAuth() {
 
     try {
       if (isSignUp) {
-        const { error } = await signUp(username, password, selectedRole);
+        const { error } = await signUp(identifier, password, selectedRole, username);
         if (error) throw error;
 
         toast({ title: t('auth.toast.created'), description: t('auth.toast.verify') });
       } else {
-        const { error } = await signIn(username, password);
+        const { error } = await signIn(identifier, password);
         if (error) throw error;
 
         toast({ title: t('auth.toast.logged'), description: t('auth.toast.welcome') });
@@ -125,18 +126,48 @@ export default function CaregiverAuth() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="username">{t('auth.username')}</Label>
-                <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder={t('auth.usernamePlaceholder')}
-                  className="mt-1"
-                  required
-                />
-              </div>
+              {isSignUp ? (
+                <>
+                  <div>
+                    <Label htmlFor="username">{t('auth.username')}</Label>
+                    <Input
+                      id="username"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder={t('auth.usernamePlaceholder')}
+                      className="mt-1"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="identifier">{t('auth.email')}</Label>
+                    <Input
+                      id="identifier"
+                      type="email"
+                      value={identifier}
+                      onChange={(e) => setIdentifier(e.target.value)}
+                      placeholder={t('auth.emailPlaceholder')}
+                      className="mt-1"
+                      required
+                    />
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <Label htmlFor="identifier">{t('auth.emailOrUsername')}</Label>
+                  <Input
+                    id="identifier"
+                    type="text"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    placeholder={t('auth.emailOrUsernamePlaceholder')}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+              )}
 
               <div>
                 <Label htmlFor="password">{t('auth.password')}</Label>
@@ -159,7 +190,12 @@ export default function CaregiverAuth() {
             <div className="mt-6 text-center">
               <button
                 type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
+                onClick={() => {
+                  setIsSignUp(!isSignUp);
+                  setIdentifier('');
+                  setUsername('');
+                  setPassword('');
+                }}
                 className="text-primary hover:underline"
               >
                 {isSignUp ? t('caregiverAuth.toggleToLogin') : t('caregiverAuth.toggleToSignup')}

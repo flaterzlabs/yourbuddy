@@ -47,6 +47,8 @@
     "emailPlaceholder": "seu@email.com",
     "passwordPlaceholder": "Sua senha",
     "email": "Email",
+    "emailOrUsername": "Email ou nome de usuário",
+    "emailOrUsernamePlaceholder": "seu@email.com ou nome de usuário",
     "password": "Senha",
     "processing": "Processando...",
     "toggleToLogin": "Já tem conta? Faça login",
@@ -61,7 +63,7 @@
       "seeYou": "Até breve!",
       "errorTitle": "Erro",
       "genericError": "Ocorreu um erro. Tente novamente.",
-      "invalidCreds": "Email ou senha incorretos.",
+      "invalidCreds": "Email/nome de usuário ou senha incorretos.",
       "alreadyRegistered": "Este email já está cadastrado. Faça login.",
       "weakPassword": "A senha deve ter pelo menos 6 caracteres."
     }

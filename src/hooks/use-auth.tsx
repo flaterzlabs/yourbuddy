@@ -18,7 +18,7 @@ interface AuthContextType {
     role: string,
     username?: string,
   ) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (identifier: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -244,7 +244,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error };
   };
 
-  const signIn = async (email: string, password: string) => {
+  const resolveEmailForSignIn = async (
+    identifier: string,
+  ): Promise<{ email?: string; error?: any }> => {
+    const trimmedIdentifier = identifier.trim();
+
+    if (trimmedIdentifier.includes('@')) {
+      return { email: trimmedIdentifier };
+    }
+
+    const { data, error } = await supabase.rpc('get_email_by_username', {
+      input_username: trimmedIdentifier,
+    });
+
+    if (error) {
+      return { error };
+    }
+
+    if (!data) {
+      return { error: new Error('Invalid login credentials') };
+    }
+
+    return { email: data as string };
+  };
+
+  const signIn = async (identifier: string, password: string) => {
+    const { email, error: resolveError } = await resolveEmailForSignIn(identifier);
+
+    if (resolveError || !email) {
+      return { error: resolveError ?? new Error('Invalid login credentials') };
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,

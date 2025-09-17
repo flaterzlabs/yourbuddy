@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 export default function Auth() {
   const { t } = useTranslation();
   const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [selectedRole, setSelectedRole] = useState<string>('student');
@@ -59,12 +59,12 @@ export default function Auth() {
 
     try {
       if (isSignUp) {
-        const { error } = await signUp(email, password, selectedRole, username);
+        const { error } = await signUp(identifier, password, selectedRole, username);
         if (error) throw error;
 
         toast({ title: t('auth.toast.created'), description: t('auth.toast.verify') });
       } else {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(identifier, password);
         if (error) throw error;
 
         toast({ title: t('auth.toast.logged'), description: t('auth.toast.welcome') });
@@ -142,18 +142,23 @@ export default function Auth() {
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder={t('auth.usernamePlaceholder')}
                     className="mt-1"
+                    required
                   />
                 </div>
               )}
 
               <div>
-                <Label htmlFor="email">{t('auth.email')}</Label>
+                <Label htmlFor="identifier">
+                  {isSignUp ? t('auth.email') : t('auth.emailOrUsername')}
+                </Label>
                 <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t('auth.emailPlaceholder')}
+                  id="identifier"
+                  type={isSignUp ? 'email' : 'text'}
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  placeholder={
+                    isSignUp ? t('auth.emailPlaceholder') : t('auth.emailOrUsernamePlaceholder')
+                  }
                   className="mt-1"
                   required
                 />
@@ -180,7 +185,12 @@ export default function Auth() {
             <div className="mt-6 text-center">
               <button
                 type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
+                onClick={() => {
+                  setIsSignUp(!isSignUp);
+                  setIdentifier('');
+                  setPassword('');
+                  setUsername('');
+                }}
                 className="text-primary hover:underline"
               >
                 {isSignUp ? t('auth.toggleToLogin') : t('auth.toggleToSignup')}

@@ -47,6 +47,8 @@
     "emailPlaceholder": "your@email.com",
     "passwordPlaceholder": "Your password",
     "email": "Email",
+    "emailOrUsername": "Email or username",
+    "emailOrUsernamePlaceholder": "your@email.com or username",
     "password": "Password",
     "processing": "Processing...",
     "toggleToLogin": "Already have an account? Log in",
@@ -61,7 +63,7 @@
       "seeYou": "See you soon!",
       "errorTitle": "Error",
       "genericError": "An error occurred. Please try again.",
-      "invalidCreds": "Invalid email or password.",
+      "invalidCreds": "Invalid email/username or password.",
       "alreadyRegistered": "This email is already registered. Please log in.",
       "weakPassword": "Password should be at least 6 characters."
     }
