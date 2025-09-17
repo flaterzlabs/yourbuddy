@@ -176,34 +176,42 @@
     }
   }
 
-  .emotion-button {
-    @apply w-20 h-20 rounded-full flex items-center justify-center text-2xl font-semibold transition-all duration-300 border-4 border-transparent cursor-pointer;
-    animation: pulse-gentle 3s ease-in-out infinite;
-  }
+  /* Botão base */
+.emotion-button {
+  @apply w-20 h-20 rounded-full flex items-center justify-center 
+         text-3xl font-bold transition-all duration-300 
+         border-4 border-transparent cursor-pointer shadow-md;
+  animation: pulse-gentle 3s ease-in-out infinite;
+}
 
-  .emotion-button:hover {
-    transform: scale(1.1);
-    animation-play-state: paused;
-  }
+/* Efeito ao passar o mouse */
+.emotion-button:hover {
+  @apply shadow-lg;
+  transform: scale(1.12);
+  animation-play-state: paused;
+}
 
-  .emotion-button.selected {
-    @apply border-white/30 shadow-lg;
-    animation-play-state: paused;
-    transform: scale(1.1);
-  }
+/* Estado selecionado */
+.emotion-button.selected {
+  @apply border-4 border-primary shadow-xl ring-4 ring-primary/30;
+  transform: scale(1.15);
+  animation-play-state: paused;
+}
 
-  .emotion-happy {
-    background: hsl(var(--emotion-happy));
-    color: hsl(var(--emotion-happy-foreground));
-  }
+/* Emoções específicas */
+.emotion-happy {
+  background: hsl(var(--emotion-happy));
+  color: hsl(var(--emotion-happy-foreground));
+}
 
-  .emotion-need {
-    background: hsl(var(--emotion-need));
-    color: hsl(var(--emotion-need-foreground));
-  }
+.emotion-need {
+  background: hsl(var(--emotion-need));
+  color: hsl(var(--emotion-need-foreground));
+}
 
-  .emotion-urgent {
-    background: hsl(var(--emotion-urgent));
-    color: hsl(var(--emotion-urgent-foreground));
-  }
+.emotion-urgent {
+  background: hsl(var(--emotion-urgent));
+  color: hsl(var(--emotion-urgent-foreground));
+}
+
 }
