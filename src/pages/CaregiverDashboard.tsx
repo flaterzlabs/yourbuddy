@@ -418,7 +418,7 @@ export default function CaregiverDashboard() {
 
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Stats Overview */}
-            <Card className="p-6 bg-gradient-card shadow-medium">
+            <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Users className="h-8 w-8 text-primary" />
@@ -468,7 +468,7 @@ export default function CaregiverDashboard() {
           </Card>
 
           {/* Help Requests */}
-            <Card className="p-6 bg-gradient-card shadow-medium">
+            <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
                 <AlertTriangle className="h-6 w-6 text-warning" />
                 <h2 className="text-xl font-bold">{t('caregiverDash.helpRequests')}</h2>
@@ -553,8 +553,8 @@ export default function CaregiverDashboard() {
             </Card>
           </div>
 
-          {/* Meus Alunos - Always visible */}
-          <Card className="mt-8 p-6 bg-gradient-card shadow-medium">
+          {/* Meus Alunos */}
+          <Card className="mt-8 p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
             <div className="flex items-center gap-3 mb-6">
               <Users className="h-6 w-6 text-primary" />
               <h2 className="text-xl font-bold">{t('caregiverDash.myStudents')}</h2>
