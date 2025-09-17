@@ -21,22 +21,80 @@ export default function ResetPassword() {
   const [checkedSession, setCheckedSession] = useState(false);
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setHasRecoverySession(!!data.session);
-      setCheckedSession(true);
+    let active = true;
+
+    const sanitizeUrl = () => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('code');
+      url.hash = '';
+      window.history.replaceState({}, document.title, url.pathname + url.search);
     };
 
-    checkSession();
+    const initRecoverySession = async () => {
+      try {
+        let session = null;
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get('code');
+
+        if (code) {
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) {
+            toast({
+              title: t('auth.toast.errorTitle'),
+              description: error.message || t('auth.toast.genericError'),
+              variant: 'destructive',
+            });
+          }
+          session = data?.session ?? null;
+          sanitizeUrl();
+        } else if (window.location.hash.includes('type=recovery')) {
+          const hashParams = new URLSearchParams(window.location.hash.substring(1));
+          const accessToken = hashParams.get('access_token');
+          const refreshToken = hashParams.get('refresh_token');
+
+          if (accessToken && refreshToken) {
+            const { data, error } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+
+            if (error) {
+              toast({
+                title: t('auth.toast.errorTitle'),
+                description: error.message || t('auth.toast.genericError'),
+                variant: 'destructive',
+              });
+            }
+
+            session = data?.session ?? null;
+            sanitizeUrl();
+          }
+        } else {
+          const { data } = await supabase.auth.getSession();
+          session = data.session;
+        }
+
+        if (!active) return;
+        setHasRecoverySession(!!session);
+      } finally {
+        if (active) {
+          setCheckedSession(true);
+        }
+      }
+    };
+
+    initRecoverySession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!active) return;
       setHasRecoverySession(!!session);
     });
 
     return () => {
+      active = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
