@@ -395,13 +395,14 @@ export default function StudentDashboard() {
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                variant="hero"
-                size="lg"
-                disabled={loading}
-                className="w-full"
-              >
+             <Button
+  type="submit"
+  variant="hero"
+  size="lg"
+  disabled={loading}
+  className="w-full py-6 text-lg font-semibold shadow-md hover:shadow-lg transition-all"
+>
+
                 {loading ? t('studentDash.sending') : t('studentDash.sendHelp')}
               </Button>
             </form>
