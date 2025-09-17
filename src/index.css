@@ -61,6 +61,14 @@
     --shadow-medium: 0 8px 30px hsl(220 70% 60% / 0.15);
     --shadow-strong: 0 12px 40px hsl(220 70% 60% / 0.2);
 
+    /* Emotional state colors */
+    --emotion-happy: 150 65% 55%;
+    --emotion-happy-foreground: 0 0% 100%;
+    --emotion-need: 45 95% 60%;
+    --emotion-need-foreground: 0 0% 100%;
+    --emotion-urgent: 0 75% 65%;
+    --emotion-urgent-foreground: 0 0% 100%;
+
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -105,6 +113,14 @@
     --destructive: 0 60% 60%;
     --destructive-foreground: 220 20% 95%;
 
+    /* Dark mode emotional state colors */
+    --emotion-happy: 150 55% 50%;
+    --emotion-happy-foreground: 230 25% 8%;
+    --emotion-need: 45 85% 55%;
+    --emotion-need-foreground: 230 25% 8%;
+    --emotion-urgent: 0 65% 60%;
+    --emotion-urgent-foreground: 220 20% 95%;
+
     --border: 230 20% 18%;
     --input: 230 20% 15%;
     --ring: 220 80% 70%;
@@ -148,5 +164,46 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary) / 0.7);
+  }
+
+  /* Emotional state button animations */
+  @keyframes pulse-gentle {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  .emotion-button {
+    @apply w-20 h-20 rounded-full flex items-center justify-center text-2xl font-semibold transition-all duration-300 border-4 border-transparent cursor-pointer;
+    animation: pulse-gentle 3s ease-in-out infinite;
+  }
+
+  .emotion-button:hover {
+    transform: scale(1.1);
+    animation-play-state: paused;
+  }
+
+  .emotion-button.selected {
+    @apply border-white/30 shadow-lg;
+    animation-play-state: paused;
+    transform: scale(1.1);
+  }
+
+  .emotion-happy {
+    background: hsl(var(--emotion-happy));
+    color: hsl(var(--emotion-happy-foreground));
+  }
+
+  .emotion-need {
+    background: hsl(var(--emotion-need));
+    color: hsl(var(--emotion-need-foreground));
+  }
+
+  .emotion-urgent {
+    background: hsl(var(--emotion-urgent));
+    color: hsl(var(--emotion-urgent-foreground));
   }
 }

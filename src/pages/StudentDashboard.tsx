@@ -351,36 +351,47 @@ export default function StudentDashboard() {
               <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
             </div>
 
-            <form onSubmit={handleHelpRequest} className="space-y-4">
+            <form onSubmit={handleHelpRequest} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-lg font-medium mb-4 text-center">
                   {t('studentDash.howFeeling')}
                 </label>
-                <div className="grid grid-cols-3 gap-2">
-                  <Button
-                    type="button"
-                    variant={urgency === 'ok' ? 'default' : 'outline'}
-                    onClick={() => setUrgency('ok')}
-                    className="text-sm"
-                  >
-                    {t('studentDash.feelings.ok')}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={urgency === 'attention' ? 'default' : 'outline'}
-                    onClick={() => setUrgency('attention')}
-                    className="text-sm"
-                  >
-                    {t('studentDash.feelings.attention')}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={urgency === 'urgent' ? 'default' : 'outline'}
-                    onClick={() => setUrgency('urgent')}
-                    className="text-sm"
-                  >
-                    {t('studentDash.feelings.urgent')}
-                  </Button>
+                <div className="flex justify-center items-center gap-8">
+                  {/* Happy/Well Button */}
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => setUrgency('ok')}
+                      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
+                    >
+                      😊
+                    </button>
+                    <p className="mt-2 text-sm font-medium">{t('studentDash.feelings.ok')}</p>
+                  </div>
+
+                  {/* Need Help Button */}
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => setUrgency('attention')}
+                      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
+                    >
+                      😟
+                    </button>
+                    <p className="mt-2 text-sm font-medium">{t('studentDash.feelings.attention')}</p>
+                  </div>
+
+                  {/* Urgent Button */}
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => setUrgency('urgent')}
+                      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
+                    >
+                      😭
+                    </button>
+                    <p className="mt-2 text-sm font-medium">{t('studentDash.feelings.urgent')}</p>
+                  </div>
                 </div>
               </div>
 
