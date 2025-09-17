@@ -6,73 +6,74 @@
 
 @layer base {
   :root {
-    /* Light theme - Friendly and warm colors */
-    --background: 220 20% 98%;
-    --foreground: 230 15% 15%;
+    /* Light theme - Warm & cozy */
+  --background: 40 40% 96%; /* bege claro */
+  --foreground: 220 25% 20%; /* texto escuro com bom contraste */
 
-    --card: 0 0% 100%;
-    --card-foreground: 230 15% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 25% 20%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 230 15% 15%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 25% 20%;
 
-    /* Primary - Soft blue for trust and calm */
-    --primary: 220 70% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 220 70% 85%;
+  /* Primary - Azul mais vivo */
+  --primary: 215 80% 55%; 
+  --primary-foreground: 0 0% 100%;
+  --primary-light: 215 90% 85%;
 
-    /* Secondary - Warm purple for creativity */
-    --secondary: 260 50% 75%;
-    --secondary-foreground: 230 15% 15%;
+  /* Secondary - Rosa/Pêssego quente */
+  --secondary: 340 70% 75%;
+  --secondary-foreground: 220 25% 20%;
 
-    /* Success - Gentle green */
-    --success: 150 60% 55%;
-    --success-foreground: 0 0% 100%;
-    --success-light: 150 60% 90%;
+  /* Success - Verde mais vibrante */
+  --success: 145 70% 50%;
+  --success-foreground: 0 0% 100%;
+  --success-light: 145 70% 88%;
 
-    /* Warning - Friendly orange */
-    --warning: 35 80% 65%;
-    --warning-foreground: 0 0% 100%;
-    --warning-light: 35 80% 90%;
+  /* Warning - Laranja mais quente */
+  --warning: 30 90% 60%;
+  --warning-foreground: 0 0% 100%;
+  --warning-light: 30 90% 88%;
 
-    /* Muted colors */
-    --muted: 220 15% 95%;
-    --muted-foreground: 230 10% 45%;
+  /* Muted */
+  --muted: 40 30% 92%;
+  --muted-foreground: 220 15% 40%;
 
-    --accent: 280 60% 80%;
-    --accent-foreground: 230 15% 15%;
+  /* Accent - Roxo mais aconchegante */
+  --accent: 280 65% 70%;
+  --accent-foreground: 220 25% 20%;
 
-    --destructive: 0 70% 65%;
-    --destructive-foreground: 0 0% 100%;
+  --destructive: 0 75% 60%;
+  --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 90%;
-    --input: 220 20% 96%;
-    --ring: 220 70% 60%;
+  --border: 40 25% 85%;
+  --input: 40 20% 94%;
+  --ring: 215 80% 55%;
 
-    --radius: 1rem;
+  --radius: 1rem;
 
-    /* Gradients for beautiful backgrounds */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
-    --gradient-hero: linear-gradient(135deg, hsl(220 70% 60%), hsl(260 50% 75%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 20% 98%));
+  /* Gradients mais aconchegantes */
+  --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  --gradient-hero: linear-gradient(135deg, hsl(215 80% 55%), hsl(340 70% 75%));
+  --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(40 40% 96%));
 
-    /* Shadows for depth */
-    --shadow-soft: 0 4px 20px hsl(220 70% 60% / 0.1);
-    --shadow-medium: 0 8px 30px hsl(220 70% 60% / 0.15);
-    --shadow-strong: 0 12px 40px hsl(220 70% 60% / 0.2);
+  /* Sombras mais quentes */
+  --shadow-soft: 0 4px 20px hsl(30 80% 60% / 0.1);
+  --shadow-medium: 0 8px 30px hsl(30 80% 60% / 0.15);
+  --shadow-strong: 0 12px 40px hsl(30 80% 60% / 0.2);
 
-    /* Emotional state colors */
-    --emotion-happy: 150 65% 55%;
-    --emotion-happy-foreground: 0 0% 100%;
-    --emotion-need: 45 95% 60%;
-    --emotion-need-foreground: 0 0% 100%;
-    --emotion-urgent: 0 75% 65%;
-    --emotion-urgent-foreground: 0 0% 100%;
+  /* Emoções (mais contrastantes e vibrantes) */
+  --emotion-happy: 145 75% 50%; /* verde-limão feliz */
+  --emotion-happy-foreground: 0 0% 100%;
+  --emotion-need: 45 100% 55%; /* amarelo vibrante */
+  --emotion-need-foreground: 0 0% 100%;
+  --emotion-urgent: 5 80% 55%; /* vermelho mais quente */
+  --emotion-urgent-foreground: 0 0% 100%;
 
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
+  /* Transições */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
 
   .dark {
     /* Dark theme - Calming and gentle */
