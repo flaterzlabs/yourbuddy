@@ -19,6 +19,7 @@ interface AuthContextType {
     username?: string,
   ) => Promise<{ error: any }>;
   signIn: (identifier: string, password: string) => Promise<{ error: any }>;
+  resetPassword: (identifier: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -283,6 +284,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error };
   };
 
+  const resetPassword = async (identifier: string) => {
+    const { email, error: resolveError } = await resolveEmailForSignIn(identifier);
+
+    if (resolveError || !email) {
+      return { error: resolveError ?? new Error('Invalid login credentials') };
+    }
+
+    const redirectUrl = `${window.location.origin}/reset-password`;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl,
+    });
+
+    return { error };
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
@@ -295,6 +311,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     signUp,
     signIn,
+    resetPassword,
     signOut,
     refreshProfile,
   };

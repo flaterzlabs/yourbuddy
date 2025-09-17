@@ -9,7 +9,7 @@ import { LanguageToggle } from '@/components/language-toggle';
 import { RoleCard } from '@/components/role-card';
 import { useAuth } from '@/hooks/use-auth';
 import { toast } from '@/hooks/use-toast';
-import { User, Users, GraduationCap } from 'lucide-react';
+import { User } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,8 +22,9 @@ export default function Auth() {
   const [username, setUsername] = useState('');
   const [selectedRole, setSelectedRole] = useState<string>('student');
   const [loading, setLoading] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
-  const { signUp, signIn, user } = useAuth();
+  const { signUp, signIn, resetPassword, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation() as { state?: { signUp?: boolean; selectedRole?: string } };
 
@@ -85,6 +86,36 @@ export default function Auth() {
       toast({ title: t('auth.toast.errorTitle'), description: message, variant: 'destructive' });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!identifier) {
+      toast({
+        title: t('auth.toast.errorTitle'),
+        description: t('auth.toast.enterIdentifier'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setResetting(true);
+    try {
+      const { error } = await resetPassword(identifier);
+      if (error) throw error;
+
+      toast({
+        title: t('auth.toast.resetSentTitle'),
+        description: t('auth.toast.resetSentDescription'),
+      });
+    } catch (error: any) {
+      toast({
+        title: t('auth.toast.errorTitle'),
+        description: error.message || t('auth.toast.genericError'),
+        variant: 'destructive',
+      });
+    } finally {
+      setResetting(false);
     }
   };
 
@@ -182,6 +213,19 @@ export default function Auth() {
               </Button>
             </form>
 
+            {!isSignUp && (
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={handleResetPassword}
+                  className="text-sm text-primary hover:underline"
+                  disabled={resetting}
+                >
+                  {resetting ? t('auth.resetting') : t('auth.forgotPassword')}
+                </button>
+              </div>
+            )}
+
             <div className="mt-6 text-center">
               <button
                 type="button"
@@ -190,6 +234,7 @@ export default function Auth() {
                   setIdentifier('');
                   setPassword('');
                   setUsername('');
+                  setResetting(false);
                 }}
                 className="text-primary hover:underline"
               >

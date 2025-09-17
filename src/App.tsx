@@ -12,6 +12,7 @@ import CaregiverAuth from './pages/CaregiverAuth';
 import StudentDashboard from './pages/StudentDashboard';
 import CaregiverDashboard from './pages/CaregiverDashboard';
 import AvatarSelection from './pages/AvatarSelection';
+import ResetPassword from './pages/ResetPassword';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -85,6 +86,7 @@ const App = () => (
               <Route path="/" element={<Welcome />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/caregiver-auth" element={<CaregiverAuth />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route
                 path="/avatar-selection"
                 element={
