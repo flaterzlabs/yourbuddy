@@ -668,8 +668,6 @@ export default function CaregiverDashboard() {
     </div>
   </Card>
 )}
-
-          )}
         </div>
       </div>
     </div>
