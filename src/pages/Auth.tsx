@@ -50,18 +50,6 @@ export default function Auth() {
       description: t('roles.student.desc'),
       icon: User,
     },
-    {
-      id: 'caregiver',
-      title: t('roles.caregiver.title'),
-      description: t('roles.caregiver.desc'),
-      icon: Users,
-    },
-    {
-      id: 'educator',
-      title: t('roles.educator.title'),
-      description: t('roles.educator.desc'),
-      icon: GraduationCap,
-    },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -181,6 +169,16 @@ export default function Auth() {
                 className="text-primary hover:underline"
               >
                 {isSignUp ? t('auth.toggleToLogin') : t('auth.toggleToSignup')}
+              </button>
+            </div>
+
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="text-muted-foreground hover:underline text-sm"
+              >
+                {t('auth.backToHome')}
               </button>
             </div>
           </Card>

@@ -49,6 +49,7 @@
     "processing": "Processando...",
     "toggleToLogin": "Já tem conta? Faça login",
     "toggleToSignup": "Não tem conta? Cadastre-se",
+    "backToHome": "← Voltar para o início",
     "toast": {
       "created": "Conta criada!",
       "verify": "Agora você pode começar a usar o BUDDY!",
