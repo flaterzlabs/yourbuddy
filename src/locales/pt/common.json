@@ -12,6 +12,7 @@
     "chooseRole": "Como você gostaria de usar o BUDDY?",
     "start": "Começar",
     "haveAccount": "Já tenho conta",
+    "caregiverLink": "É responsável ou educador? Clique aqui",
     "features": {
       "avatarTitle": "Avatar Personalizado",
       "avatarDesc": "Crie seu ThriveSprite único e divertido",
@@ -61,6 +62,16 @@
       "alreadyRegistered": "Este nome de usuário já está cadastrado. Faça login.",
       "weakPassword": "A senha deve ter pelo menos 6 caracteres."
     }
+  },
+  "caregiverAuth": {
+    "signup": "Criar Conta",
+    "login": "Entrar",
+    "joinBuddy": "Junte-se ao BUDDY como responsável ou educador",
+    "accessBuddy": "Acesse sua conta de responsável/educador",
+    "howUse": "Como você vai usar o BUDDY?",
+    "toggleToLogin": "Já tem conta? Faça login",
+    "toggleToSignup": "Não tem conta? Cadastre-se",
+    "backToStudent": "← Voltar para cadastro de estudante"
   },
   "notFound": {
     "title": "404",

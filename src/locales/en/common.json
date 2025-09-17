@@ -12,6 +12,7 @@
     "chooseRole": "How would you like to use BUDDY?",
     "start": "Get started",
     "haveAccount": "I already have an account",
+    "caregiverLink": "Are you a parent or educator? Click here",
     "features": {
       "avatarTitle": "Personalized Avatar",
       "avatarDesc": "Create your unique and fun ThriveSprite",
@@ -61,6 +62,16 @@
       "alreadyRegistered": "This username is already registered. Please log in.",
       "weakPassword": "Password should be at least 6 characters."
     }
+  },
+  "caregiverAuth": {
+    "signup": "Create Account",
+    "login": "Sign In",
+    "joinBuddy": "Join BUDDY as caregiver or educator",
+    "accessBuddy": "Access your caregiver/educator account",
+    "howUse": "How will you use BUDDY?",
+    "toggleToLogin": "Already have an account? Log in",
+    "toggleToSignup": "Don't have an account? Sign up",
+    "backToStudent": "← Back to student registration"
   },
   "notFound": {
     "title": "404",

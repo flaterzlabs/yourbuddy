@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from '@/hooks/use-auth';
 import { useTranslation } from 'react-i18next';
 import Welcome from './pages/Welcome';
 import Auth from './pages/Auth';
+import CaregiverAuth from './pages/CaregiverAuth';
 import StudentDashboard from './pages/StudentDashboard';
 import CaregiverDashboard from './pages/CaregiverDashboard';
 import AvatarSelection from './pages/AvatarSelection';
@@ -83,6 +84,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/caregiver-auth" element={<CaregiverAuth />} />
               <Route
                 path="/avatar-selection"
                 element={

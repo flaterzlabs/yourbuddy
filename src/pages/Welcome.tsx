@@ -11,9 +11,9 @@ import { useTranslation } from 'react-i18next';
 
 export default function Welcome() {
   const { t } = useTranslation();
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const selectedRole = 'student'; // Fixed role for students
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -21,27 +21,6 @@ export default function Welcome() {
       navigate('/dashboard');
     }
   }, [user, navigate]);
-
-  const roles = [
-    {
-      id: 'student',
-      title: t('roles.student.title'),
-      description: t('roles.student.desc'),
-      icon: User,
-    },
-    {
-      id: 'caregiver',
-      title: t('roles.caregiver.title'),
-      description: t('roles.caregiver.desc'),
-      icon: Users,
-    },
-    {
-      id: 'educator',
-      title: t('roles.educator.title'),
-      description: t('roles.educator.desc'),
-      icon: GraduationCap,
-    },
-  ];
 
   const handleContinue = () => {
     navigate('/auth', { state: { signUp: true, selectedRole } });
@@ -70,33 +49,37 @@ export default function Welcome() {
             </p>
           </div>
 
-          {/* Role Selection */}
+          {/* Student Focus Section */}
           <div className="mb-12">
-            <h2 className="text-2xl font-semibold mb-8 text-foreground">
-              {t('welcome.chooseRole')}
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-              {roles.map((role) => (
-                <RoleCard
-                  key={role.id}
-                  title={role.title}
-                  description={role.description}
-                  icon={role.icon}
-                  selected={selectedRole === role.id}
-                  onClick={() => setSelectedRole(role.id)}
-                />
-              ))}
+            <div className="max-w-md mx-auto">
+              <RoleCard
+                title={t('roles.student.title')}
+                description={t('roles.student.desc')}
+                icon={User}
+                selected={true}
+                onClick={() => {}}
+              />
             </div>
           </div>
 
           {/* Continue Button */}
-          <div className="flex justify-center gap-4">
-            <Button variant="hero" size="xl" onClick={handleContinue} className="px-12">
-              {t('welcome.start')}
-            </Button>
-            <Button variant="outline" size="xl" onClick={() => navigate('/auth')} className="px-8">
-              {t('welcome.haveAccount')}
-            </Button>
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex gap-4">
+              <Button variant="hero" size="xl" onClick={handleContinue} className="px-12">
+                {t('welcome.start')}
+              </Button>
+              <Button variant="outline" size="xl" onClick={() => navigate('/auth')} className="px-8">
+                {t('welcome.haveAccount')}
+              </Button>
+            </div>
+            
+            {/* Link for Parents/Educators */}
+            <button
+              onClick={() => navigate('/caregiver-auth')}
+              className="text-primary hover:underline text-sm font-medium mt-4"
+            >
+              {t('welcome.caregiverLink')}
+            </button>
           </div>
 
           {/* Features Preview */}
