@@ -635,35 +635,36 @@ export default function CaregiverDashboard() {
         >
           {profile.caregiver_code}
         </Badge>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={async () => {
-            if (!profile?.caregiver_code) return;
-            try {
-              await navigator.clipboard.writeText(profile.caregiver_code);
-              setCopyStatus('copied');
-              toast({
-                title: t('caregiverDash.copySuccessTitle'),
-                description: t('caregiverDash.copySuccessDesc'),
-              });
-            } catch (error) {
-              console.error('Erro ao copiar código do cuidador', error);
-              toast({
-                title: t('caregiverDash.copyErrorTitle'),
-                description: t('caregiverDash.copyErrorDesc'),
-                variant: 'destructive',
-              });
-            }
-          }}
-          className="h-9 w-9 p-0 border-primary/40"
-        >
-          {copyStatus === 'copied' ? (
-            <Check className="h-5 w-5 text-success" />
-          ) : (
-            <Copy className="h-5 w-5 text-primary" />
-          )}
-        </Button>
+       <Button
+  size="sm"
+  variant="ghost"
+  onClick={async () => {
+    if (!profile?.caregiver_code) return;
+    try {
+      await navigator.clipboard.writeText(profile.caregiver_code);
+      setCopyStatus('copied');
+      toast({
+        title: t('caregiverDash.copySuccessTitle'),
+        description: t('caregiverDash.copySuccessDesc'),
+      });
+    } catch (error) {
+      console.error('Erro ao copiar código do cuidador', error);
+      toast({
+        title: t('caregiverDash.copyErrorTitle'),
+        description: t('caregiverDash.copyErrorDesc'),
+        variant: 'destructive',
+      });
+    }
+  }}
+  className="h-9 w-9 p-0 border border-primary/40 bg-white/5 hover:bg-primary/10 hover:border-primary/60 transition-colors"
+>
+  {copyStatus === 'copied' ? (
+    <Check className="h-5 w-5 text-success" />
+  ) : (
+    <Copy className="h-5 w-5 text-primary" />
+  )}
+</Button>
+
       </div>
     </div>
   </Card>
