@@ -152,7 +152,8 @@
     "copySuccessTitle": "Código copiado!",
     "copySuccessDesc": "Agora é só colar onde quiser compartilhar.",
     "copyErrorTitle": "Erro ao copiar",
-    "copyErrorDesc": "Não conseguimos copiar o código. Tente novamente."
+    "copyErrorDesc": "Não conseguimos copiar o código. Tente novamente.",
+    "connectionCode": "Código de Conexão"
   },
   "avatar": {
     "title": "Escolha seu ThriveSprite!",

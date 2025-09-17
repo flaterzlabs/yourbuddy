@@ -152,7 +152,8 @@
     "copySuccessTitle": "Code copied!",
     "copySuccessDesc": "Paste it wherever you need to share.",
     "copyErrorTitle": "Copy failed",
-    "copyErrorDesc": "We couldn't copy the code. Try again."
+    "copyErrorDesc": "We couldn't copy the code. Try again.",
+    "connectionCode": "Connection Code"
   },
   "avatar": {
     "title": "Choose your ThriveSprite!",

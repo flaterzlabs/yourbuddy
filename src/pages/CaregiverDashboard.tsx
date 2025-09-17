@@ -414,60 +414,6 @@ export default function CaregiverDashboard() {
               {t('caregiverDash.headerHello', { name: profile?.username })}
             </h1>
             <p className="text-xl text-muted-foreground">{t('caregiverDash.subtitle')}</p>
-            
-            {/* Display Caregiver Code */}
-            {profile?.caregiver_code && (
-              <div className="bg-gradient-card p-6 rounded-lg border shadow-medium mt-6 max-w-md mx-auto">
-                <div className="text-center space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-2">Seu código de conexão:</p>
-                    <Badge variant="outline" className="font-mono text-lg px-4 py-2">
-                      {profile.caregiver_code}
-                    </Badge>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={async () => {
-                        if (!profile?.caregiver_code) return;
-                        try {
-                          await navigator.clipboard.writeText(profile.caregiver_code);
-                          setCopyStatus('copied');
-                          toast({
-                            title: t('caregiverDash.copySuccessTitle'),
-                            description: t('caregiverDash.copySuccessDesc'),
-                          });
-                        } catch (error) {
-                          console.error('Erro ao copiar código do cuidador', error);
-                          toast({
-                            title: t('caregiverDash.copyErrorTitle'),
-                            description: t('caregiverDash.copyErrorDesc'),
-                            variant: 'destructive',
-                          });
-                        }
-                      }}
-                      className="inline-flex items-center gap-2"
-                    >
-                      {copyStatus === 'copied' ? (
-                        <Check className="h-4 w-4" />
-                      ) : (
-                        <Copy className="h-4 w-4" />
-                      )}
-                      {copyStatus === 'copied'
-                        ? t('caregiverDash.copied')
-                        : t('caregiverDash.copyCode')}
-                    </Button>
-                    <p className="text-xs text-muted-foreground">
-                      {t('caregiverDash.copyHelper')}
-                    </p>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Compartilhe este código com seus alunos para que eles se conectem
-                  </p>
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8">
@@ -666,6 +612,59 @@ export default function CaregiverDashboard() {
               </div>
             )}
           </Card>
+
+          {/* Connection Code Card - Moved here from welcome section */}
+          {profile?.caregiver_code && (
+            <Card className="mt-6 p-4 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20 shadow-soft">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <UserPlus className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">{t('caregiverDash.connectionCode')}</h3>
+                    <p className="text-xs text-muted-foreground">
+                      Compartilhe com alunos para conectar
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Badge variant="outline" className="font-mono text-sm px-3 py-1">
+                    {profile.caregiver_code}
+                  </Badge>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={async () => {
+                      if (!profile?.caregiver_code) return;
+                      try {
+                        await navigator.clipboard.writeText(profile.caregiver_code);
+                        setCopyStatus('copied');
+                        toast({
+                          title: t('caregiverDash.copySuccessTitle'),
+                          description: t('caregiverDash.copySuccessDesc'),
+                        });
+                      } catch (error) {
+                        console.error('Erro ao copiar código do cuidador', error);
+                        toast({
+                          title: t('caregiverDash.copyErrorTitle'),
+                          description: t('caregiverDash.copyErrorDesc'),
+                          variant: 'destructive',
+                        });
+                      }
+                    }}
+                    className="h-8 w-8 p-0"
+                  >
+                    {copyStatus === 'copied' ? (
+                      <Check className="h-4 w-4 text-success" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
         </div>
       </div>
     </div>
