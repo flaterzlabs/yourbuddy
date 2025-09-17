@@ -44,7 +44,9 @@
     "howUse": "Como você vai usar o BUDDY?",
     "username": "Nome de usuário",
     "usernamePlaceholder": "Como quer ser chamado?",
+    "emailPlaceholder": "seu@email.com",
     "passwordPlaceholder": "Sua senha",
+    "email": "Email",
     "password": "Senha",
     "processing": "Processando...",
     "toggleToLogin": "Já tem conta? Faça login",
@@ -52,15 +54,15 @@
     "backToHome": "← Voltar para o início",
     "toast": {
       "created": "Conta criada!",
-      "verify": "Agora você pode começar a usar o BUDDY!",
+      "verify": "Verifique seu email para confirmar a conta.",
       "logged": "Login realizado!",
       "welcome": "Bem-vindo ao BUDDY!",
       "loggedOut": "Você saiu",
       "seeYou": "Até breve!",
       "errorTitle": "Erro",
       "genericError": "Ocorreu um erro. Tente novamente.",
-      "invalidCreds": "Nome de usuário ou senha incorretos.",
-      "alreadyRegistered": "Este nome de usuário já está cadastrado. Faça login.",
+      "invalidCreds": "Email ou senha incorretos.",
+      "alreadyRegistered": "Este email já está cadastrado. Faça login.",
       "weakPassword": "A senha deve ter pelo menos 6 caracteres."
     }
   },

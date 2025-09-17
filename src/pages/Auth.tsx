@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 export default function Auth() {
   const { t } = useTranslation();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [selectedRole, setSelectedRole] = useState<string>('student');
@@ -58,12 +59,12 @@ export default function Auth() {
 
     try {
       if (isSignUp) {
-        const { error } = await signUp(username, password, selectedRole);
+        const { error } = await signUp(email, password, selectedRole, username);
         if (error) throw error;
 
         toast({ title: t('auth.toast.created'), description: t('auth.toast.verify') });
       } else {
-        const { error } = await signIn(username, password);
+        const { error } = await signIn(email, password);
         if (error) throw error;
 
         toast({ title: t('auth.toast.logged'), description: t('auth.toast.welcome') });
@@ -131,14 +132,28 @@ export default function Auth() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {isSignUp && (
+                <div>
+                  <Label htmlFor="username">{t('auth.username')}</Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder={t('auth.usernamePlaceholder')}
+                    className="mt-1"
+                  />
+                </div>
+              )}
+
               <div>
-                <Label htmlFor="username">{t('auth.username')}</Label>
+                <Label htmlFor="email">{t('auth.email')}</Label>
                 <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder={t('auth.usernamePlaceholder')}
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t('auth.emailPlaceholder')}
                   className="mt-1"
                   required
                 />
