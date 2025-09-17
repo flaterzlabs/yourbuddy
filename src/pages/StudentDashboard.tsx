@@ -336,7 +336,7 @@ export default function StudentDashboard() {
           </div>
 
           {/* Help Request Form - Centralized */}
-          <Card className="p-6 bg-gradient-card shadow-medium mb-8">
+         <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
             <div className="text-center mb-6">
               <div className="flex items-center justify-center mx-auto mb-4">
                 <StudentAvatar
@@ -408,7 +408,7 @@ export default function StudentDashboard() {
           </Card>
 
           {/* Recent Help Requests - Below main form */}
-          <Card className="p-6 bg-gradient-card shadow-medium mb-8">
+          <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
             <h3 className="text-xl font-bold mb-4">
               {t('studentDash.recentRequests')} ({helpRequests.length.toString().padStart(2, '0')})
             </h3>
@@ -462,7 +462,7 @@ export default function StudentDashboard() {
 
           {/* Connected Teachers/Parents Section */}
           {connections.length > 0 && (
-            <Card className="p-6 bg-gradient-card shadow-medium">
+            <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <Users className="h-5 w-5" />
                 {t('studentDash.connectedCaregivers')}
