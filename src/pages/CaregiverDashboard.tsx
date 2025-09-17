@@ -613,9 +613,7 @@ export default function CaregiverDashboard() {
             )}
           </Card>
 
-          {/* Connection Code Card - Moved here from welcome section */}
-          {profile?.caregiver_code && (
-           {/* Connection Code Card - Moved here from welcome section */}
+         {/* Connection Code Card */}
 {profile?.caregiver_code && (
   <Card className="mt-6 p-5 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
     <div className="flex items-center justify-between">
