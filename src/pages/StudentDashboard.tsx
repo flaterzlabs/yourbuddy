@@ -339,13 +339,13 @@ export default function StudentDashboard() {
 <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
   <div className="text-center mb-6">
     <div className="flex items-center justify-center mx-auto mb-4">
-      <StudentAvatar
-        imageUrl={thriveSprite?.image_url}
-        seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
-        style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
-        size={120}
-        className="border-2 border-success rounded-full"
-      />
+     <StudentAvatar
+  imageUrl={thriveSprite?.image_url}
+  seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
+  style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
+  size={120}
+  className="border-4 border-success rounded-full shadow-md shadow-green-500"
+/>
     </div>
     <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
     <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
