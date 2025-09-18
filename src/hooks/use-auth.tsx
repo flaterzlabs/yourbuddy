@@ -254,19 +254,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { email: trimmedIdentifier };
     }
 
-    const { data, error } = await supabase.rpc('get_email_by_username', {
-      input_username: trimmedIdentifier,
-    });
-
-    if (error) {
-      return { error };
-    }
-
-    if (!data) {
-      return { error: new Error('Invalid login credentials') };
-    }
-
-    return { email: data as string };
+    // Function not available in current schema, return error
+    return { error: 'Username lookup not supported' };
   };
 
   const signIn = async (identifier: string, password: string) => {
