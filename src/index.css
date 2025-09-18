@@ -204,11 +204,11 @@
   color: hsl(var(--emotion-happy-foreground));
 }
 .emotion-happy:hover {
-  box-shadow: 0 6px 18px hsl(145 70% 40%); /* verde com contraste */
+  box-shadow: 0 0 16px 4px hsl(145 70% 45% / 0.6); /* centralizado */
 }
 .emotion-happy.selected {
-  border-color: hsl(145 85% 25%);
-  box-shadow: 0 10px 28px hsl(145 70% 35%);
+  border-color: hsl(145 85% 65%); /* mais clara */
+  box-shadow: 0 0 20px 6px hsl(145 70% 45% / 0.8);
 }
 
 .emotion-need {
@@ -216,11 +216,11 @@
   color: hsl(var(--emotion-need-foreground));
 }
 .emotion-need:hover {
-  box-shadow: 0 6px 18px hsl(35 90% 45%); /* amarelo/laranja */
+  box-shadow: 0 0 16px 4px hsl(35 90% 50% / 0.6);
 }
 .emotion-need.selected {
-  border-color: hsl(30 100% 35%);
-  box-shadow: 0 10px 28px hsl(35 85% 40%);
+  border-color: hsl(35 95% 65%);
+  box-shadow: 0 0 20px 6px hsl(35 90% 50% / 0.8);
 }
 
 .emotion-urgent {
@@ -228,12 +228,13 @@
   color: hsl(var(--emotion-urgent-foreground));
 }
 .emotion-urgent:hover {
-  box-shadow: 0 6px 18px hsl(0 80% 55%); /* vermelho médio → não branco */
+  box-shadow: 0 0 16px 4px hsl(0 80% 60% / 0.6);
 }
 .emotion-urgent.selected {
-  border-color: hsl(0 85% 60%); /* vermelho mais claro */
-  box-shadow: 0 10px 28px hsl(0 80% 50%);
+  border-color: hsl(0 90% 70%); /* vermelho mais claro */
+  box-shadow: 0 0 20px 6px hsl(0 80% 55% / 0.8);
 }
+
 
 
 
