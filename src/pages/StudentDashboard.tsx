@@ -335,65 +335,68 @@ export default function StudentDashboard() {
             </div>
           </div>
 
-          {/* Help Request Form - Centralized */}
-         <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
-            <div className="text-center mb-6">
-              <div className="flex items-center justify-center mx-auto mb-4">
-                <StudentAvatar
-                  imageUrl={thriveSprite?.image_url}
-                  seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
-                  style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
-                  size={120}
-                  className="border-2 border-success rounded-full"
-                />
-              </div>
-              <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
-              <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
-            </div>
-
-           <form onSubmit={handleHelpRequest} className="space-y-6">
-  <div>
-    <div className="flex justify-center items-center gap-8">
-      {/* Happy/Well Button */}
-      <button
-        type="button"
-        onClick={() => setUrgency('ok')}
-        className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
-      >
-        😊
-      </button>
-
-      {/* Need Help Button */}
-      <button
-        type="button"
-        onClick={() => setUrgency('attention')}
-        className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
-      >
-        😟
-      </button>
-
-      {/* Urgent Button */}
-      <button
-        type="button"
-        onClick={() => setUrgency('urgent')}
-        className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
-      >
-        😭
-      </button>
+         {/* Help Request Form */}
+<Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
+  <div className="text-center mb-6">
+    <div className="flex items-center justify-center mx-auto mb-4">
+      <StudentAvatar
+        imageUrl={thriveSprite?.image_url}
+        seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
+        style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
+        size={120}
+        className="border-2 border-success rounded-full"
+      />
     </div>
+    <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
+    <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
   </div>
 
-  <Button
-    type="submit"
-    variant="hero"
-    size="lg"
-    disabled={loading}
-    className="w-full py-6 text-lg font-semibold shadow-md hover:shadow-lg transition-all"
-  >
-    {loading ? t('studentDash.sending') : t('studentDash.sendHelp')}
-  </Button>
-</form>
-          </Card>
+  <form onSubmit={handleHelpRequest} className="space-y-8">
+    <div>
+      <div className="flex justify-center items-center gap-12">
+        {/* Happy/Well Button */}
+        <button
+          type="button"
+          onClick={() => setUrgency('ok')}
+          className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
+        >
+          😊
+        </button>
+
+        {/* Need Help Button */}
+        <button
+          type="button"
+          onClick={() => setUrgency('attention')}
+          className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
+        >
+          😟
+        </button>
+
+        {/* Urgent Button */}
+        <button
+          type="button"
+          onClick={() => setUrgency('urgent')}
+          className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
+        >
+          😭
+        </button>
+      </div>
+    </div>
+
+    {/* Botão principal de enviar ajuda */}
+    <Button
+      type="submit"
+      variant="hero"
+      size="lg"
+      disabled={loading}
+      className="max-w-md mx-auto w-full py-8 text-xl font-bold flex items-center justify-center 
+                 shadow-md hover:shadow-[0_0_16px_rgba(128,90,213,0.5)] 
+                 hover:scale-90 transition-all duration-200"
+    >
+      {loading ? t('studentDash.sending') : <>🆘 {t('studentDash.sendHelp')}</>}
+    </Button>
+  </form>
+</Card>
 
           {/* Recent Help Requests - Below main form */}
           <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
