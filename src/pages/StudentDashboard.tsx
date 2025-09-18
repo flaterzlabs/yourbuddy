@@ -384,17 +384,17 @@ export default function StudentDashboard() {
     </div>
 
     {/* Botão principal de enviar ajuda */}
-    <Button
-      type="submit"
-      variant="hero"
-      size="lg"
-      disabled={loading}
-      className="max-w-md mx-auto w-full py-8 text-xl font-bold flex items-center justify-center 
-                 shadow-md hover:shadow-[0_0_16px_rgba(128,90,213,0.5)] 
-                 hover:scale-90 transition-all duration-200"
-    >
-      {loading ? t('studentDash.sending') : <>🆘 {t('studentDash.sendHelp')}</>}
-    </Button>
+<Button
+  type="submit"
+  variant="hero"
+  size="lg"
+  disabled={loading}
+  className="max-w-md mx-auto w-full py-8 text-xl font-bold flex items-center justify-center 
+             shadow-md hover:shadow-[0_0_16px_rgba(128,90,213,0.5)] 
+             hover:scale-95 active:scale-90 transition-all duration-200"
+>
+  {loading ? t('studentDash.sending') : `🆘 ${t('studentDash.sendHelp')}`}
+</Button>
   </form>
 </Card>
 
