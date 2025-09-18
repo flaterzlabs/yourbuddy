@@ -177,27 +177,26 @@
     }
   }
 
-/* Botão base */
+  /* Botão base */
 .emotion-button {
   @apply w-20 h-20 rounded-full flex items-center justify-center 
-         text-4xl font-bold transition-all duration-300 
-         border-6 cursor-pointer shadow-md;
+         text-3xl font-bold transition-all duration-300 
+         border-4 border-transparent cursor-pointer shadow-md;
   animation: pulse-gentle 3s ease-in-out infinite;
-  border-color: currentColor; /* borda pega a cor do botão */
 }
 
 /* Efeito ao passar o mouse */
 .emotion-button:hover {
-  transform: scale(1.2);
+  @apply shadow-lg;
+  transform: scale(1.12);
   animation-play-state: paused;
-  box-shadow: 0 8px 25px currentColor; /* sombra da cor do botão */
 }
 
 /* Estado selecionado */
 .emotion-button.selected {
-  transform: scale(1.25);
+  @apply border-4 border-primary shadow-xl ring-4 ring-primary/30;
+  transform: scale(1.15);
   animation-play-state: paused;
-  box-shadow: 0 10px 30px currentColor; /* sombra ainda mais forte da cor do botão */
 }
 
 /* Emoções específicas */
@@ -215,44 +214,5 @@
   background: hsl(var(--emotion-urgent));
   color: hsl(var(--emotion-urgent-foreground));
 }
-/* Botão base */
-.emotion-button {
-  @apply w-20 h-20 rounded-full flex items-center justify-center 
-         text-4xl font-bold transition-all duration-300 
-         border-6 cursor-pointer shadow-md;
-  animation: pulse-gentle 3s ease-in-out infinite;
-  border-color: currentColor; /* borda pega a cor do botão */
-}
-
-/* Efeito ao passar o mouse */
-.emotion-button:hover {
-  transform: scale(1.2);
-  animation-play-state: paused;
-  box-shadow: 0 8px 25px currentColor; /* sombra da cor do botão */
-}
-
-/* Estado selecionado */
-.emotion-button.selected {
-  transform: scale(1.25);
-  animation-play-state: paused;
-  box-shadow: 0 10px 30px currentColor; /* sombra ainda mais forte da cor do botão */
-}
-
-/* Emoções específicas */
-.emotion-happy {
-  background: hsl(var(--emotion-happy));
-  color: hsl(var(--emotion-happy-foreground));
-}
-
-.emotion-need {
-  background: hsl(var(--emotion-need));
-  color: hsl(var(--emotion-need-foreground));
-}
-
-.emotion-urgent {
-  background: hsl(var(--emotion-urgent));
-  color: hsl(var(--emotion-urgent-foreground));
-}
-
 
 }
