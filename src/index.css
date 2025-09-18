@@ -182,34 +182,35 @@
   @apply w-20 h-20 rounded-full flex items-center justify-center 
          text-4xl font-bold transition-all duration-300 
          border-2 border-transparent cursor-pointer shadow-md;
-  animation: pulse-gentle 3s ease-in-out infinite;
+  animation: pulse-gentle 2s ease-in-out infinite; /* mais rápido */
 }
 
 /* Efeito ao passar o mouse */
 .emotion-button:hover {
-  @apply shadow-xl;
   transform: scale(1.08);
   animation-play-state: paused;
+  box-shadow: 0 8px 25px currentColor; /* sombra colorida */
 }
 
 /* Estado selecionado */
 .emotion-button.selected {
-  @apply border-4 shadow-xl;
+  @apply border-4;
   transform: scale(1.05);
   animation-play-state: paused;
+  box-shadow: 0 10px 30px currentColor; /* sombra mais forte */
 }
 
 /* Bordas específicas para cada emoção quando selecionada */
 .emotion-button.emotion-happy.selected {
-  border-color: hsl(var(--emotion-happy));
+  border-color: hsl(145 85% 25%); /* verde escuro */
 }
 
 .emotion-button.emotion-need.selected {
-  border-color: hsl(var(--emotion-need));
+  border-color: hsl(30 100% 35%); /* laranja escuro */
 }
 
 .emotion-button.emotion-urgent.selected {
-  border-color: hsl(var(--emotion-urgent));
+  border-color: hsl(0 85% 30%); /* vermelho vinho */
 }
 
 /* Emoções específicas */
@@ -227,5 +228,6 @@
   background: hsl(var(--emotion-urgent));
   color: hsl(var(--emotion-urgent-foreground));
 }
+
 
 }
