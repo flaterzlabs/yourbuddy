@@ -344,7 +344,7 @@ export default function StudentDashboard() {
       seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
       style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
       size={120}
-      className="border-4 border-success rounded-full shadow-2xl shadow-green-500"
+      className="border-4 border-success rounded-full shadow-md shadow-green-500"
     />
     </div>
     <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
