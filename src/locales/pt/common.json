@@ -135,7 +135,8 @@
     "helpAnsweredDesc": "Um responsável respondeu ao seu pedido.",
     "helpClosed": "Pedido finalizado 🎯", 
     "helpClosedDesc": "Seu pedido de ajuda foi resolvido.",
-    "connectedCaregivers": "Responsáveis Conectados"
+    "connectedCaregivers": "Responsáveis Conectados",
+    "historyTitle": "Histórico de Pedidos"
   },
   "caregiverDash": {
     "title": "Painel do Responsável",

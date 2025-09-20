@@ -177,25 +177,20 @@
     }
   }
 
- /* Botão base */
 .emotion-button {
-  @apply w-20 h-20 rounded-full flex items-center justify-center 
-         text-4xl font-bold transition-all duration-300 
-         border-2 border-transparent cursor-pointer shadow-md;
-  animation: pulse-gentle 2s ease-in-out infinite; /* mais rápido */
+  @apply w-20 h-20 rounded-full flex items-center justify-center text-5xl font-bold cursor-pointer transition-all duration-300 border-4 border-transparent;
 }
 
-/* Efeito ao passar o mouse */
 .emotion-button:hover {
-  transform: scale(1.08);
-  animation-play-state: paused;
+  @apply scale-110 shadow-[0_8px_20px_rgba(0,0,0,0.15)];
 }
 
-/* Estado selecionado */
 .emotion-button.selected {
-  @apply border-4;
-  transform: scale(1.05);
-  animation-play-state: paused;
+  @apply scale-125 border-4;
+}
+
+.emotion-button:not(.selected) {
+  @apply scale-90 opacity-40 grayscale hover:scale-100 hover:opacity-60;
 }
 
 /* Emoções específicas */
@@ -204,10 +199,10 @@
   color: hsl(var(--emotion-happy-foreground));
 }
 .emotion-happy:hover {
-  box-shadow: 0 0 16px 4px hsl(145 70% 45% / 0.6); /* centralizado */
+  box-shadow: 0 0 16px 4px hsl(145 70% 45% / 0.6);
 }
 .emotion-happy.selected {
-  border-color: hsl(145 85% 65%); /* mais clara */
+  border-color: hsl(145 85% 65%);
   box-shadow: 0 0 20px 6px hsl(145 70% 45% / 0.8);
 }
 
@@ -231,7 +226,7 @@
   box-shadow: 0 0 16px 4px hsl(0 80% 60% / 0.6);
 }
 .emotion-urgent.selected {
-  border-color: hsl(0 90% 70%); /* vermelho mais claro */
+  border-color: hsl(0 90% 70%);
   box-shadow: 0 0 20px 6px hsl(0 80% 55% / 0.8);
 }
 
