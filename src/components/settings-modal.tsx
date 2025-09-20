@@ -3,16 +3,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useTranslation } from 'react-i18next';
-import { Settings, UserPlus } from 'lucide-react';
+import { Link, UserPlus, Users, GraduationCap } from 'lucide-react';
 
 interface SettingsModalProps {
   onConnectionAdded?: () => void;
+  connections?: Array<{
+    id: string;
+    created_at: string;
+    caregiver_profile?: {
+      username: string;
+      role: string;
+    };
+  }>;
 }
 
-export function SettingsModal({ onConnectionAdded }: SettingsModalProps) {
+export function SettingsModal({ onConnectionAdded, connections = [] }: SettingsModalProps) {
   const [caregiverCode, setCaregiverCode] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [open, setOpen] = useState(false);
@@ -63,14 +72,14 @@ export function SettingsModal({ onConnectionAdded }: SettingsModalProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="icon" className="h-9 w-9">
-          <Settings className="h-4 w-4" />
+          <Link className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Settings className="h-5 w-5" />
-            Configurações
+            <Link className="h-5 w-5" />
+            Conexões
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleConnectCaregiver} className="space-y-4">
@@ -99,6 +108,54 @@ export function SettingsModal({ onConnectionAdded }: SettingsModalProps) {
             {isConnecting ? "Conectando..." : "Conectar"}
           </Button>
         </form>
+        
+        {/* Connected Caregivers Section */}
+        <div className="mt-6 pt-4 border-t border-border">
+          <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Responsáveis Conectados
+          </h3>
+          
+          {connections.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              Não há nenhum responsável conectado ainda...
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {connections.map((connection) => (
+                <div
+                  key={connection.id}
+                  className="flex items-center justify-between p-3 bg-background/50 rounded-lg border border-border"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      connection.caregiver_profile?.role === 'educator' 
+                        ? 'bg-blue-500/10 text-blue-600' 
+                        : 'bg-green-500/10 text-green-600'
+                    }`}>
+                      {connection.caregiver_profile?.role === 'educator' ? (
+                        <GraduationCap className="h-4 w-4" />
+                      ) : (
+                        <Users className="h-4 w-4" />
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-sm">
+                        {connection.caregiver_profile?.username || 'Professor/Responsável'}
+                      </h4>
+                      <p className="text-xs text-muted-foreground">
+                        Conectado em {new Date(connection.created_at).toLocaleDateString('pt-BR')}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs px-2 py-1">
+                    {connection.caregiver_profile?.role === 'educator' ? 'Professor' : 'Responsável'}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );

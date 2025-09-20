@@ -375,7 +375,7 @@ export default function StudentDashboard() {
                 </div>
               </DialogContent>
             </Dialog>
-            <SettingsModal onConnectionAdded={handleConnectionAdded} />
+            <SettingsModal onConnectionAdded={handleConnectionAdded} connections={connections} />
             <LanguageToggle />
             <ThemeToggle />
             <Button
@@ -466,48 +466,6 @@ export default function StudentDashboard() {
 </Card>
 
 
-          {/* Connected Teachers/Parents Section */}
-          {connections.length > 0 && (
-            <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                {t('studentDash.connectedCaregivers')}
-              </h3>
-              <div className="space-y-3">
-                {connections.map((connection) => (
-                  <div
-                    key={connection.id}
-                    className="flex items-center justify-between p-4 bg-background/50 rounded-lg border border-border"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        connection.caregiver_profile?.role === 'educator' 
-                          ? 'bg-blue-500/10 text-blue-600' 
-                          : 'bg-green-500/10 text-green-600'
-                      }`}>
-                        {connection.caregiver_profile?.role === 'educator' ? (
-                          <GraduationCap className="h-5 w-5" />
-                        ) : (
-                          <Users className="h-5 w-5" />
-                        )}
-                      </div>
-                      <div>
-                        <h4 className="font-medium">
-                          {connection.caregiver_profile?.username || 'Professor/Responsável'}
-                        </h4>
-                        <p className="text-sm text-muted-foreground">
-                          Conectado em {new Date(connection.created_at).toLocaleDateString(i18n.language)}
-                        </p>
-                      </div>
-                    </div>
-                    <Badge variant="secondary" className="px-3 py-1">
-                      {connection.caregiver_profile?.role === 'educator' ? 'Professor' : 'Responsável'}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
         </div>
       </div>
     </div>
