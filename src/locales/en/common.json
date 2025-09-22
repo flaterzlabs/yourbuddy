@@ -103,7 +103,7 @@
     "logout": "Sign out"
   },
   "studentDash": {
-    "hello": "Hello, {{name}}! 👋",
+    "hello": "Hello, {{name}} !",
     "feelingToday": "How are you feeling today?",
     "needHelpTitle": "Need Help?",
     "caregiversNotified": "Your caregivers will be notified immediately",
@@ -140,7 +140,7 @@
   "caregiverDash": {
     "title": "Caregiver Dashboard",
     "titleEducator": "Educator Dashboard",
-    "headerHello": "Hello, {{name}}, welcome",
+    "headerHello": "Hello, {{name}} !",
     "subtitle": "Track and support your connected students",
     "connectStudentTitle": "Connect Student",
     "enterCode": "Enter the student code",
