@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { ToastAction } from '@/components/ui/toast';
+import { ToastAction } from '@/components/ui/toast'; // Importação do componente
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageToggle } from '@/components/language-toggle';
@@ -106,10 +106,13 @@ export default function StudentDashboard() {
 
   const handleConnectionAdded = () => {
     fetchConnections();
+    // === Alteração: Adicionado variant e viewportId ===
     toast({
       title: "Conexão estabelecida!",
       description: "Você foi conectado com sucesso ao professor/responsável.",
       duration: 3000,
+      variant: 'student',
+      viewportId: 'student-toast-viewport',
     });
   };
 
@@ -158,12 +161,15 @@ export default function StudentDashboard() {
           // Check for status changes to show notifications
           if (payload.eventType === 'UPDATE' && newRecord && oldRecord) {
             if (oldRecord.status === 'open' && newRecord.status === 'answered') {
+              // === Alteração: Adicionado variant e viewportId ===
               toast({
                 title: t('studentDash.helpAnswered'),
                 description: t('studentDash.helpAnsweredDesc'),
                 duration: 3000,
+                variant: 'student',
+                viewportId: 'student-toast-viewport',
                 action: (
-                  <ToastAction 
+                  <ToastAction
                     altText={t('studentDash.viewDetails')}
                     onClick={() => setHistoryModalOpen(true)}
                   >
@@ -173,10 +179,13 @@ export default function StudentDashboard() {
               });
               setLastStatusChange({id: newRecord.id, status: 'answered'});
             } else if (oldRecord.status !== 'closed' && newRecord.status === 'closed') {
+              // === Alteração: Adicionado variant e viewportId ===
               toast({
                 title: t('studentDash.helpClosed'),
                 description: t('studentDash.helpClosedDesc'),
                 duration: 3000,
+                variant: 'student',
+                viewportId: 'student-toast-viewport',
               });
               setLastStatusChange({id: newRecord.id, status: 'closed'});
             }
@@ -196,12 +205,15 @@ export default function StudentDashboard() {
 
         // Show notification for status changes
         if (data.status === 'answered') {
+          // === Alteração: Adicionado variant e viewportId ===
           toast({
             title: t('studentDash.helpAnswered'),
             description: t('studentDash.helpAnsweredDesc'),
             duration: 3000,
+            variant: 'student',
+            viewportId: 'student-toast-viewport',
             action: (
-              <ToastAction 
+              <ToastAction
                 altText={t('studentDash.viewDetails')}
                 onClick={() => setHistoryModalOpen(true)}
               >
@@ -210,10 +222,13 @@ export default function StudentDashboard() {
             ),
           });
         } else if (data.status === 'closed') {
+          // === Alteração: Adicionado variant e viewportId ===
           toast({
             title: t('studentDash.helpClosed'),
             description: t('studentDash.helpClosedDesc'),
             duration: 3000,
+            variant: 'student',
+            viewportId: 'student-toast-viewport',
           });
         }
 
@@ -258,7 +273,14 @@ export default function StudentDashboard() {
 
       if (error) throw error;
 
-      toast({ title: t('studentDash.sentTitle'), description: t('studentDash.sentDesc'), duration: 3000 });
+      // === Alteração: Adicionado variant e viewportId ===
+      toast({ 
+        title: t('studentDash.sentTitle'), 
+        description: t('studentDash.sentDesc'), 
+        duration: 3000, 
+        variant: 'student',
+        viewportId: 'student-toast-viewport',
+      });
 
       // Replace optimistic request with real one
       setHelpRequests(prev => prev.map(req =>
@@ -291,11 +313,13 @@ export default function StudentDashboard() {
       // Remove optimistic request on error
       setHelpRequests(prev => prev.filter(req => req.id !== optimisticRequest.id));
 
+      // === Alteração: Adicionado variant e viewportId ===
       toast({
         title: t('auth.toast.errorTitle'),
         description: t('studentDash.sendError'),
         variant: 'destructive',
         duration: 3000,
+        viewportId: 'student-toast-viewport',
       });
     } finally {
       setLoading(false);
@@ -305,7 +329,14 @@ export default function StudentDashboard() {
   const copyStudentCode = () => {
     if (profile?.student_code) {
       navigator.clipboard.writeText(profile.student_code);
-      toast({ title: t('studentDash.copiedTitle'), description: t('studentDash.copiedDesc'), duration: 3000 });
+      // === Alteração: Adicionado variant e viewportId ===
+      toast({ 
+        title: t('studentDash.copiedTitle'), 
+        description: t('studentDash.copiedDesc'), 
+        duration: 3000, 
+        variant: 'student',
+        viewportId: 'student-toast-viewport',
+      });
     }
   };
 
@@ -442,7 +473,13 @@ export default function StudentDashboard() {
       className="transition-colors duration-200"
       onClick={async () => {
         await signOut();
-        toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
+        // === Alteração: Adicionado variant e viewportId ===
+        toast({ 
+          title: t('auth.toast.loggedOut'), 
+          description: t('auth.toast.seeYou'),
+          variant: 'student',
+          viewportId: 'student-toast-viewport',
+        });
         navigate('/auth');
       }}
     >

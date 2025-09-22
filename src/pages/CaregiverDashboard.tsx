@@ -171,10 +171,12 @@ export default function CaregiverDashboard() {
         const conn = connections.find((c) => c.student_id === rec.student_id);
         const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
         const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
+        // === Alteração: Adicionado viewportId ===
         toast({
           title: t('caregiverDash.newHelpTitle'),
           description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
           variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
+          viewportId: 'caregiver-toast-viewport',
         });
         fetchHelpRequests();
       })
@@ -208,10 +210,12 @@ export default function CaregiverDashboard() {
             const conn = connections.find((c) => c.student_id === rec.student_id);
             const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
             const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
+            // === Alteração: Adicionado viewportId ===
             toast({
               title: t('caregiverDash.newHelpTitle'),
               description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
               variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
+              viewportId: 'caregiver-toast-viewport',
             });
           }
           fetchHelpRequests();
@@ -240,25 +244,31 @@ export default function CaregiverDashboard() {
       const result = data as { success: boolean; error?: string; student?: any };
 
       if (result.success && result.student) {
+        // === Alteração: Adicionado viewportId ===
         toast({
           title: 'Estudante conectado!',
           description: `Conectado com ${result.student.username} (${result.student.student_code})`,
+          viewportId: 'caregiver-toast-viewport',
         });
         setStudentCode('');
         fetchConnections(); // This will refresh the "Meus Alunos" section
       } else {
+        // === Alteração: Adicionado viewportId ===
         toast({
           title: 'Erro',
           description: result.error || 'Código inválido',
           variant: 'destructive',
+          viewportId: 'caregiver-toast-viewport',
         });
       }
     } catch (error) {
       console.error('Error connecting to student:', error);
+      // === Alteração: Adicionado viewportId ===
       toast({
         title: 'Erro',
         description: 'Não foi possível conectar. Tente novamente.',
         variant: 'destructive',
+        viewportId: 'caregiver-toast-viewport',
       });
     } finally {
       setLoading(false);
@@ -281,9 +291,11 @@ export default function CaregiverDashboard() {
 
       if (error) throw error;
 
+      // === Alteração: Adicionado viewportId ===
       toast({
         title: action === 'answered' ? 'Marcado como respondido' : 'Pedido finalizado',
         description: 'O estudante foi notificado.',
+        viewportId: 'caregiver-toast-viewport',
       });
 
       // Notify the student via broadcast
@@ -311,10 +323,12 @@ export default function CaregiverDashboard() {
       fetchHelpRequests();
     } catch (error) {
       console.error('Error updating help request:', error);
+      // === Alteração: Adicionado viewportId ===
       toast({
         title: 'Erro',
         description: 'Não foi possível atualizar o pedido.',
         variant: 'destructive',
+        viewportId: 'caregiver-toast-viewport',
       });
     }
   };
@@ -418,7 +432,12 @@ export default function CaregiverDashboard() {
               variant="ghost"
               onClick={async () => {
                 await signOut();
-                toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
+                // === Alteração: Adicionado viewportId ===
+                toast({ 
+                  title: t('auth.toast.loggedOut'), 
+                  description: t('auth.toast.seeYou'),
+                  viewportId: 'caregiver-toast-viewport',
+                });
                 navigate('/auth');
               }}
               className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300 px-4"
@@ -486,9 +505,9 @@ export default function CaregiverDashboard() {
                 </BarChart>
               </ChartContainer>
             </div>
-          </Card>
+            </Card>
 
-          {/* Help Requests */}
+            {/* Help Requests */}
             <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
                 <AlertTriangle className="h-6 w-6 text-warning" />
@@ -500,7 +519,7 @@ export default function CaregiverDashboard() {
                 )}
               </div>
 
-             <div className="space-y-4 max-h-[32rem] overflow-y-auto">
+              <div className="space-y-4 max-h-[32rem] overflow-y-auto">
                 {helpRequests.length === 0 ? (
                   <div className="text-center py-8">
                     <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -634,7 +653,7 @@ export default function CaregiverDashboard() {
             )}
           </Card>
 
-         {/* Connection Code Card */}
+          {/* Connection Code Card */}
 {profile?.caregiver_code && (
   <Card className="mt-6 p-5 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
     <div className="flex items-center justify-between">
@@ -656,7 +675,7 @@ export default function CaregiverDashboard() {
         >
           {profile.caregiver_code}
         </Badge>
-       <Button
+        <Button
   size="sm"
   variant="ghost"
   onClick={async () => {
@@ -664,16 +683,20 @@ export default function CaregiverDashboard() {
     try {
       await navigator.clipboard.writeText(profile.caregiver_code);
       setCopyStatus('copied');
+      // === Alteração: Adicionado viewportId ===
       toast({
         title: t('caregiverDash.copySuccessTitle'),
         description: t('caregiverDash.copySuccessDesc'),
+        viewportId: 'caregiver-toast-viewport',
       });
     } catch (error) {
       console.error('Erro ao copiar código do cuidador', error);
+      // === Alteração: Adicionado viewportId ===
       toast({
         title: t('caregiverDash.copyErrorTitle'),
         description: t('caregiverDash.copyErrorDesc'),
         variant: 'destructive',
+        viewportId: 'caregiver-toast-viewport',
       });
     }
   }}
