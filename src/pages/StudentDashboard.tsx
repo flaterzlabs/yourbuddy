@@ -390,7 +390,7 @@ export default function StudentDashboard() {
       connections={connections}
       trigger={
         <Button variant="ghost" size="icon" className="transition-colors duration-200">
-          <LinkIcon className="h-5 w-5" />
+          <Link className="h-5 w-5" />
         </Button>
       }
     />
