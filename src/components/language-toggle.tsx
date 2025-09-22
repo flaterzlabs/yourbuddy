@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
 
 interface LanguageToggleProps {
   trigger?: React.ReactNode;
@@ -25,13 +26,14 @@ export function LanguageToggle({ trigger }: LanguageToggleProps = {}) {
   }
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="icon"
       onClick={() => i18n.changeLanguage(switchTo)}
-      className="inline-flex items-center rounded-md border px-3 py-1 text-sm hover:bg-accent"
       aria-label="Change language"
       title={current.startsWith('pt') ? 'Switch to English' : 'Mudar para Português'}
     >
       {label}
-    </button>
+    </Button>
   );
 }
