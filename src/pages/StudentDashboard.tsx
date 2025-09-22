@@ -11,12 +11,12 @@ import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { 
-  ClipboardList, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  Link 
+import {
+  ClipboardList,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Link
 } from "lucide-react";
 
 import { Database } from '@/integrations/supabase/types';
@@ -86,7 +86,7 @@ export default function StudentDashboard() {
       const connectionsWithProfiles = connectionsData.map(connection => {
         const caregiverProfile = profilesData?.find(profile => profile.user_id === connection.caregiver_id);
         console.log(`Mapping connection ${connection.id} with caregiver ${connection.caregiver_id}:`, caregiverProfile); // Debug log
-        
+
         return {
           ...connection,
           caregiver_profile: caregiverProfile || {
@@ -108,6 +108,7 @@ export default function StudentDashboard() {
     toast({
       title: "Conexão estabelecida!",
       description: "Você foi conectado com sucesso ao professor/responsável.",
+      duration: 3000,
     });
   };
 
@@ -148,28 +149,36 @@ export default function StudentDashboard() {
         (payload) => {
           const newRecord = payload.new as HelpRequest;
           const oldRecord = payload.old as HelpRequest;
-          
+
           // Filter for this student's requests only
           const relevantRecord = newRecord || oldRecord;
           if (!relevantRecord || relevantRecord.student_id !== user.id) return;
-          
+
           // Check for status changes to show notifications
           if (payload.eventType === 'UPDATE' && newRecord && oldRecord) {
             if (oldRecord.status === 'open' && newRecord.status === 'answered') {
               toast({
                 title: t('studentDash.helpAnswered'),
                 description: t('studentDash.helpAnsweredDesc'),
+                duration: 3000,
+                action: {
+                  label: t('studentDash.viewDetails'),
+                  onClick: () => {
+                    setHistoryModalOpen(true);
+                  }
+                },
               });
               setLastStatusChange({id: newRecord.id, status: 'answered'});
             } else if (oldRecord.status !== 'closed' && newRecord.status === 'closed') {
               toast({
                 title: t('studentDash.helpClosed'),
                 description: t('studentDash.helpClosedDesc'),
+                duration: 3000,
               });
               setLastStatusChange({id: newRecord.id, status: 'closed'});
             }
           }
-          
+
           fetchHelpRequests();
         },
       )
@@ -181,20 +190,28 @@ export default function StudentDashboard() {
       .on('broadcast', { event: 'status-update' }, (payload: any) => {
         const data = payload.payload;
         if (!data || data.student_id !== user.id) return;
-        
+
         // Show notification for status changes
         if (data.status === 'answered') {
           toast({
             title: t('studentDash.helpAnswered'),
             description: t('studentDash.helpAnsweredDesc'),
+            duration: 3000,
+            action: {
+              label: t('studentDash.viewDetails'),
+              onClick: () => {
+                setHistoryModalOpen(true);
+              }
+            },
           });
         } else if (data.status === 'closed') {
           toast({
             title: t('studentDash.helpClosed'),
             description: t('studentDash.helpClosedDesc'),
+            duration: 3000,
           });
         }
-        
+
         fetchHelpRequests();
       })
       .subscribe();
@@ -236,10 +253,10 @@ export default function StudentDashboard() {
 
       if (error) throw error;
 
-      toast({ title: t('studentDash.sentTitle'), description: t('studentDash.sentDesc') });
+      toast({ title: t('studentDash.sentTitle'), description: t('studentDash.sentDesc'), duration: 3000 });
 
       // Replace optimistic request with real one
-      setHelpRequests(prev => prev.map(req => 
+      setHelpRequests(prev => prev.map(req =>
         req.id === optimisticRequest.id ? data : req
       ));
 
@@ -265,14 +282,15 @@ export default function StudentDashboard() {
       setUrgency('ok');
     } catch (error) {
       console.error('Error creating help request:', error);
-      
+
       // Remove optimistic request on error
       setHelpRequests(prev => prev.filter(req => req.id !== optimisticRequest.id));
-      
+
       toast({
         title: t('auth.toast.errorTitle'),
         description: t('studentDash.sendError'),
         variant: 'destructive',
+        duration: 3000,
       });
     } finally {
       setLoading(false);
@@ -282,7 +300,7 @@ export default function StudentDashboard() {
   const copyStudentCode = () => {
     if (profile?.student_code) {
       navigator.clipboard.writeText(profile.student_code);
-      toast({ title: t('studentDash.copiedTitle'), description: t('studentDash.copiedDesc') });
+      toast({ title: t('studentDash.copiedTitle'), description: t('studentDash.copiedDesc'), duration: 3000 });
     }
   };
 
@@ -321,7 +339,7 @@ export default function StudentDashboard() {
               {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
             </h2>
           </div>
-          
+
           <div className="flex items-center gap-4">
     {/* Histórico */}
     <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
@@ -441,7 +459,7 @@ export default function StudentDashboard() {
             </div>
           </div>
 
-         {/* Help Request Form */}
+          {/* Help Request Form */}
 <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
   <div className="text-center mb-6">
     <div className="flex items-center justify-center mx-auto mb-4">
@@ -495,8 +513,8 @@ export default function StudentDashboard() {
   variant="hero"
   size="lg"
   disabled={loading}
-  className="max-w-md mx-auto w-full py-8 text-2xl font-bold flex items-center justify-center 
-             shadow-md hover:shadow-[0_0_16px_rgba(128,90,213,0.5)] 
+  className="max-w-md mx-auto w-full py-8 text-2xl font-bold flex items-center justify-center
+             shadow-md hover:shadow-[0_0_16px_rgba(128,90,213,0.5)]
              hover:scale-95 active:scale-90 transition-all duration-200"
 >
   {loading ? t('studentDash.sending') : t('studentDash.sendHelp')}
