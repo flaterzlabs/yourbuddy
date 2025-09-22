@@ -170,9 +170,11 @@ export default function CaregiverDashboard() {
         if (!rec || !activeIds.has(rec.student_id)) return;
         const conn = connections.find((c) => c.student_id === rec.student_id);
         const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
+        const urgencyVariant = rec.urgency === 'urgent' ? 'urgent' : rec.urgency === 'attention' ? 'warning' : 'success';
         toast({
           title: t('caregiverDash.newHelpTitle'),
           description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
+          variant: urgencyVariant as 'success' | 'warning' | 'urgent',
         });
         fetchHelpRequests();
       })
@@ -205,9 +207,11 @@ export default function CaregiverDashboard() {
           if (payload.eventType === 'INSERT') {
             const conn = connections.find((c) => c.student_id === rec.student_id);
             const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
+            const urgencyVariant = rec.urgency === 'urgent' ? 'urgent' : rec.urgency === 'attention' ? 'warning' : 'success';
             toast({
               title: t('caregiverDash.newHelpTitle'),
               description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
+              variant: urgencyVariant as 'success' | 'warning' | 'urgent',
             });
           }
           fetchHelpRequests();
@@ -391,9 +395,21 @@ export default function CaregiverDashboard() {
               {profile?.role === 'educator' ? t('caregiverDash.titleEducator') : t('caregiverDash.title')}
             </h2>
           </div>
-          <div className="flex items-center gap-4">
-            <LanguageToggle />
-            <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost" 
+              size="icon"
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
+            >
+              <LanguageToggle />
+            </Button>
+            <Button
+              variant="ghost" 
+              size="icon"
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
+            >
+              <ThemeToggle />
+            </Button>
             <Button
               variant="ghost"
               onClick={async () => {
@@ -401,6 +417,7 @@ export default function CaregiverDashboard() {
                 toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
                 navigate('/auth');
               }}
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300 px-4"
             >
               {t('common.logout')}
             </Button>
