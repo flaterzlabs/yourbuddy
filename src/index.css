@@ -177,6 +177,15 @@
     }
   }
 
+  @keyframes toast-progress {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: 0%;
+    }
+  }
+
 .emotion-button {
   @apply w-20 h-20 rounded-full flex items-center justify-center text-5xl font-bold cursor-pointer transition-all duration-300 border-4 border-transparent;
 }
@@ -230,7 +239,9 @@
   box-shadow: 0 0 20px 6px hsl(0 80% 55% / 0.8);
 }
 
-
-
+/* Toast progress bar animation */
+.animate-toast-progress {
+  animation: toast-progress 4s linear forwards;
+}
 
 }

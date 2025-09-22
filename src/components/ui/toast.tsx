@@ -32,6 +32,9 @@ const toastVariants = cva(
         success: 'border-success bg-success text-success-foreground shadow-[0_0_20px_hsl(var(--success)/0.4)]',
         warning: 'border-warning bg-warning text-warning-foreground shadow-[0_0_20px_hsl(var(--warning)/0.4)]',
         urgent: 'border-destructive bg-destructive text-destructive-foreground shadow-[0_0_20px_hsl(var(--destructive)/0.4)]',
+        'caregiver-success': 'bg-gradient-primary text-white border-4 border-emotion-happy shadow-[0_0_20px_hsl(var(--emotion-happy)/0.4)]',
+        'caregiver-warning': 'bg-gradient-primary text-white border-4 border-emotion-need shadow-[0_0_20px_hsl(var(--emotion-need)/0.4)]',
+        'caregiver-urgent': 'bg-gradient-primary text-white border-4 border-emotion-urgent shadow-[0_0_20px_hsl(var(--emotion-urgent)/0.4)]',
       },
     },
     defaultVariants: {
@@ -44,12 +47,17 @@ const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> & VariantProps<typeof toastVariants>
 >(({ className, variant, ...props }, ref) => {
+  const showProgressBar = variant?.startsWith('caregiver-') || false;
+  
   return (
     <ToastPrimitives.Root
       ref={ref}
       className={cn(toastVariants({ variant }), className)}
       {...props}
-    />
+    >
+      {props.children}
+      {showProgressBar && <ToastProgressBar />}
+    </ToastPrimitives.Root>
   );
 });
 Toast.displayName = ToastPrimitives.Root.displayName;
@@ -87,11 +95,26 @@ const ToastClose = React.forwardRef<
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;
 
+const ToastProgressBar = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      'absolute bottom-0 left-0 h-1 bg-white/30 animate-toast-progress',
+      className
+    )}
+    {...props}
+  />
+));
+ToastProgressBar.displayName = 'ToastProgressBar';
+
 const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitives.Title ref={ref} className={cn('text-sm font-semibold', className)} {...props} />
+  <ToastPrimitives.Title ref={ref} className={cn('text-lg font-semibold', className)} {...props} />
 ));
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
@@ -101,7 +124,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Description
     ref={ref}
-    className={cn('text-sm opacity-90', className)}
+    className={cn('text-base opacity-90', className)}
     {...props}
   />
 ));
@@ -121,4 +144,5 @@ export {
   ToastDescription,
   ToastClose,
   ToastAction,
+  ToastProgressBar,
 };

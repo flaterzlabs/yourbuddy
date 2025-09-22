@@ -170,11 +170,11 @@ export default function CaregiverDashboard() {
         if (!rec || !activeIds.has(rec.student_id)) return;
         const conn = connections.find((c) => c.student_id === rec.student_id);
         const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
-        const urgencyVariant = rec.urgency === 'urgent' ? 'urgent' : rec.urgency === 'attention' ? 'warning' : 'success';
+        const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
         toast({
           title: t('caregiverDash.newHelpTitle'),
           description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
-          variant: urgencyVariant as 'success' | 'warning' | 'urgent',
+          variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
         });
         fetchHelpRequests();
       })
@@ -207,11 +207,11 @@ export default function CaregiverDashboard() {
           if (payload.eventType === 'INSERT') {
             const conn = connections.find((c) => c.student_id === rec.student_id);
             const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
-            const urgencyVariant = rec.urgency === 'urgent' ? 'urgent' : rec.urgency === 'attention' ? 'warning' : 'success';
+            const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
             toast({
               title: t('caregiverDash.newHelpTitle'),
               description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
-              variant: urgencyVariant as 'success' | 'warning' | 'urgent',
+              variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
             });
           }
           fetchHelpRequests();
