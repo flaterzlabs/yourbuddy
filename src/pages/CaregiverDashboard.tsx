@@ -399,14 +399,14 @@ export default function CaregiverDashboard() {
             <Button
               variant="ghost" 
               size="icon"
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
             >
               <LanguageToggle />
             </Button>
             <Button
               variant="ghost" 
               size="icon"
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
             >
               <ThemeToggle />
             </Button>
@@ -417,7 +417,7 @@ export default function CaregiverDashboard() {
                 toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
                 navigate('/auth');
               }}
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300 px-4"
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300 px-4"
             >
               {t('common.logout')}
             </Button>
