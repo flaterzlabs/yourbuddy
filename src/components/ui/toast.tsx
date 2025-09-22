@@ -31,9 +31,9 @@ const toastVariants = cva(
         student: 'border bg-background text-foreground p-4 text-sm',
         
         // Estilos para o toast do Professor (maior e com bordas coloridas)
-        'caregiver-success': 'bg-card text-card-foreground border-6 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)] space-y-2 p-6',
-        'caregiver-warning': 'bg-card text-card-foreground border-6 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)] space-y-2 p-6',
-        'caregiver-urgent': 'bg-card text-card-foreground border-6 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)] space-y-2 p-6',
+        'caregiver-success': 'bg-card text-card-foreground border-2 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)] space-y-2 p-6 min-w-96',
+        'caregiver-warning': 'bg-card text-card-foreground border-2 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)] space-y-2 p-6 min-w-96',
+        'caregiver-urgent': 'bg-card text-card-foreground border-2 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)] space-y-2 p-6 min-w-96',
         
         // Estilo para erros (destructive)
         destructive: 'border bg-destructive text-destructive-foreground p-4 text-sm',
@@ -58,7 +58,7 @@ const Toast = React.forwardRef<
       {...props}
     >
       {props.children}
-      {showProgressBar && <ToastProgressBar />}
+      {showProgressBar && <ToastProgressBar variant={variant} />}
       <ToastClose />
     </ToastPrimitives.Root>
   );
@@ -100,17 +100,33 @@ ToastClose.displayName = ToastPrimitives.Close.displayName;
 
 const ToastProgressBar = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      'absolute bottom-0 left-0 h-2 bg-foreground/30 animate-toast-progress',
-      className
-    )}
-    {...props}
-  />
-));
+  React.HTMLAttributes<HTMLDivElement> & { variant?: string }
+>(({ className, variant, ...props }, ref) => {
+  const getProgressBarColor = (variant?: string) => {
+    switch (variant) {
+      case 'caregiver-success':
+        return 'bg-emotion-happy';
+      case 'caregiver-warning':
+        return 'bg-emotion-need';
+      case 'caregiver-urgent':
+        return 'bg-emotion-urgent';
+      default:
+        return 'bg-foreground/30';
+    }
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        'absolute bottom-0 left-0 h-2 animate-toast-progress',
+        getProgressBarColor(variant),
+        className
+      )}
+      {...props}
+    />
+  );
+});
 ToastProgressBar.displayName = 'ToastProgressBar';
 
 const ToastTitle = React.forwardRef<
