@@ -405,13 +405,7 @@ export default function StudentDashboard() {
     />
 
     {/* Tema */}
-    <ThemeToggle
-      trigger={
-        <Button variant="ghost" size="icon" className="transition-colors duration-200">
-  
-        </Button>
-      }
-    />
+    <ThemeToggle />
 
     {/* Logout */}
     <Button
