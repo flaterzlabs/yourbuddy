@@ -408,7 +408,7 @@ export default function StudentDashboard() {
     <ThemeToggle
       trigger={
         <Button variant="ghost" size="icon" className="transition-colors duration-200">
-          🎨
+  
         </Button>
       }
     />
