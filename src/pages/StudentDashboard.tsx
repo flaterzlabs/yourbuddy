@@ -11,7 +11,14 @@ import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Hand, Copy, Clock, CheckCircle, XCircle, Users, GraduationCap, ClipboardList, Link as LinkIcon } from 'lucide-react';
+import { 
+  ClipboardList, 
+  Clock, 
+  CheckCircle, 
+  XCircle, 
+  Link as LinkIcon 
+} from "lucide-react";
+
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
