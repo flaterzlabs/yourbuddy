@@ -12,8 +12,15 @@ export function Toaster() {
   const { toasts } = useToast();
 
   // Separa os toasts por tipo
-  const studentToasts = toasts.filter(toast => !toast.variant || toast.variant === 'student' || toast.variant === 'destructive');
-  const caregiverToasts = toasts.filter(toast => toast.variant && toast.variant.startsWith('caregiver-'));
+  const studentToasts = toasts.filter(toast => 
+    !toast.variant || 
+    toast.variant === 'student' || 
+    toast.variant === 'destructive'
+  );
+  const caregiverToasts = toasts.filter(toast => 
+    toast.variant && 
+    (toast.variant.startsWith('caregiver-'))
+  );
 
   return (
     <ToastProvider>
@@ -34,7 +41,7 @@ export function Toaster() {
       </ToastViewport>
       
       {/* Viewport para toasts de caregiver - top-center */}
-      <ToastViewport className="top-4 left-1/2 -translate-x-1/2 bottom-auto right-auto md:max-w-lg w-full max-w-lg">
+      <ToastViewport className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-auto sm:right-auto sm:top-4 sm:flex-col md:max-w-[420px]">
         {caregiverToasts.map(function ({ id, title, description, action, variant, ...props }) {
           return (
             <Toast key={id} variant={variant} {...props}>

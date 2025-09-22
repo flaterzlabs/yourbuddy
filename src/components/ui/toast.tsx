@@ -31,9 +31,9 @@ const toastVariants = cva(
         student: 'border bg-background text-foreground p-4 text-sm',
         
         // Estilos para o toast do Professor (maior e com bordas coloridas)
-        'caregiver-success': 'bg-card text-card-foreground border-2 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)] space-y-2 p-6 min-w-96',
-        'caregiver-warning': 'bg-card text-card-foreground border-2 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)] space-y-2 p-6 min-w-96',
-        'caregiver-urgent': 'bg-card text-card-foreground border-2 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)] space-y-2 p-6 min-w-96',
+        'caregiver-success': 'bg-card text-card-foreground border-2 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)] space-y-2 p-6 min-w-[380px]',
+        'caregiver-warning': 'bg-card text-card-foreground border-2 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)] space-y-2 p-6 min-w-[380px]',
+        'caregiver-urgent': 'bg-card text-card-foreground border-2 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)] space-y-2 p-6 min-w-[380px]',
         
         // Estilo para erros (destructive)
         destructive: 'border bg-destructive text-destructive-foreground p-4 text-sm',

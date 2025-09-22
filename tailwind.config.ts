@@ -63,6 +63,9 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        'emotion-happy': 'hsl(var(--emotion-happy))',
+        'emotion-need': 'hsl(var(--emotion-need))',
+        'emotion-urgent': 'hsl(var(--emotion-urgent))',
       },
       backgroundImage: {
         'gradient-primary': 'var(--gradient-primary)',
@@ -104,6 +107,7 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'toast-progress': 'toast-progress 4s ease-out forwards',
       },
     },
   },

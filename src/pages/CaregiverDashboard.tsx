@@ -246,6 +246,7 @@ export default function CaregiverDashboard() {
         toast({
           title: 'Estudante conectado!',
           description: `Conectado com ${result.student.username} (${result.student.student_code})`,
+          variant: 'caregiver-success',
         });
         setStudentCode('');
         fetchConnections(); // This will refresh the "Meus Alunos" section
@@ -290,6 +291,7 @@ export default function CaregiverDashboard() {
       toast({
         title: action === 'answered' ? 'Marcado como respondido' : 'Pedido finalizado',
         description: 'O estudante foi notificado.',
+        variant: 'caregiver-success',
       });
 
       // Notify the student via broadcast
@@ -429,6 +431,7 @@ export default function CaregiverDashboard() {
                 toast({ 
                   title: t('auth.toast.loggedOut'), 
                   description: t('auth.toast.seeYou'),
+                  variant: 'caregiver-success',
                 });
                 navigate('/auth');
               }}
@@ -679,6 +682,7 @@ export default function CaregiverDashboard() {
       toast({
         title: t('caregiverDash.copySuccessTitle'),
         description: t('caregiverDash.copySuccessDesc'),
+        variant: 'caregiver-success',
       });
     } catch (error) {
       console.error('Erro ao copiar código do cuidador', error);
