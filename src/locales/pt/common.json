@@ -103,7 +103,7 @@
     "logout": "Sair"
   },
   "studentDash": {
-    "hello": "Olá, {{name}}! 👋",
+    "hello": "Olá, {{name}} !",
     "feelingToday": "Como você está se sentindo hoje?",
     "needHelpTitle": "Precisa de Ajuda?",
     "caregiversNotified": "Seus responsáveis serão notificados imediatamente",
@@ -141,7 +141,7 @@
   "caregiverDash": {
     "title": "Painel do Responsável",
     "titleEducator": "Painel do Educador",
-    "headerHello": "Olá, {{name}}, bem-vindo",
+    "headerHello": "Olá, {{name}} !",
     "subtitle": "Acompanhe e apoie seus estudantes conectados",
     "connectStudentTitle": "Conectar Estudante",
     "enterCode": "Digite o código do estudante",
