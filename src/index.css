@@ -241,7 +241,7 @@
 
 /* Toast progress bar animation */
 .animate-toast-progress {
-  animation: toast-progress 4s linear forwards;
+  animation: toast-progress 5s linear forwards;
 }
 
 }

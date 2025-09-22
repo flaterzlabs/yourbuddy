@@ -23,7 +23,7 @@ const ToastViewport = React.forwardRef<
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
 const toastVariants = cva(
-  'group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-lg border p-8 pr-10 shadow-xl transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-top-full data-[state=open]:slide-in-from-top-full text-lg min-h-[120px]',
+  'group pointer-events-auto relative flex w-full flex-col items-center justify-center space-y-2 overflow-hidden rounded-lg border p-8 pr-10 shadow-xl transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-top-full data-[state=open]:slide-in-from-top-full text-xl min-h-[140px]',
   {
     variants: {
       variant: {
@@ -32,9 +32,9 @@ const toastVariants = cva(
         success: 'border-success bg-success text-success-foreground shadow-[0_0_20px_hsl(var(--success)/0.4)]',
         warning: 'border-warning bg-warning text-warning-foreground shadow-[0_0_20px_hsl(var(--warning)/0.4)]',
         urgent: 'border-destructive bg-destructive text-destructive-foreground shadow-[0_0_20px_hsl(var(--destructive)/0.4)]',
-        'caregiver-success': 'bg-gradient-primary text-white border-4 border-emotion-happy shadow-[0_0_20px_hsl(var(--emotion-happy)/0.4)]',
-        'caregiver-warning': 'bg-gradient-primary text-white border-4 border-emotion-need shadow-[0_0_20px_hsl(var(--emotion-need)/0.4)]',
-        'caregiver-urgent': 'bg-gradient-primary text-white border-4 border-emotion-urgent shadow-[0_0_20px_hsl(var(--emotion-urgent)/0.4)]',
+        'caregiver-success': 'bg-card text-card-foreground border-6 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)]',
+        'caregiver-warning': 'bg-card text-card-foreground border-6 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)]',
+        'caregiver-urgent': 'bg-card text-card-foreground border-6 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)]',
       },
     },
     defaultVariants: {
@@ -102,7 +102,7 @@ const ToastProgressBar = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      'absolute bottom-0 left-0 h-1 bg-white/30 animate-toast-progress',
+      'absolute bottom-0 left-0 h-2 bg-foreground/30 animate-toast-progress',
       className
     )}
     {...props}
@@ -114,7 +114,7 @@ const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitives.Title ref={ref} className={cn('text-lg font-semibold', className)} {...props} />
+  <ToastPrimitives.Title ref={ref} className={cn('text-2xl font-semibold text-center w-full', className)} {...props} />
 ));
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
@@ -124,7 +124,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Description
     ref={ref}
-    className={cn('text-base opacity-90', className)}
+    className={cn('text-xl opacity-90 text-center w-full', className)}
     {...props}
   />
 ));
