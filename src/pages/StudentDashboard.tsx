@@ -112,7 +112,6 @@ export default function StudentDashboard() {
       description: "Você foi conectado com sucesso ao professor/responsável.",
       duration: 3000,
       variant: 'student',
-      viewportId: 'student-toast-viewport',
     });
   };
 
@@ -167,7 +166,6 @@ export default function StudentDashboard() {
                 description: t('studentDash.helpAnsweredDesc'),
                 duration: 3000,
                 variant: 'student',
-                viewportId: 'student-toast-viewport',
                 action: (
                   <ToastAction
                     altText={t('studentDash.viewDetails')}
@@ -185,7 +183,6 @@ export default function StudentDashboard() {
                 description: t('studentDash.helpClosedDesc'),
                 duration: 3000,
                 variant: 'student',
-                viewportId: 'student-toast-viewport',
               });
               setLastStatusChange({id: newRecord.id, status: 'closed'});
             }
@@ -211,7 +208,6 @@ export default function StudentDashboard() {
             description: t('studentDash.helpAnsweredDesc'),
             duration: 3000,
             variant: 'student',
-            viewportId: 'student-toast-viewport',
             action: (
               <ToastAction
                 altText={t('studentDash.viewDetails')}
@@ -228,7 +224,6 @@ export default function StudentDashboard() {
             description: t('studentDash.helpClosedDesc'),
             duration: 3000,
             variant: 'student',
-            viewportId: 'student-toast-viewport',
           });
         }
 
@@ -279,7 +274,6 @@ export default function StudentDashboard() {
         description: t('studentDash.sentDesc'), 
         duration: 3000, 
         variant: 'student',
-        viewportId: 'student-toast-viewport',
       });
 
       // Replace optimistic request with real one
@@ -319,7 +313,6 @@ export default function StudentDashboard() {
         description: t('studentDash.sendError'),
         variant: 'destructive',
         duration: 3000,
-        viewportId: 'student-toast-viewport',
       });
     } finally {
       setLoading(false);
@@ -335,7 +328,6 @@ export default function StudentDashboard() {
         description: t('studentDash.copiedDesc'), 
         duration: 3000, 
         variant: 'student',
-        viewportId: 'student-toast-viewport',
       });
     }
   };
@@ -478,7 +470,6 @@ export default function StudentDashboard() {
           title: t('auth.toast.loggedOut'), 
           description: t('auth.toast.seeYou'),
           variant: 'student',
-          viewportId: 'student-toast-viewport',
         });
         navigate('/auth');
       }}

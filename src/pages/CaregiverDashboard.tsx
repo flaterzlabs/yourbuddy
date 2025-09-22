@@ -176,7 +176,6 @@ export default function CaregiverDashboard() {
           title: t('caregiverDash.newHelpTitle'),
           description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
           variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
-          viewportId: 'caregiver-toast-viewport',
         });
         fetchHelpRequests();
       })
@@ -215,7 +214,6 @@ export default function CaregiverDashboard() {
               title: t('caregiverDash.newHelpTitle'),
               description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
               variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
-              viewportId: 'caregiver-toast-viewport',
             });
           }
           fetchHelpRequests();
@@ -248,7 +246,6 @@ export default function CaregiverDashboard() {
         toast({
           title: 'Estudante conectado!',
           description: `Conectado com ${result.student.username} (${result.student.student_code})`,
-          viewportId: 'caregiver-toast-viewport',
         });
         setStudentCode('');
         fetchConnections(); // This will refresh the "Meus Alunos" section
@@ -258,7 +255,6 @@ export default function CaregiverDashboard() {
           title: 'Erro',
           description: result.error || 'Código inválido',
           variant: 'destructive',
-          viewportId: 'caregiver-toast-viewport',
         });
       }
     } catch (error) {
@@ -268,7 +264,6 @@ export default function CaregiverDashboard() {
         title: 'Erro',
         description: 'Não foi possível conectar. Tente novamente.',
         variant: 'destructive',
-        viewportId: 'caregiver-toast-viewport',
       });
     } finally {
       setLoading(false);
@@ -295,7 +290,6 @@ export default function CaregiverDashboard() {
       toast({
         title: action === 'answered' ? 'Marcado como respondido' : 'Pedido finalizado',
         description: 'O estudante foi notificado.',
-        viewportId: 'caregiver-toast-viewport',
       });
 
       // Notify the student via broadcast
@@ -328,7 +322,6 @@ export default function CaregiverDashboard() {
         title: 'Erro',
         description: 'Não foi possível atualizar o pedido.',
         variant: 'destructive',
-        viewportId: 'caregiver-toast-viewport',
       });
     }
   };
@@ -436,7 +429,6 @@ export default function CaregiverDashboard() {
                 toast({ 
                   title: t('auth.toast.loggedOut'), 
                   description: t('auth.toast.seeYou'),
-                  viewportId: 'caregiver-toast-viewport',
                 });
                 navigate('/auth');
               }}
@@ -687,7 +679,6 @@ export default function CaregiverDashboard() {
       toast({
         title: t('caregiverDash.copySuccessTitle'),
         description: t('caregiverDash.copySuccessDesc'),
-        viewportId: 'caregiver-toast-viewport',
       });
     } catch (error) {
       console.error('Erro ao copiar código do cuidador', error);
@@ -696,7 +687,6 @@ export default function CaregiverDashboard() {
         title: t('caregiverDash.copyErrorTitle'),
         description: t('caregiverDash.copyErrorDesc'),
         variant: 'destructive',
-        viewportId: 'caregiver-toast-viewport',
       });
     }
   }}
