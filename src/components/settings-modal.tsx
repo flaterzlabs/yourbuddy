@@ -19,9 +19,10 @@ interface SettingsModalProps {
       role: string;
     };
   }>;
+  trigger?: React.ReactNode;
 }
 
-export function SettingsModal({ onConnectionAdded, connections = [] }: SettingsModalProps) {
+export function SettingsModal({ onConnectionAdded, connections = [], trigger }: SettingsModalProps) {
   const [caregiverCode, setCaregiverCode] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [open, setOpen] = useState(false);
@@ -71,9 +72,11 @@ export function SettingsModal({ onConnectionAdded, connections = [] }: SettingsM
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" className="h-9 w-9">
-          <Link className="h-4 w-4" />
-        </Button>
+        {trigger || (
+          <Button variant="outline" size="icon" className="h-9 w-9">
+            <Link className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
