@@ -313,7 +313,7 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
+       {/* Header */}
 <div className="flex justify-between items-center mb-8">
   <BuddyLogo size="lg" />
   <div className="flex items-center gap-4">
@@ -389,10 +389,8 @@ export default function StudentDashboard() {
       onConnectionAdded={handleConnectionAdded}
       connections={connections}
       trigger={
-        <Button variant="ghost" size="icon">
-          <Link 
-            
-            className="h-5 w-5 transition-colors duration-200" />
+        <Button variant="ghost" size="icon" className="transition-colors duration-200">
+          <LinkIcon className="h-5 w-5" />
         </Button>
       }
     />
@@ -400,18 +398,25 @@ export default function StudentDashboard() {
     {/* Idioma */}
     <LanguageToggle
       trigger={
-        <Button variant="ghost" size="icon">
-          <span className="font-semibold transition-colors duration-200">PT</span>
+        <Button variant="ghost" size="icon" className="transition-colors duration-200">
+          <span className="font-semibold">{i18n.language.startsWith('pt') ? 'PT' : 'EN'}</span>
         </Button>
       }
     />
 
     {/* Tema */}
-    <ThemeToggle />
+    <ThemeToggle
+      trigger={
+        <Button variant="ghost" size="icon" className="transition-colors duration-200">
+          🎨
+        </Button>
+      }
+    />
 
     {/* Logout */}
     <Button
       variant="ghost"
+      className="transition-colors duration-200"
       onClick={async () => {
         await signOut();
         toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
@@ -422,6 +427,7 @@ export default function StudentDashboard() {
     </Button>
   </div>
 </div>
+
 
 
         <div className="max-w-2xl mx-auto">
