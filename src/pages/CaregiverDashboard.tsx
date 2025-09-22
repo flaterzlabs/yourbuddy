@@ -403,13 +403,17 @@ export default function CaregiverDashboard() {
             >
               <LanguageToggle />
             </Button>
+
+            
             <Button
               variant="ghost" 
               size="icon"
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
+              className="rounded-full border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
             >
               <ThemeToggle />
             </Button>
+
+            
             <Button
               variant="ghost"
               onClick={async () => {
