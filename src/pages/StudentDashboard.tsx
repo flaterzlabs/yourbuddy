@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { ToastAction } from '@/components/ui/toast';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageToggle } from '@/components/language-toggle';
@@ -161,12 +162,14 @@ export default function StudentDashboard() {
                 title: t('studentDash.helpAnswered'),
                 description: t('studentDash.helpAnsweredDesc'),
                 duration: 3000,
-                action: {
-                  label: t('studentDash.viewDetails'),
-                  onClick: () => {
-                    setHistoryModalOpen(true);
-                  }
-                },
+                action: (
+                  <ToastAction 
+                    altText={t('studentDash.viewDetails')}
+                    onClick={() => setHistoryModalOpen(true)}
+                  >
+                    {t('studentDash.viewDetails')}
+                  </ToastAction>
+                ),
               });
               setLastStatusChange({id: newRecord.id, status: 'answered'});
             } else if (oldRecord.status !== 'closed' && newRecord.status === 'closed') {
@@ -197,12 +200,14 @@ export default function StudentDashboard() {
             title: t('studentDash.helpAnswered'),
             description: t('studentDash.helpAnsweredDesc'),
             duration: 3000,
-            action: {
-              label: t('studentDash.viewDetails'),
-              onClick: () => {
-                setHistoryModalOpen(true);
-              }
-            },
+            action: (
+              <ToastAction 
+                altText={t('studentDash.viewDetails')}
+                onClick={() => setHistoryModalOpen(true)}
+              >
+                {t('studentDash.viewDetails')}
+              </ToastAction>
+            ),
           });
         } else if (data.status === 'closed') {
           toast({
