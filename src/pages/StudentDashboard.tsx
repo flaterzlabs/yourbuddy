@@ -16,7 +16,7 @@ import {
   Clock, 
   CheckCircle, 
   XCircle, 
-  Link as LinkIcon 
+  Link 
 } from "lucide-react";
 
 import { Database } from '@/integrations/supabase/types';
@@ -390,7 +390,7 @@ export default function StudentDashboard() {
       connections={connections}
       trigger={
         <Button variant="ghost" size="icon">
-          <LinkIcon className="h-5 w-5" />
+          <Link className="h-5 w-5" />
         </Button>
       }
     />
