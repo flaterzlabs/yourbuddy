@@ -2,14 +2,30 @@ import { Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  trigger?: React.ReactNode;
+}
+
+export function ThemeToggle({ trigger }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
+
+  const handleToggle = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  if (trigger) {
+    return (
+      <div onClick={handleToggle} className="cursor-pointer">
+        {trigger}
+      </div>
+    );
+  }
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+      onClick={handleToggle}
       className="transition-colors duration-200 rounded-full"
     >
       <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
