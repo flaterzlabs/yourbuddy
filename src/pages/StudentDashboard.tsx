@@ -314,7 +314,7 @@ export default function StudentDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex flex-col items-center gap-6 mb-8">
+        <div className="flex justify-between items-center mb-8">
           <div className="flex flex-col items-center gap-2">
             <BuddyLogo size="lg" />
             <h2 className="text-lg font-semibold text-muted-foreground">
