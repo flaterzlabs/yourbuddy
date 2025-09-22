@@ -307,89 +307,113 @@ export default function StudentDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <BuddyLogo size="lg" />
-          <div className="flex items-center gap-4">
-            <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative">
-                  <ClipboardList className="h-5 w-5" />
-                  {helpRequests.length > 0 && (
-                    <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
-                      {helpRequests.length}
-                    </span>
-                  )}
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md max-h-[80vh]">
-                <DialogHeader>
-                  <DialogTitle>
-                    {t('studentDash.historyTitle')} ({helpRequests.length.toString().padStart(2, '0')})
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {helpRequests.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">
-                      {t('studentDash.noneYet')}
-                    </p>
-                  ) : (
-                    helpRequests.map((request) => (
-                      <div
-                        key={request.id}
-                        className="p-3 bg-background/50 rounded-lg border border-border"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
-                            <Badge variant={getStatusColor(request.status || 'open')}>
-                              {request.status === 'open' && (
-                                <>
-                                  <Clock className="h-3 w-3 mr-1" />
-                                  {t('studentDash.status.waiting')}
-                                </>
-                              )}
-                              {request.status === 'answered' && (
-                                <>
-                                  <CheckCircle className="h-3 w-3 mr-1" />
-                                  {t('studentDash.status.answered')}
-                                </>
-                              )}
-                              {request.status === 'closed' && (
-                                <>
-                                  <XCircle className="h-3 w-3 mr-1" />
-                                  {t('studentDash.status.closed')}
-                                </>
-                              )}
-                            </Badge>
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            {new Date(request.created_at).toLocaleDateString(i18n.language)}
-                          </span>
-                        </div>
-                        {request.message && (
-                          <p className="text-sm text-muted-foreground">{request.message}</p>
-                        )}
-                      </div>
-                    ))
-                  )}
+<div className="flex justify-between items-center mb-8">
+  <BuddyLogo size="lg" />
+  <div className="flex items-center gap-4">
+    {/* Histórico */}
+    <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="icon" className="relative">
+          <ClipboardList className="h-5 w-5" />
+          {helpRequests.length > 0 && (
+            <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
+              {helpRequests.length}
+            </span>
+          )}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-md max-h-[80vh]">
+        <DialogHeader>
+          <DialogTitle>
+            {t('studentDash.historyTitle')} ({helpRequests.length.toString().padStart(2, '0')})
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-3 max-h-96 overflow-y-auto">
+          {helpRequests.length === 0 ? (
+            <p className="text-muted-foreground text-center py-4">
+              {t('studentDash.noneYet')}
+            </p>
+          ) : (
+            helpRequests.map((request) => (
+              <div
+                key={request.id}
+                className="p-3 bg-background/50 rounded-lg border border-border"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
+                    <Badge variant={getStatusColor(request.status || 'open')}>
+                      {request.status === 'open' && (
+                        <>
+                          <Clock className="h-3 w-3 mr-1" />
+                          {t('studentDash.status.waiting')}
+                        </>
+                      )}
+                      {request.status === 'answered' && (
+                        <>
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          {t('studentDash.status.answered')}
+                        </>
+                      )}
+                      {request.status === 'closed' && (
+                        <>
+                          <XCircle className="h-3 w-3 mr-1" />
+                          {t('studentDash.status.closed')}
+                        </>
+                      )}
+                    </Badge>
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(request.created_at).toLocaleDateString(i18n.language)}
+                  </span>
                 </div>
-              </DialogContent>
-            </Dialog>
-            <SettingsModal onConnectionAdded={handleConnectionAdded} connections={connections} />
-            <LanguageToggle />
-            <ThemeToggle />
-            <Button
-              variant="ghost"
-              onClick={async () => {
-                await signOut();
-                toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
-                navigate('/auth');
-              }}
-            >
-              {t('common.logout')}
-            </Button>
-          </div>
+                {request.message && (
+                  <p className="text-sm text-muted-foreground">{request.message}</p>
+                )}
+              </div>
+            ))
+          )}
         </div>
+      </DialogContent>
+    </Dialog>
+
+    {/* Conexões */}
+    <SettingsModal
+      onConnectionAdded={handleConnectionAdded}
+      connections={connections}
+      trigger={
+        <Button variant="ghost" size="icon">
+          <LinkIcon className="h-5 w-5" />
+        </Button>
+      }
+    />
+
+    {/* Idioma */}
+    <LanguageToggle
+      trigger={
+        <Button variant="ghost" size="icon">
+          <span className="font-semibold">PT</span>
+        </Button>
+      }
+    />
+
+    {/* Tema */}
+    <ThemeToggle />
+
+    {/* Logout */}
+    <Button
+      variant="ghost"
+      onClick={async () => {
+        await signOut();
+        toast({ title: t('auth.toast.loggedOut'), description: t('auth.toast.seeYou') });
+        navigate('/auth');
+      }}
+    >
+      {t('common.logout')}
+    </Button>
+  </div>
+</div>
+
 
         <div className="max-w-2xl mx-auto">
           {/* Welcome Section */}
