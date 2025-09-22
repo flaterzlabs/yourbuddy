@@ -103,6 +103,8 @@
     "logout": "Sair"
   },
   "studentDash": {
+    "title": "Painel do Aluno",
+    "titleStudent": "Painel do Aluno",
     "hello": "Olá, {{name}} !",
     "feelingToday": "Como você está se sentindo hoje?",
     "needHelpTitle": "Precisa de Ajuda?",

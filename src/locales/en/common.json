@@ -103,6 +103,8 @@
     "logout": "Sign out"
   },
   "studentDash": {
+    "title": "Student Dashboard",
+    "titleStudent": "Student Dashboard",
     "hello": "Hello, {{name}} !",
     "feelingToday": "How are you feeling today?",
     "needHelpTitle": "Need Help?",
