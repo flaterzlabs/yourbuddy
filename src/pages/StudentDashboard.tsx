@@ -313,14 +313,16 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
-       {/* Header */}
-<div className="flex flex-col items-center gap-2">
+        {/* Header */}
+        <div className="flex flex-col items-center gap-6 mb-8">
+          <div className="flex flex-col items-center gap-2">
             <BuddyLogo size="lg" />
             <h2 className="text-lg font-semibold text-muted-foreground">
               {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
             </h2>
           </div>
-  <div className="flex items-center gap-4">
+          
+          <div className="flex items-center gap-4">
     {/* Histórico */}
     <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
       <DialogTrigger asChild>
@@ -424,7 +426,7 @@ export default function StudentDashboard() {
       {t('common.logout')}
     </Button>
   </div>
-</div>
+        </div>
 
 
 
