@@ -320,7 +320,7 @@ export default function StudentDashboard() {
     {/* Histórico */}
     <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
           <ClipboardList className="h-5 w-5" />
           {helpRequests.length > 0 && (
             <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
@@ -390,7 +390,9 @@ export default function StudentDashboard() {
       connections={connections}
       trigger={
         <Button variant="ghost" size="icon">
-          <Link className="h-5 w-5" />
+          <Link 
+            
+            className="h-5 w-5 transition-colors duration-200" />
         </Button>
       }
     />
@@ -399,7 +401,7 @@ export default function StudentDashboard() {
     <LanguageToggle
       trigger={
         <Button variant="ghost" size="icon">
-          <span className="font-semibold">PT</span>
+          <span className="font-semibold transition-colors duration-200">PT</span>
         </Button>
       }
     />
