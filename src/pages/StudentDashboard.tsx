@@ -540,9 +540,8 @@ export default function StudentDashboard() {
       </div>
     </div>
 
-    {/* BOTAO SOS */}
-    
-  <div className="flex justify-center items-center">
+   {/* BOTÃO SOS */}
+<div className="flex justify-center items-center h-full w-full">
   <Button
     type="submit"
     variant="ghost"
@@ -568,6 +567,7 @@ export default function StudentDashboard() {
     )}
   </Button>
 </div>
+
 
 
   </form>
