@@ -521,7 +521,7 @@ export default function StudentDashboard() {
 
   <form onSubmit={handleHelpRequest} className="space-y-8">
     <div>
-      <div className="flex justify-center items-center gap-12">
+      <div className={`flex justify-center items-center gap-12 ${urgency ? 'has-selection' : ''}`}>
         {/* Happy/Well Button */}
         <button
           type="button"

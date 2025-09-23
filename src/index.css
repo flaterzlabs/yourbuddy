@@ -198,7 +198,7 @@
   @apply scale-125 border-4;
 }
 
-.emotion-button:not(.selected) {
+.has-selection .emotion-button:not(.selected) {
   @apply scale-90 opacity-40 grayscale hover:scale-100 hover:opacity-60;
 }
 
