@@ -244,6 +244,10 @@ export type Database = {
         Args: { user_uuid: string }
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      get_email_by_username: {
+        Args: { input_username: string }
+        Returns: string | null
+      }
       is_connected_to_student: {
         Args: { caregiver_uuid: string; student_uuid: string }
         Returns: boolean
