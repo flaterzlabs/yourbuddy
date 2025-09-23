@@ -50,17 +50,17 @@ export default function Welcome() {
           </div>
 
           {/* Student Focus Section */}
-          <div className="mb-12">
-            <div className="max-w-md mx-auto">
-              <RoleCard
-                title={t('roles.student.title')}
-                description={t('roles.student.desc')}
-                icon={User}
-                selected={true}
-                onClick={() => {}}
-              />
-            </div>
-          </div>
+         <div className="mb-12">
+  <div className="max-w-sm mx-auto"> {/* largura menor só aqui */}
+    <RoleCard
+      title={t('roles.student.title')}
+      description={t('roles.student.desc')}
+      icon={User}
+      selected={true}
+      onClick={() => {}}
+    />
+  </div>
+</div>
 
           {/* Continue Button */}
           <div className="flex flex-col items-center gap-4">
