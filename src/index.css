@@ -190,53 +190,66 @@
   @apply w-20 h-20 rounded-full flex items-center justify-center text-5xl font-bold cursor-pointer transition-all duration-300 border-4 border-transparent;
 }
 
-.emotion-button:hover {
-  @apply scale-110 shadow-[0_8px_20px_rgba(0,0,0,0.15)];
-}
-
-.emotion-button.selected {
-  @apply scale-125 border-4;
-}
-
-.emotion-button:not(.selected) {
-  @apply scale-90 opacity-40 grayscale hover:scale-100 hover:opacity-60;
-}
-
-/* Emoções específicas */
+/* Emoções específicas - sempre com suas cores */
 .emotion-happy {
   background: hsl(var(--emotion-happy));
   color: hsl(var(--emotion-happy-foreground));
-}
-.emotion-happy:hover {
-  box-shadow: 0 0 16px 4px hsl(145 70% 45% / 0.6);
-}
-.emotion-happy.selected {
-  border-color: hsl(145 85% 65%);
-  box-shadow: 0 0 20px 6px hsl(145 70% 45% / 0.8);
 }
 
 .emotion-need {
   background: hsl(var(--emotion-need));
   color: hsl(var(--emotion-need-foreground));
 }
-.emotion-need:hover {
-  box-shadow: 0 0 16px 4px hsl(35 90% 50% / 0.6);
-}
-.emotion-need.selected {
-  border-color: hsl(35 95% 65%);
-  box-shadow: 0 0 20px 6px hsl(35 90% 50% / 0.8);
-}
 
 .emotion-urgent {
   background: hsl(var(--emotion-urgent));
   color: hsl(var(--emotion-urgent-foreground));
 }
-.emotion-urgent:hover {
-  box-shadow: 0 0 16px 4px hsl(0 80% 60% / 0.6);
+
+/* Estados dos botões */
+.emotion-button.selected {
+  @apply scale-125 border-4;
 }
+
+.emotion-button:not(.selected) {
+  @apply scale-90 opacity-40 grayscale;
+}
+
+.emotion-button:not(.selected):hover {
+  @apply scale-100 opacity-60;
+}
+
+.emotion-button:hover {
+  @apply scale-110 shadow-[0_8px_20px_rgba(0,0,0,0.15)];
+}
+
+/* Efeitos especiais para botões selecionados */
+.emotion-happy.selected {
+  border-color: hsl(145 85% 65%);
+  box-shadow: 0 0 20px 6px hsl(145 70% 45% / 0.8);
+}
+
+.emotion-need.selected {
+  border-color: hsl(35 95% 65%);
+  box-shadow: 0 0 20px 6px hsl(35 90% 50% / 0.8);
+}
+
 .emotion-urgent.selected {
   border-color: hsl(0 90% 70%);
   box-shadow: 0 0 20px 6px hsl(0 80% 55% / 0.8);
+}
+
+/* Efeitos de hover para cores específicas */
+.emotion-happy:hover {
+  box-shadow: 0 0 16px 4px hsl(145 70% 45% / 0.6);
+}
+
+.emotion-need:hover {
+  box-shadow: 0 0 16px 4px hsl(35 90% 50% / 0.6);
+}
+
+.emotion-urgent:hover {
+  box-shadow: 0 0 16px 4px hsl(0 80% 60% / 0.6);
 }
 
 /* Toast progress bar animation */
