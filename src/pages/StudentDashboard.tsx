@@ -540,29 +540,32 @@ export default function StudentDashboard() {
       </div>
     </div>
 
-    {/* SOS Button */}
+    {/* BOTAO SOS */}
+    
   <div className="flex justify-center">
-    <Button
-      type="submit"
-      variant="ghost"
-      size="lg"
-      disabled={loading}
-      className="flex h-22 w-22 items-center justify-center 
-                 rounded-2xl border-2 border-transparent 
-                 bg-gradient-to-br from-red-500 via-red-600 to-red-700 
-                 text-7xl text-white 
-                 shadow-[0_0_18px_rgba(220,38,38,0.55)]
-                 hover:shadow-[0_0_28px_rgba(248,113,113,0.85)]
-                 hover:scale-105 active:scale-95 
-                 transition-all duration-200"
-    >
-      {loading ? (
-        <span className="text-white text-base font-bold">{t('studentDash.sending')}</span>
-      ) : (
-        <span role="img" aria-label="sos">🆘</span>
-      )}
-    </Button>
-  </div>
+  <Button
+    type="submit"
+    variant="ghost"
+    size="lg"
+    disabled={loading}
+    className="flex h-24 w-24 items-center justify-center 
+               rounded-2xl border-4 border-transparent 
+               bg-gradient-to-br from-red-500 via-red-600 to-red-700 
+               text-7xl text-white 
+               shadow-[0_0_25px_rgba(220,38,38,0.75)]
+               hover:shadow-[0_0_45px_rgba(248,113,113,1)]
+               hover:scale-105 active:scale-95 
+               transition-all duration-200"
+  >
+    {loading ? (
+      <span className="text-white text-base font-bold">
+        {t('studentDash.sending')}
+      </span>
+    ) : (
+      <span role="img" aria-label="sos">🆘</span>
+    )}
+  </Button>
+</div>
 
   </form>
 </Card>
