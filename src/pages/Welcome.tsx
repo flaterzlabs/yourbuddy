@@ -94,7 +94,7 @@ export default function Welcome() {
             >
               {t('welcome.caregiverLink')}
             </button>
-          </div>
+          
 
           {/* Features Preview */}
           <div className="mt-16 grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
