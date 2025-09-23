@@ -117,7 +117,7 @@
     },
     "moreDetails": "Quer contar mais alguma coisa? (opcional)",
     "messagePlaceholder": "O que está acontecendo?",
-    "sendHelp": "🆘 Pedir Ajuda",
+    "sendHelp": "🆘",
     "sending": "Enviando...",
     "sentTitle": "Pedido enviado!",
     "sentDesc": "Seus responsáveis foram notificados.",
@@ -190,6 +190,28 @@
       "savedDesc": "Seu ThriveSprite foi definido com sucesso.",
       "errorTitle": "Erro",
       "errorDesc": "Não foi possível salvar o avatar. Tente novamente."
+    }
+  },
+  "settingsModal": {
+    "title": "Conexões",
+    "connectLabel": "Conectar Professor/Responsável",
+    "codePlaceholder": "Digite o código do professor...",
+    "codeHelper": "Insira o código de 8 caracteres fornecido pelo seu professor ou responsável.",
+    "connectButton": "Conectar",
+    "connecting": "Conectando...",
+    "connectedCaregivers": "Responsáveis Conectados",
+    "emptyState": "Não há nenhum responsável conectado ainda...",
+    "connectedOn": "Conectado em {{date}}",
+    "role": {
+      "educator": "Professor",
+      "caregiver": "Responsável",
+      "fallback": "Professor/Responsável"
+    },
+    "toast": {
+      "successTitle": "Conexão realizada!",
+      "successDesc": "Você está agora conectado com {{username}}",
+      "errorTitle": "Erro na conexão",
+      "errorDesc": "Ocorreu um erro ao tentar conectar. Tente novamente."
     }
   }
 }

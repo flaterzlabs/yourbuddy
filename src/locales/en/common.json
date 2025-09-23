@@ -117,7 +117,7 @@
     },
     "moreDetails": "Want to say anything else? (optional)",
     "messagePlaceholder": "What is happening?",
-    "sendHelp": "🆘 Ask for Help",
+    "sendHelp": "🆘",
     "sending": "Sending...",
     "sentTitle": "Request sent!",
     "sentDesc": "Your caregivers have been notified.",
@@ -137,7 +137,8 @@
     "helpAnsweredDesc": "A caregiver has responded to your request.",
     "helpClosed": "Request completed 🎯", 
     "helpClosedDesc": "Your help request has been resolved.",
-    "connectedCaregivers": "Connected Caregivers"
+    "connectedCaregivers": "Connected Caregivers",
+    "historyTitle": "Request History"
   },
   "caregiverDash": {
     "title": "Caregiver Dashboard",
@@ -189,6 +190,28 @@
       "savedDesc": "Your ThriveSprite has been set.",
       "errorTitle": "Error",
       "errorDesc": "Couldn't save the avatar. Please try again."
+    }
+  },
+  "settingsModal": {
+    "title": "Connections",
+    "connectLabel": "Connect Teacher/Caregiver",
+    "codePlaceholder": "Enter the teacher code...",
+    "codeHelper": "Enter the 8-character code provided by your teacher or caregiver.",
+    "connectButton": "Connect",
+    "connecting": "Connecting...",
+    "connectedCaregivers": "Connected Caregivers",
+    "emptyState": "No caregivers connected yet...",
+    "connectedOn": "Connected on {{date}}",
+    "role": {
+      "educator": "Teacher",
+      "caregiver": "Caregiver",
+      "fallback": "Teacher/Caregiver"
+    },
+    "toast": {
+      "successTitle": "Connected successfully!",
+      "successDesc": "You are now connected with {{username}}",
+      "errorTitle": "Connection error",
+      "errorDesc": "An error occurred while trying to connect. Please try again."
     }
   }
 }
