@@ -540,20 +540,25 @@ export default function StudentDashboard() {
       </div>
     </div>
 
-    {/* Botão principal de enviar ajuda */}
-<div className="mx-auto flex h-36 w-36 items-center justify-center">
+    {/* Container externo (mais quadrado, borda + sombra igual aos outros) */}
+<div className="mx-auto flex h-40 w-40 flex-col items-center justify-center 
+                rounded-3xl border-[3px] border-red-300/70 
+                bg-slate-900/80 shadow-[inset_0_18px_28px_rgba(0,0,0,0.45)]
+                backdrop-blur-sm">
+  
+  {/* Botão SOS (emoji grande, igual estilo dos outros) */}
   <Button
     type="submit"
     variant="ghost"
     size="lg"
     disabled={loading}
-    className="flex h-32 w-32 items-center justify-center rounded-full
-               bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-6xl
+    className="flex h-28 w-28 items-center justify-center rounded-2xl
+               bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-7xl
                shadow-[0_0_25px_rgba(220,38,38,0.55)] hover:shadow-[0_0_35px_rgba(248,113,113,0.85)]
                hover:scale-105 active:scale-95 transition-transform transition-shadow duration-200"
   >
     {loading ? (
-      <span className="text-white text-xl font-bold">{t('studentDash.sending')}</span>
+      <span className="text-white text-lg font-bold">{t('studentDash.sending')}</span>
     ) : (
       <span role="img" aria-label="sos">🆘</span>
     )}
