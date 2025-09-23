@@ -62,16 +62,30 @@ export default function Welcome() {
   </div>
 </div>
 
-          {/* Continue Button */}
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex gap-4">
-              <Button variant="hero" size="xl" onClick={handleContinue} className="px-12">
-                {t('welcome.start')}
-              </Button>
-              <Button variant="outline" size="xl" onClick={() => navigate('/auth')} className="px-8">
-                {t('welcome.haveAccount')}
-              </Button>
-            </div>
+        {/* Continue Button */}
+<div className="flex flex-col items-center gap-4">
+  <div className="flex gap-4">
+    <Button
+      variant="hero"
+      size="xl"
+      onClick={handleContinue}
+      className="px-12 transition-all duration-300 ease-in-out 
+                 hover:scale-105 active:scale-95"
+    >
+      {t('welcome.start')}
+    </Button>
+
+    <Button
+      variant="outline"
+      size="xl"
+      onClick={() => navigate('/auth')}
+      className="px-8 transition-all duration-300 ease-in-out 
+                 hover:bg-muted hover:scale-105 active:scale-95"
+    >
+      {t('welcome.haveAccount')}
+    </Button>
+  </div>
+</div>
             
             {/* Link for Parents/Educators */}
             <button
