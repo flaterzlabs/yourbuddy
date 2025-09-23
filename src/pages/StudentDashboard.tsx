@@ -541,22 +541,24 @@ export default function StudentDashboard() {
     </div>
 
     {/* Botão principal de enviar ajuda */}
-    <div className="mx-auto flex h-36 w-36 flex-col items-center justify-center rounded-[2.5rem]
-                 border-[3px] border-red-200/70 bg-slate-900/80 shadow-[inset_0_18px_28px_rgba(0,0,0,0.45)]
-                 backdrop-blur-sm">
-      <Button
-        type="submit"
-        variant="ghost"
-        size="lg"
-        disabled={loading}
-        className="flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-[2rem]
-                   bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-white text-2xl font-extrabold
-                   shadow-[0_14px_35px_rgba(220,38,38,0.55)] hover:shadow-[0_0_25px_rgba(248,113,113,0.85)]
-                   hover:-translate-y-1 active:translate-y-0 transition-transform transition-shadow duration-200"
-      >
-        {loading ? t('studentDash.sending') : t('studentDash.sendHelp')}
-      </Button>
-    </div>
+<div className="mx-auto flex h-36 w-36 items-center justify-center">
+  <Button
+    type="submit"
+    variant="ghost"
+    size="lg"
+    disabled={loading}
+    className="flex h-32 w-32 items-center justify-center rounded-full
+               bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-6xl
+               shadow-[0_0_25px_rgba(220,38,38,0.55)] hover:shadow-[0_0_35px_rgba(248,113,113,0.85)]
+               hover:scale-105 active:scale-95 transition-transform transition-shadow duration-200"
+  >
+    {loading ? (
+      <span className="text-white text-xl font-bold">{t('studentDash.sending')}</span>
+    ) : (
+      <span role="img" aria-label="sos">🆘</span>
+    )}
+  </Button>
+</div>
   </form>
 </Card>
 
