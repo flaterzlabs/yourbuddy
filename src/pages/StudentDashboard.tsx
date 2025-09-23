@@ -41,7 +41,7 @@ export default function StudentDashboard() {
   const [connections, setConnections] = useState<Connection[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent'>('ok');
+  const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent' | null>(null);
   const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
@@ -241,6 +241,17 @@ export default function StudentDashboard() {
     e.preventDefault();
     if (!user) return;
 
+    // Require urgency selection
+    if (!urgency) {
+      toast({
+        title: t('auth.toast.errorTitle'),
+        description: "Por favor, selecione como você está se sentindo antes de enviar o pedido.",
+        variant: 'destructive',
+        duration: 3000,
+      });
+      return;
+    }
+
     setLoading(true);
 
     // Optimistic update - add request immediately to UI
@@ -300,7 +311,7 @@ export default function StudentDashboard() {
       }
 
       setMessage('');
-      setUrgency('ok');
+      setUrgency(null);
     } catch (error) {
       console.error('Error creating help request:', error);
 
