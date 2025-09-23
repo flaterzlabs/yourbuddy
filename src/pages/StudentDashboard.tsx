@@ -540,17 +540,17 @@ export default function StudentDashboard() {
       </div>
     </div>
 
-    {/* Centralizado e menor */}
+    {/* SOS Button */}
   <div className="flex justify-center">
     <Button
       type="submit"
       variant="ghost"
       size="lg"
       disabled={loading}
-      className="flex h-24 w-24 items-center justify-center 
+      className="flex h-22 w-22 items-center justify-center 
                  rounded-2xl border-2 border-transparent 
                  bg-gradient-to-br from-red-500 via-red-600 to-red-700 
-                 text-6xl text-white 
+                 text-7xl text-white 
                  shadow-[0_0_18px_rgba(220,38,38,0.55)]
                  hover:shadow-[0_0_28px_rgba(248,113,113,0.85)]
                  hover:scale-105 active:scale-95 
