@@ -551,7 +551,7 @@ export default function StudentDashboard() {
     className="flex h-24 w-24 items-center justify-center 
                rounded-2xl 
                bg-gradient-to-br from-red-500 via-red-600 to-red-700 
-               text-8xl text-white 
+               text-7xl text-white 
                shadow-[0_0_25px_rgba(220,38,38,0.75)]
                hover:shadow-[0_0_45px_rgba(248,113,113,1)]
                hover:scale-105 active:scale-95 
