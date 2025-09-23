@@ -552,7 +552,7 @@ export default function StudentDashboard() {
                bg-gradient-to-br from-red-500 via-red-600 to-red-700 
                text-white 
                shadow-[0_0_25px_rgba(220,38,38,0.75)]
-               hover:shadow-[0_0_45px_rgba(248,113,113,1)]
+               hover:shadow-[0_0_30px_rgba(248,80,80,1)]
                hover:scale-105 active:scale-95 
                transition-all duration-200"
   >
