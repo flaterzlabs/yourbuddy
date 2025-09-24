@@ -383,7 +383,7 @@ export default function StudentDashboard() {
     {/* Histórico */}
     <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
+        <Button variant="ghost" size="icon" className="relative transition-colors duration-200 hover:text-white">
           <ClipboardList className="h-5 w-5" />
           {helpRequests.length > 0 && (
             <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
@@ -473,7 +473,7 @@ export default function StudentDashboard() {
     {/* Logout */}
     <Button
       variant="ghost"
-      className="transition-colors duration-200 hover:bg-purple-600 hover:text-primary-foreground"
+      className="transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
       onClick={async () => {
         await signOut();
         // === Alteração: Adicionado variant e viewportId ===
