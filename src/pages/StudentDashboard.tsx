@@ -306,14 +306,14 @@ export default function StudentDashboard() {
   </div>
 
   {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
-  <div className="flex flex-col items-center text-center sm:ml-4">
-    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-      {t('studentDash.hello', { name: profile?.username })}
-    </h1>
-    <p className="text-base sm:text-xl text-muted-foreground">
-      {t('studentDash.feelingToday')}
-    </p>
-  </div>
+<div className="flex flex-col items-center text-center sm:hidden">
+    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+      {t('studentDash.hello', { name: profile?.username })}
+    </h1>
+    <p className="text-base sm:text-xl text-muted-foreground">
+      {t('studentDash.feelingToday')}
+    </p>
+</div>
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
