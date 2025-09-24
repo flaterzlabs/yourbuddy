@@ -294,12 +294,11 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
-        
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex flex-col items-center gap-2">
-            <BuddyLogo size="md" /> 
-            <h2 className="text-base sm:text-lg font-semibold text-muted-foreground">
+            <BuddyLogo size="lg" />
+            <h2 className="text-lg font-semibold text-muted-foreground">
               {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
             </h2>
           </div>
@@ -430,31 +429,31 @@ export default function StudentDashboard() {
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
-              <div>
-                <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
-                  <button
-                    type="button"
-                    onClick={() => setUrgency('ok')}
-                    className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
-                  >
-                    <span className="text-4xl sm:text-5xl">😊</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setUrgency('attention')}
-                    className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
-                  >
-                    <span className="text-4xl sm:text-5xl">😟</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setUrgency('urgent')}
-                    className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
-                  >
-                    <span className="text-4xl sm:text-5xl">😭</span>
-                  </button>
-                </div>
-              </div>
+           <div>
+  <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
+    <button
+      type="button"
+      onClick={() => setUrgency('ok')}
+      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
+    >
+      <span className="text-4xl sm:text-5xl">😊</span>
+    </button>
+    <button
+      type="button"
+      onClick={() => setUrgency('attention')}
+      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
+    >
+      <span className="text-4xl sm:text-5xl">😟</span>
+    </button>
+    <button
+      type="button"
+      onClick={() => setUrgency('urgent')}
+      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
+    >
+      <span className="text-4xl sm:text-5xl">😭</span>
+    </button>
+  </div>
+</div>
 
 
               {/* BOTÃO SOS */}
@@ -464,7 +463,14 @@ export default function StudentDashboard() {
                   variant="ghost"
                   size="lg"
                   disabled={loading}
-                  className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-white shadow-[0_0_25px_rgba(220,38,38,0.75)] hover:shadow-[0_0_30px_rgba(248,80,80,1)] hover:scale-105 active:scale-95 transition-all duration-200"
+                  className="flex h-24 w-24 items-center justify-center 
+                            rounded-2xl 
+                            bg-gradient-to-br from-red-500 via-red-600 to-red-700 
+                            text-white 
+                            shadow-[0_0_25px_rgba(220,38,38,0.75)]
+                            hover:shadow-[0_0_30px_rgba(248,80,80,1)]
+                            hover:scale-105 active:scale-95 
+                            transition-all duration-200"
                 >
                   {loading ? (
                     <span className="text-white text-base font-bold">{t('studentDash.sending')}</span>
