@@ -6,74 +6,75 @@
 
 @layer base {
   :root {
-    /* Light theme - Warm & cozy */
-  --background: 210 40% 93%; /* azul bebê com mais contraste */
-  --foreground: 220 25% 15%; /* texto ainda mais escuro para contraste */
+  /* Light theme - Mais contraste e menos brilho */
+  --background: 210 30% 85%;       /* Azul bebê mais escuro */
+  --foreground: 220 30% 15%;       /* Texto bem contrastante */
 
-  --card: 210 30% 90%; /* cartões com tom azul bebê mais escuro */
+  --card: 210 20% 96%;             /* Cinza-azulado mais sóbrio */
   --card-foreground: 220 25% 15%;
 
-  --popover: 210 30% 90%;
+  --popover: 210 20% 96%;
   --popover-foreground: 220 25% 15%;
 
-  /* Primary - Azul mais vivo */
-  --primary: 215 80% 55%; 
+  /* Primary - Azul mais forte */
+  --primary: 215 75% 50%;
   --primary-foreground: 0 0% 100%;
-  --primary-light: 215 90% 85%;
+  --primary-light: 215 70% 80%;
 
-  /* Secondary - Rosa/Pêssego quente */
-  --secondary: 340 70% 75%;
+  /* Secondary - Rosa/Pêssego suave mas não tão claro */
+  --secondary: 340 65% 65%;
   --secondary-foreground: 220 25% 15%;
 
-  /* Success - Verde mais vibrante */
-  --success: 145 70% 50%;
+  /* Success */
+  --success: 145 65% 45%;
   --success-foreground: 0 0% 100%;
-  --success-light: 145 70% 88%;
+  --success-light: 145 60% 75%;
 
-  /* Warning - Laranja mais quente */
-  --warning: 30 90% 60%;
+  /* Warning */
+  --warning: 30 80% 50%;
   --warning-foreground: 0 0% 100%;
-  --warning-light: 30 90% 88%;
+  --warning-light: 30 75% 75%;
 
   /* Muted */
-  --muted: 210 25% 88%; /* cinza azulado com mais contraste */
-  --muted-foreground: 220 15% 35%;
+  --muted: 210 15% 75%;            /* Cinza mais frio e visível */
+  --muted-foreground: 220 15% 30%;
 
-  /* Accent - Roxo mais aconchegante */
-  --accent: 280 65% 70%;
+  /* Accent */
+  --accent: 280 60% 60%;
   --accent-foreground: 220 25% 15%;
 
-  --destructive: 0 75% 60%;
+  --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 210 20% 82%; /* bordas mais visíveis */
-  --input: 210 25% 88%; /* inputs com mais contraste */
-  --ring: 215 80% 55%;
+  --border: 210 20% 70%;           /* Bordas mais escuras */
+  --input: 210 20% 75%;
+  --ring: 215 75% 50%;
 
   --radius: 1rem;
 
-  /* Gradients mais aconchegantes */
+  /* Gradientes */
   --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-  --gradient-hero: linear-gradient(135deg, hsl(215 80% 55%), hsl(340 70% 75%));
-  --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(40 40% 96%));
+  --gradient-hero: linear-gradient(135deg, hsl(215 75% 50%), hsl(340 65% 65%));
+  --gradient-card: linear-gradient(145deg, hsl(210 25% 92%), hsl(210 20% 88%));
 
-  /* Sombras mais quentes */
-  --shadow-soft: 0 4px 20px hsl(30 80% 60% / 0.1);
-  --shadow-medium: 0 8px 30px hsl(30 80% 60% / 0.15);
-  --shadow-strong: 0 12px 40px hsl(30 80% 60% / 0.2);
+  /* Sombras mais visíveis */
+  --shadow-soft: 0 4px 20px hsl(210 30% 40% / 0.15);
+  --shadow-medium: 0 8px 30px hsl(210 30% 40% / 0.25);
+  --shadow-strong: 0 12px 40px hsl(210 30% 40% / 0.35);
 
-  /* Emoções (mais contrastantes e vibrantes) */
-  --emotion-happy: 145 75% 50%; /* verde-limão feliz */
+  /* Emoções (mantém contraste vibrante) */
+  --emotion-happy: 145 75% 45%;
   --emotion-happy-foreground: 0 0% 100%;
-  --emotion-need: 45 100% 55%; /* amarelo vibrante */
+  --emotion-need: 45 95% 50%;
   --emotion-need-foreground: 0 0% 100%;
-  --emotion-urgent: 5 80% 55%; /* vermelho mais quente */
+  --emotion-urgent: 5 75% 50%;
   --emotion-urgent-foreground: 0 0% 100%;
 
   /* Transições */
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
 
   .dark {
     /* Dark theme - Calming and gentle */
