@@ -7,10 +7,10 @@
 @layer base {
   :root {
   /* Light theme - Mais contraste e menos brilho */
-  --background: 210 30% 82%;       /* Azul bebê mais escuro e mais contraste */
+  --background: 210 70% 88%;       /* Azul bebê mais vivo */
   --foreground: 220 35% 12%;       /* Texto bem contrastante */
 
- --card: 150 50% 90%; /* Verde menta */
+ --card: 150 50% 85%;             /* Verde menta suave */
 --card-foreground: 220 25% 15%;
 
   --popover: 210 20% 94%;
@@ -57,10 +57,10 @@
   --gradient-hero: linear-gradient(135deg, hsl(215 75% 50%), hsl(340 65% 65%));
   --gradient-card: linear-gradient(145deg, hsl(210 25% 90%), hsl(210 20% 86%));
 
-  /* Sombras mais visíveis */
-  --shadow-soft: 0 6px 22px hsl(210 30% 35% / 0.20);
-  --shadow-medium: 0 10px 32px hsl(210 30% 35% / 0.30);
-  --shadow-strong: 0 14px 44px hsl(210 30% 35% / 0.40);
+   /* Sombras mais densas */
+  --shadow-soft: 0 6px 24px hsl(210 30% 30% / 0.25);
+  --shadow-medium: 0 10px 36px hsl(210 30% 25% / 0.35);
+  --shadow-strong: 0 14px 48px hsl(210 30% 20% / 0.45);
 
   /* Emoções (mantém contraste vibrante) */
   --emotion-happy: 145 75% 43%;
