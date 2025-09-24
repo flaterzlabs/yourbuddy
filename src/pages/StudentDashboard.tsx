@@ -413,7 +413,7 @@ export default function StudentDashboard() {
           </div>
 
           {/* Help Request Form */}
-          <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
+          <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
             <div className="text-center mb-6">
               <div className="flex items-center justify-center mx-auto mb-4">
                 <StudentAvatar
@@ -425,7 +425,7 @@ export default function StudentDashboard() {
                 />
               </div>
               <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
-              <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
+              <p className="text-muted-foreground mb-2">{t('studentDash.caregiversNotified')}</p>
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
@@ -433,7 +433,7 @@ export default function StudentDashboard() {
               {/* EMOTIONAL BUTTONS*/}
               
           <div>
-  <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
+  <div className={`flex justify-center items-center gap-8 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
     <button
       type="button"
       onClick={() => setUrgency('ok')}
