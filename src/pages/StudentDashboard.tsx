@@ -294,17 +294,14 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
-       {/* Header */}
-<div className="flex justify-between items-center mb-8">
-  <div className="flex flex-col items-center gap-2">
-    {/* Logo menor no mobile */}
-    <BuddyLogo size="md" className="sm:size-lg" />
-    <h2 className="text-sm sm:text-lg font-semibold text-muted-foreground">
-      {profile?.role === 'student'
-        ? t('studentDash.titleStudent')
-        : t('studentDash.title')}
-    </h2>
-  </div>
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col items-center gap-2">
+            <BuddyLogo size="lg" />
+            <h2 className="text-lg font-semibold text-muted-foreground">
+              {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
+            </h2>
+          </div>
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
@@ -432,33 +429,19 @@ export default function StudentDashboard() {
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
-             <div>
-  <div className="flex justify-center items-center gap-4 sm:gap-8">
-    <button
-      type="button"
-      onClick={() => setUrgency('ok')}
-      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
-    >
-      <span className="text-4xl sm:text-6xl">😊</span>
-    </button>
-
-    <button
-      type="button"
-      onClick={() => setUrgency('attention')}
-      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
-    >
-      <span className="text-4xl sm:text-6xl">😟</span>
-    </button>
-
-    <button
-      type="button"
-      onClick={() => setUrgency('urgent')}
-      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
-    >
-      <span className="text-4xl sm:text-6xl">😭</span>
-    </button>
-  </div>
-</div>
+              <div>
+                <div className={`flex justify-center items-center gap-12 ${urgency ? 'has-selection' : ''}`}>
+                  <button type="button" onClick={() => setUrgency('ok')} className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}>
+                    😊
+                  </button>
+                  <button type="button" onClick={() => setUrgency('attention')} className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}>
+                    😟
+                  </button>
+                  <button type="button" onClick={() => setUrgency('urgent')} className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}>
+                    😭
+                  </button>
+                </div>
+              </div>
 
               {/* BOTÃO SOS */}
               <div className="flex justify-center items-center h-full w-full">
