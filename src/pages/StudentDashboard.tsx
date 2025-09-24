@@ -433,7 +433,7 @@ export default function StudentDashboard() {
               {/* EMOTIONAL BUTTONS*/}
               
           <div>
-  <div className={`flex justify-center items-center gap-8 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
+  <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
     <button
       type="button"
       onClick={() => setUrgency('ok')}
