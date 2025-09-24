@@ -436,21 +436,21 @@ export default function StudentDashboard() {
       onClick={() => setUrgency('ok')}
       className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
     >
-      <span className="text-3xl sm:text-5xl">😊</span>
+      <span className="text-4xl sm:text-5xl">😊</span>
     </button>
     <button
       type="button"
       onClick={() => setUrgency('attention')}
       className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
     >
-      <span className="text-3xl sm:text-5xl">😟</span>
+      <span className="text-4xl sm:text-5xl">😟</span>
     </button>
     <button
       type="button"
       onClick={() => setUrgency('urgent')}
       className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
     >
-      <span className="text-3xl sm:text-5xl">😭</span>
+      <span className="text-4xl sm:text-5xl">😭</span>
     </button>
   </div>
 </div>
