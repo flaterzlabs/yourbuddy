@@ -11,7 +11,7 @@ import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link } from "lucide-react";
+import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut } from "lucide-react";
 
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
@@ -143,7 +143,7 @@ function MobileMenu({
               navigate("/auth");
             }}
           >
-            <XCircle className="h-5 w-5" />
+            <LogOut className="h-5 w-5" />
           </Button>
         </DropdownMenuContent>
       </DropdownMenu>
