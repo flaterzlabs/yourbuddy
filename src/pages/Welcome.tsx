@@ -80,7 +80,7 @@ export default function Welcome() {
       size="xl"
       onClick={() => navigate('/auth')}
       className="px-8 transition-all duration-300 ease-in-out 
-                 hover:scale-105 active:scale-95"
+                 hover:scale-105 active:scale-95 hover:bg-gradient-primary hover:text-white hover:border-transparent"
     >
       {t('welcome.haveAccount')}
     </Button>
