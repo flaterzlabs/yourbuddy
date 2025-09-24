@@ -294,14 +294,26 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex flex-col items-center gap-2">
-            <BuddyLogo size="lg" />
-            <h2 className="text-lg font-semibold text-muted-foreground">
-              {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
-            </h2>
-          </div>
+        
+       {/* Header */}
+<div className="flex justify-between items-center mb-8">
+  {/* Logo e título - visíveis apenas no desktop/tablet */}
+  <div className="hidden sm:flex flex-col items-center gap-2">
+    <BuddyLogo size="lg" />
+    <h2 className="text-lg font-semibold text-muted-foreground">
+      {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
+    </h2>
+  </div>
+
+  {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
+  <div className="flex flex-col items-center text-center sm:ml-4">
+    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+      {t('studentDash.hello', { name: profile?.username })}
+    </h1>
+    <p className="text-base sm:text-xl text-muted-foreground">
+      {t('studentDash.feelingToday')}
+    </p>
+  </div>
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
