@@ -291,6 +291,18 @@ export default function StudentDashboard() {
     }
   };
 
+  useEffect(() => {
+  function handleClickOutside(event: MouseEvent) {
+    if ((event.target as HTMLElement).closest('.emotion-button')) return;
+    if (urgency !== null) setUrgency(null);
+  }
+
+  document.addEventListener('click', handleClickOutside);
+  return () => {
+    document.removeEventListener('click', handleClickOutside);
+  };
+}, [urgency]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
