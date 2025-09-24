@@ -10,8 +10,8 @@
   --background: 210 30% 82%;       /* Azul bebê mais escuro e mais contraste */
   --foreground: 220 35% 12%;       /* Texto bem contrastante */
 
-  --card: 210 20% 94%;             /* Cinza-azulado mais definido */
-  --card-foreground: 220 30% 12%;
+ --card: 150 50% 90%; /* Verde menta */
+--card-foreground: 220 25% 15%;
 
   --popover: 210 20% 94%;
   --popover-foreground: 220 30% 12%;
