@@ -1,11 +1,13 @@
 import { Heart } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface BuddyLogoProps {
   size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
+  className?: string;
 }
 
-export function BuddyLogo({ size = 'md', showText = true }: BuddyLogoProps) {
+export function BuddyLogo({ size = 'md', showText = true, className }: BuddyLogoProps) {
   const sizeClasses = {
     sm: 'h-6 w-6',
     md: 'h-8 w-8',
@@ -19,7 +21,7 @@ export function BuddyLogo({ size = 'md', showText = true }: BuddyLogoProps) {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)}>
       <div className="relative">
         <div
           className={`${sizeClasses[size]} bg-gradient-primary rounded-2xl flex items-center justify-center shadow-soft`}
