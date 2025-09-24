@@ -32,7 +32,7 @@ export function LanguageToggle({ trigger }: LanguageToggleProps = {}) {
       onClick={() => i18n.changeLanguage(switchTo)}
       aria-label="Change language"
       title={current.startsWith('pt') ? 'Switch to English' : 'Mudar para Português'}
-      className="transition-colors duration-200 hover:text-white"
+      className="transition-colors duration-200"
     >
       {label}
     </Button>
