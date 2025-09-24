@@ -305,12 +305,12 @@ export default function StudentDashboard() {
     </h2>
   </div>
 
- {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
-<div className="flex flex-col items-center text-center sm:hidden mb-20">
-    <h1 className="text-3xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+  {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
+<div className="flex flex-col items-center text-center sm:hidden">
+    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
       {t('studentDash.hello', { name: profile?.username })}
     </h1>
-    <p className="text-xl sm:text-xl text-muted-foreground">
+    <p className="text-base sm:text-xl text-muted-foreground">
       {t('studentDash.feelingToday')}
     </p>
 </div>
@@ -414,14 +414,14 @@ export default function StudentDashboard() {
 
         {/* Conteúdo principal */}
         <div className="max-w-2xl mx-auto">
-          {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
-<div className="flex flex-col items-center text-center sm:hidden mb-20">
-    <h1 className="text-3xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+          {/* Welcome Section */}
+<div className="hidden sm:block text-center mb-8">
+  <div className="mb-4">
+    <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
       {t('studentDash.hello', { name: profile?.username })}
     </h1>
-    <p className="text-xl sm:text-xl text-muted-foreground">
-      {t('studentDash.feelingToday')}
-    </p>
+    <p className="text-xl text-muted-foreground">{t('studentDash.feelingToday')}</p>
+  </div>
 </div>
 
           {/* Help Request Form */}
