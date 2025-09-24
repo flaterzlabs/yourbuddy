@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use Ref } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -160,6 +160,7 @@ export default function StudentDashboard() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent' | null>(null);
+  const emotionRef = useRef<HTMLDivElement>(null);
   const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
@@ -290,6 +291,23 @@ export default function StudentDashboard() {
       default: return '🟢';
     }
   };
+
+  // ✅ Resetar seleção ao clicar fora dos botões
+useEffect(() => {
+  function handleClickOutside(event: MouseEvent | TouchEvent) {
+    if (emotionRef.current && !emotionRef.current.contains(event.target as Node)) {
+      setUrgency(null);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+  document.addEventListener("touchstart", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+    document.removeEventListener("touchstart", handleClickOutside);
+  };
+}, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -429,31 +447,40 @@ export default function StudentDashboard() {
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
-           <div>
-  <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
+           <div ref={emotionRef}>
+  <div className={`flex justify-center items-center gap-6 sm:gap-12`}>
     <button
       type="button"
       onClick={() => setUrgency('ok')}
-      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
+      className={`emotion-button emotion-happy ${
+        urgency === 'ok' ? 'selected' : urgency ? 'faded' : ''
+      }`}
     >
       <span className="text-4xl sm:text-5xl">😊</span>
     </button>
+
     <button
       type="button"
       onClick={() => setUrgency('attention')}
-      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
+      className={`emotion-button emotion-need ${
+        urgency === 'attention' ? 'selected' : urgency ? 'faded' : ''
+      }`}
     >
       <span className="text-4xl sm:text-5xl">😟</span>
     </button>
+
     <button
       type="button"
       onClick={() => setUrgency('urgent')}
-      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
+      className={`emotion-button emotion-urgent ${
+        urgency === 'urgent' ? 'selected' : urgency ? 'faded' : ''
+      }`}
     >
       <span className="text-4xl sm:text-5xl">😭</span>
     </button>
   </div>
 </div>
+
 
 
               {/* BOTÃO SOS */}
