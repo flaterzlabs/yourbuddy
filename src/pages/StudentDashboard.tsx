@@ -473,7 +473,7 @@ export default function StudentDashboard() {
     {/* Logout */}
     <Button
       variant="ghost"
-      className="transition-colors duration-200"
+      className="transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
       onClick={async () => {
         await signOut();
         // === Alteração: Adicionado variant e viewportId ===
