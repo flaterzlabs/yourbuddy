@@ -7,14 +7,14 @@
 @layer base {
   :root {
     /* Light theme - Warm & cozy */
-  --background: 210 40% 97%; /* azul bebê muito claro */
-  --foreground: 220 25% 20%; /* texto escuro com bom contraste */
+  --background: 210 40% 93%; /* azul bebê com mais contraste */
+  --foreground: 220 25% 15%; /* texto ainda mais escuro para contraste */
 
-  --card: 210 30% 98%; /* cartões com leve tom azul bebê */
-  --card-foreground: 220 25% 20%;
+  --card: 210 30% 90%; /* cartões com tom azul bebê mais escuro */
+  --card-foreground: 220 25% 15%;
 
-  --popover: 210 30% 98%;
-  --popover-foreground: 220 25% 20%;
+  --popover: 210 30% 90%;
+  --popover-foreground: 220 25% 15%;
 
   /* Primary - Azul mais vivo */
   --primary: 215 80% 55%; 
@@ -23,7 +23,7 @@
 
   /* Secondary - Rosa/Pêssego quente */
   --secondary: 340 70% 75%;
-  --secondary-foreground: 220 25% 20%;
+  --secondary-foreground: 220 25% 15%;
 
   /* Success - Verde mais vibrante */
   --success: 145 70% 50%;
@@ -36,18 +36,18 @@
   --warning-light: 30 90% 88%;
 
   /* Muted */
-  --muted: 210 25% 94%; /* cinza azulado mais aconchegante */
-  --muted-foreground: 220 15% 40%;
+  --muted: 210 25% 88%; /* cinza azulado com mais contraste */
+  --muted-foreground: 220 15% 35%;
 
   /* Accent - Roxo mais aconchegante */
   --accent: 280 65% 70%;
-  --accent-foreground: 220 25% 20%;
+  --accent-foreground: 220 25% 15%;
 
   --destructive: 0 75% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 210 20% 88%; /* bordas com tom azul bebê */
-  --input: 210 25% 95%; /* inputs com azul bebê */
+  --border: 210 20% 82%; /* bordas mais visíveis */
+  --input: 210 25% 88%; /* inputs com mais contraste */
   --ring: 215 80% 55%;
 
   --radius: 1rem;
@@ -145,7 +145,7 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    background: linear-gradient(135deg, hsl(210 40% 97%), hsl(210 30% 94%));
+    background: linear-gradient(135deg, hsl(210 40% 93%), hsl(210 30% 88%));
   }
 
   /* Custom scrollbar for better UX */
