@@ -414,7 +414,7 @@ export default function StudentDashboard() {
 
           {/* Help Request Form */}
           <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
-            <div className="text-center mb-6">
+            <div className="text-center mb-8">
               <div className="flex items-center justify-center mx-auto mb-4">
                 <StudentAvatar
                   imageUrl={thriveSprite?.image_url}
@@ -425,7 +425,7 @@ export default function StudentDashboard() {
                 />
               </div>
               <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
-              <p className="text-muted-foreground mb-2">{t('studentDash.caregiversNotified')}</p>
+              <p className="text-muted-foreground mb-4">{t('studentDash.caregiversNotified')}</p>
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
