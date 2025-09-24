@@ -162,6 +162,7 @@ export default function StudentDashboard() {
   const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent' | null>(null);
   const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
+  const [selectedEmotion, setSelectedEmotion] = useState<'good' | 'neutral' | 'bad' | null>(null);
 
   const fetchConnections = async () => {
     if (!user) return;
@@ -232,7 +233,7 @@ export default function StudentDashboard() {
   const handleHelpRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
-    if (!urgency) {
+    if (!selectedEmotion) {
       toast({
         title: t('auth.toast.errorTitle'),
         description: "Por favor, selecione como você está se sentindo antes de enviar o pedido.",
@@ -242,12 +243,20 @@ export default function StudentDashboard() {
       return;
     }
 
+    // Map selectedEmotion to urgency
+    const emotionToUrgency = {
+      'good': 'ok' as const,
+      'neutral': 'attention' as const,
+      'bad': 'urgent' as const
+    };
+    const mappedUrgency = emotionToUrgency[selectedEmotion];
+
     setLoading(true);
     try {
       const { data, error } = await supabase.from('help_requests').insert({
         student_id: user.id,
         message: message || undefined,
-        urgency,
+        urgency: mappedUrgency,
       }).select().single();
 
       if (error) throw error;
@@ -261,7 +270,7 @@ export default function StudentDashboard() {
 
       fetchHelpRequests();
       setMessage('');
-      setUrgency(null);
+      setSelectedEmotion(null);
     } catch (error) {
       toast({
         title: t('auth.toast.errorTitle'),
