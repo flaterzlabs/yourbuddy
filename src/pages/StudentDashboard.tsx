@@ -429,19 +429,48 @@ export default function StudentDashboard() {
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
-              <div>
-                <div className={`flex justify-center items-center gap-12 ${urgency ? 'has-selection' : ''}`}>
-                  <button type="button" onClick={() => setUrgency('ok')} className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}>
-                    😊
-                  </button>
-                  <button type="button" onClick={() => setUrgency('attention')} className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}>
-                    😟
-                  </button>
-                  <button type="button" onClick={() => setUrgency('urgent')} className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}>
-                    😭
-                  </button>
-                </div>
-              </div>
+
+              
+             {/* Emojis de emoção */}
+<div className="flex flex-col items-center justify-center">
+  <div className="flex gap-4 sm:gap-6">
+    <button
+      type="button"
+      onClick={() => setSelectedEmotion("good")}
+      className={`p-3 sm:p-4 rounded-full transition-transform ${
+        selectedEmotion === "good" ? "ring-4 ring-green-500 scale-110" : "hover:scale-105"
+      }`}
+    >
+      <span role="img" aria-label="good" className="text-4xl sm:text-6xl">
+        😀
+      </span>
+    </button>
+
+    <button
+      type="button"
+      onClick={() => setSelectedEmotion("neutral")}
+      className={`p-3 sm:p-4 rounded-full transition-transform ${
+        selectedEmotion === "neutral" ? "ring-4 ring-yellow-500 scale-110" : "hover:scale-105"
+      }`}
+    >
+      <span role="img" aria-label="neutral" className="text-4xl sm:text-6xl">
+        😐
+      </span>
+    </button>
+
+    <button
+      type="button"
+      onClick={() => setSelectedEmotion("bad")}
+      className={`p-3 sm:p-4 rounded-full transition-transform ${
+        selectedEmotion === "bad" ? "ring-4 ring-red-500 scale-110" : "hover:scale-105"
+      }`}
+    >
+      <span role="img" aria-label="bad" className="text-4xl sm:text-6xl">
+        😟
+      </span>
+    </button>
+  </div>
+</div>
 
               {/* BOTÃO SOS */}
               <div className="flex justify-center items-center h-full w-full">
