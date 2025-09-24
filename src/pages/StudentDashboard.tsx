@@ -429,37 +429,31 @@ export default function StudentDashboard() {
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
-          <div>
-  <div className={`flex justify-center items-center gap-8 ${urgency ? 'has-selection' : ''}`}>
+           <div>
+  <div className={`flex justify-center items-center gap-12 ${urgency ? 'has-selection' : ''}`}>
     <button
       type="button"
       onClick={() => setUrgency('ok')}
-      className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center transition-all 
-        ${urgency === 'ok' ? 'ring-4 ring-green-500 scale-110' : 'hover:scale-105 bg-muted'}`}
+      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
     >
-      <span className="text-2xl sm:text-4xl">😊</span>
+      <span className="text-3xl sm:text-5xl">😊</span>
     </button>
-
     <button
       type="button"
       onClick={() => setUrgency('attention')}
-      className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center transition-all 
-        ${urgency === 'attention' ? 'ring-4 ring-yellow-500 scale-110' : 'hover:scale-105 bg-muted'}`}
+      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
     >
-      <span className="text-2xl sm:text-4xl">😟</span>
+      <span className="text-3xl sm:text-5xl">😟</span>
     </button>
-
     <button
       type="button"
       onClick={() => setUrgency('urgent')}
-      className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center transition-all 
-        ${urgency === 'urgent' ? 'ring-4 ring-red-500 scale-110' : 'hover:scale-105 bg-muted'}`}
+      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
     >
-      <span className="text-2xl sm:text-4xl">😭</span>
+      <span className="text-3xl sm:text-5xl">😭</span>
     </button>
   </div>
 </div>
-
 
 
               {/* BOTÃO SOS */}
