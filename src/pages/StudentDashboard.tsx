@@ -297,7 +297,7 @@ export default function StudentDashboard() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex flex-col items-center gap-2">
-            <BuddyLogo size="sm:lg m" />
+            <BuddyLogo size="lg" />
             <h2 className="text-lg font-semibold text-muted-foreground">
               {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
             </h2>
