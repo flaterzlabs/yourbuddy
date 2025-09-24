@@ -437,23 +437,23 @@ export default function StudentDashboard() {
     <button
       type="button"
       onClick={() => setUrgency('ok')}
-      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''} w-16 h-16 sm:w-24 sm:h-24`}
+      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
     >
-      <span className="text-4xl sm:text-6xl">😊</span>
+      <span className="text-5xl sm:text-6xl">😊</span>
     </button>
     <button
       type="button"
       onClick={() => setUrgency('attention')}
-      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''} w-16 h-16 sm:w-24 sm:h-24`}
+      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
     >
-      <span className="text-4xl sm:text-6xl">😟</span>
+      <span className="text-5xl sm:text-6xl">😟</span>
     </button>
     <button
       type="button"
       onClick={() => setUrgency('urgent')}
-      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''} w-16 h-16 sm:w-24 sm:h-24`}
+      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
     >
-      <span className="text-4xl sm:text-6xl">😭</span>
+      <span className="text-5xl sm:text-6xl">😭</span>
     </button>
   </div>
 </div>
