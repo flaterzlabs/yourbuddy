@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -31,24 +31,113 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/use-auth';
+import { supabase } from '@/integrations/supabase/client';
 
-export function StudentDashboard({
-  profile,
-  thriveSprite,
-  helpRequests,
-  connections,
-  handleConnectionAdded,
-  getUrgencyEmoji,
-  getStatusColor,
-  handleHelpRequest,
-  loading,
-  urgency,
-  setUrgency,
-}: any) {
+function StudentDashboard() {
+  const { profile, thriveSprite, loading: authLoading, signOut } = useAuth();
+  const [helpRequests, setHelpRequests] = useState([]);
+  const [connections, setConnections] = useState([]);
+  const [urgency, setUrgency] = useState('ok');
+  const [loading, setLoading] = useState(false);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { signOut } = useAuth();
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
+
+  // Helper functions
+  const getUrgencyEmoji = (urgency: string) => {
+    switch (urgency) {
+      case 'urgent': return '😭';
+      case 'attention': return '😟';
+      case 'ok': return '😊';
+      default: return '😊';
+    }
+  };
+
+  const getStatusColor = (status: string): "default" | "destructive" | "outline" | "secondary" => {
+    switch (status) {
+      case 'open': return 'destructive';
+      case 'answered': return 'default';
+      case 'closed': return 'secondary';
+      default: return 'outline';
+    }
+  };
+
+  const handleConnectionAdded = async () => {
+    // Refresh connections - you can implement this based on your needs
+    console.log('Connection added');
+  };
+
+  const handleHelpRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      if (!profile?.id) return;
+      
+      const { error } = await supabase
+        .from('help_requests')
+        .insert({
+          student_id: profile.id,
+          urgency: urgency as 'ok' | 'urgent' | 'attention',
+          status: 'open' as 'open'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: t('studentDash.helpSent'),
+        description: t('studentDash.caregiversNotified'),
+      });
+
+      setUrgency('ok');
+      // Refresh help requests
+      fetchHelpRequests();
+    } catch (error) {
+      console.error('Error sending help request:', error);
+      toast({
+        title: t('studentDash.error'),
+        description: t('studentDash.tryAgain'),
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchHelpRequests = async () => {
+    if (!profile?.user_id) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('help_requests')
+        .select('*')
+        .eq('student_id', profile.user_id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setHelpRequests(data || []);
+    } catch (error) {
+      console.error('Error fetching help requests:', error);
+    }
+  };
+
+  // Fetch data on component mount and when profile changes
+  useEffect(() => {
+    if (profile?.id) {
+      fetchHelpRequests();
+    }
+  }, [profile?.id]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">{t('general.loading')}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
