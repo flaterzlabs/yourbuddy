@@ -429,31 +429,32 @@ export default function StudentDashboard() {
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
-             <div>
+           <div>
   <div className={`flex justify-center items-center gap-12 ${urgency ? 'has-selection' : ''}`}>
     <button
       type="button"
       onClick={() => setUrgency('ok')}
       className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
     >
-      <span className="text-4xl sm:text-6xl">😊</span>
+      <span className="text-3xl sm:text-5xl">😊</span>
     </button>
     <button
       type="button"
       onClick={() => setUrgency('attention')}
       className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
     >
-      <span className="text-4xl sm:text-6xl">😟</span>
+      <span className="text-3xl sm:text-5xl">😟</span>
     </button>
     <button
       type="button"
       onClick={() => setUrgency('urgent')}
       className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
     >
-      <span className="text-4xl sm:text-6xl">😭</span>
+      <span className="text-3xl sm:text-5xl">😭</span>
     </button>
   </div>
 </div>
+
 
               {/* BOTÃO SOS */}
               <div className="flex justify-center items-center h-full w-full">
