@@ -425,7 +425,7 @@ export default function StudentDashboard() {
                 />
               </div>
               <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
-              <p className="text-muted-foreground mb-4">{t('studentDash.caregiversNotified')}</p>
+              <p className="hidden sm:block text-muted-foreground mb-4">{t('studentDash.caregiversNotified')}</p>
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
