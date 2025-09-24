@@ -5,73 +5,75 @@
 /* BUDDY App Design System - Colors optimized for children and accessibility */
 
 @layer base {
- :root {
-  /* Light theme - Azul bebê + Verde Menta */
-  --background: 210 70% 88%;       /* Azul bebê mais vivo */
+  :root {
+  /* Light theme - Mais contraste e menos brilho */
+  --background: 210 30% 82%;       /* Azul bebê mais escuro e mais contraste */
   --foreground: 220 35% 12%;       /* Texto bem contrastante */
 
-  --card: 150 50% 85%;             /* Verde menta suave */
-  --card-foreground: 220 35% 12%;
+--card: 260 60% 90%;   /* Lilás */
+--card-foreground: 220 25% 15%;
 
-  --popover: 210 60% 92%;
-  --popover-foreground: 220 35% 12%;
+  --popover: 210 20% 94%;
+  --popover-foreground: 220 30% 12%;
 
-  /* Primary - Azul petróleo */
-  --primary: 215 70% 45%;
+  /* Primary - Azul mais forte */
+  --primary: 215 75% 50%;
   --primary-foreground: 0 0% 100%;
+  --primary-light: 215 70% 78%;
 
-  /* Secondary - Coral suave */
-  --secondary: 10 70% 60%;
-  --secondary-foreground: 0 0% 100%;
+  /* Secondary - Rosa/Pêssego suave mas não tão claro */
+  --secondary: 340 65% 63%;
+  --secondary-foreground: 220 30% 12%;
 
-  /* Success - Verde oliva */
-  --success: 140 50% 40%;
+  /* Success */
+  --success: 145 65% 43%;
   --success-foreground: 0 0% 100%;
+  --success-light: 145 60% 73%;
 
-  /* Warning - Mostarda */
-  --warning: 40 80% 50%;
+  /* Warning */
+  --warning: 30 80% 48%;
   --warning-foreground: 0 0% 100%;
+  --warning-light: 30 75% 73%;
 
   /* Muted */
-  --muted: 210 20% 75%;
-  --muted-foreground: 220 20% 30%;
+  --muted: 210 15% 72%;            /* Cinza mais frio e visível */
+  --muted-foreground: 220 20% 25%;
 
-  /* Accent - Lilás médio */
-  --accent: 270 50% 55%;
-  --accent-foreground: 0 0% 100%;
+  /* Accent */
+  --accent: 280 60% 58%;
+  --accent-foreground: 220 30% 12%;
 
-  --destructive: 0 70% 50%;
+  --destructive: 0 70% 48%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 210 25% 65%;
-  --input: 210 25% 70%;
-  --ring: 215 70% 45%;
+  --border: 210 20% 65%;           /* Bordas mais escuras */
+  --input: 210 20% 72%;
+  --ring: 215 75% 50%;
 
-  --radius: 1rem;
+  --radius: 1.25rem; /* Aumentei as bordas */
 
   /* Gradientes */
   --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-  --gradient-hero: linear-gradient(135deg, hsl(215 70% 45%), hsl(10 70% 60%));
-  --gradient-card: linear-gradient(145deg, hsl(150 50% 88%), hsl(150 50% 82%));
+  --gradient-hero: linear-gradient(135deg, hsl(215 75% 50%), hsl(340 65% 65%));
+  --gradient-card: linear-gradient(145deg, hsl(210 25% 90%), hsl(210 20% 86%));
 
-  /* Sombras mais densas */
-  --shadow-soft: 0 6px 24px hsl(210 30% 30% / 0.25);
-  --shadow-medium: 0 10px 36px hsl(210 30% 25% / 0.35);
-  --shadow-strong: 0 14px 48px hsl(210 30% 20% / 0.45);
+  /* Sombras mais visíveis */
+  --shadow-soft: 0 6px 22px hsl(210 30% 35% / 0.20);
+  --shadow-medium: 0 10px 32px hsl(210 30% 35% / 0.30);
+  --shadow-strong: 0 14px 44px hsl(210 30% 35% / 0.40);
 
-  /* Emoções */
-  --emotion-happy: 145 70% 45%;
+  /* Emoções (mantém contraste vibrante) */
+  --emotion-happy: 145 75% 43%;
   --emotion-happy-foreground: 0 0% 100%;
-  --emotion-need: 40 85% 50%;
+  --emotion-need: 45 95% 48%;
   --emotion-need-foreground: 0 0% 100%;
-  --emotion-urgent: 5 75% 50%;
+  --emotion-urgent: 5 75% 48%;
   --emotion-urgent-foreground: 0 0% 100%;
 
   /* Transições */
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-
 
 
 
