@@ -295,13 +295,19 @@ export default function StudentDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex flex-col items-center gap-2">
-            <BuddyLogo size="lg" />
-            <h2 className="text-lg font-semibold text-muted-foreground">
-              {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
-            </h2>
-          </div>
+<div className="flex justify-between items-center mb-8">
+  {/* Logo e título - visíveis apenas no desktop/tablet */}
+  <div className="hidden sm:flex flex-col items-center gap-2">
+    <BuddyLogo size="lg" />
+    <h2 className="text-lg font-semibold text-muted-foreground">
+      {profile?.role === 'student'
+        ? t('studentDash.titleStudent')
+        : t('studentDash.title')}
+    </h2>
+  </div>
+
+  
+</div>
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
@@ -402,15 +408,15 @@ export default function StudentDashboard() {
 
         {/* Conteúdo principal */}
         <div className="max-w-2xl mx-auto">
-          {/* Welcome Section */}
-          <div className="text-center mb-8">
-            <div className="mb-4">
-              <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                {t('studentDash.hello', { name: profile?.username })}
-              </h1>
-              <p className="text-xl text-muted-foreground">{t('studentDash.feelingToday')}</p>
-            </div>
-          </div>
+         {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
+  <div className="flex flex-col items-center text-center sm:ml-4">
+    <h1 className="text-2xl sm:text-3xl font-bold text-primary">
+      {t('studentDash.greeting', { name: profile?.name })}
+    </h1>
+    <p className="text-base sm:text-xl text-muted-foreground">
+      {t('studentDash.feelingToday')}
+    </p>
+  </div>
 
           {/* Help Request Form */}
           <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
