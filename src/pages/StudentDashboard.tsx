@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { BuddyLogo } from "@/components/buddy-logo";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -6,11 +7,12 @@ import { ClipboardList, Clock, CheckCircle, XCircle, Menu } from "lucide-react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { LanguageToggle } from "@/components/language-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
-import SettingsModal from "@/components/settings-modal";
+import { SettingsModal } from "@/components/settings-modal";
 import { toast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "@/lib/auth"; // ajuste para o caminho certo
+import { useAuth } from "@/hooks/use-auth";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/integrations/supabase/client";
 
 interface HeaderProps {
   helpRequests: any[];
@@ -18,12 +20,12 @@ interface HeaderProps {
   historyModalOpen: boolean;
   setHistoryModalOpen: (open: boolean) => void;
   getUrgencyEmoji: (urgency: string) => string;
-  getStatusColor: (status: string) => string;
+  getStatusColor: (status: string) => "default" | "destructive" | "outline" | "secondary";
   handleConnectionAdded: () => void;
   i18n: any;
 }
 
-export function Header({
+function Header({
   helpRequests,
   connections,
   historyModalOpen,
@@ -35,6 +37,7 @@ export function Header({
 }: HeaderProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   return (
     <div className="flex justify-between items-center mb-8">
@@ -192,6 +195,124 @@ export function Header({
               </Button>
             </SheetContent>
           </Sheet>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function StudentDashboard() {
+  const { t, i18n } = useTranslation();
+  const { user, profile, thriveSprite } = useAuth();
+  const [helpRequests, setHelpRequests] = useState<any[]>([]);
+  const [connections, setConnections] = useState<any[]>([]);
+  const [historyModalOpen, setHistoryModalOpen] = useState(false);
+
+  const getUrgencyEmoji = (urgency: string) => {
+    switch (urgency) {
+      case 'urgent': return '🚨';
+      case 'moderate': return '⚠️';
+      case 'ok': return '✋';
+      default: return '✋';
+    }
+  };
+
+  const getStatusColor = (status: string): "default" | "destructive" | "outline" | "secondary" => {
+    switch (status) {
+      case 'open': return 'destructive';
+      case 'answered': return 'secondary';
+      case 'closed': return 'outline';
+      default: return 'default';
+    }
+  };
+
+  const handleConnectionAdded = () => {
+    // Refresh connections logic here
+    console.log("Connection added");
+  };
+
+  useEffect(() => {
+    // Fetch help requests and connections
+    const fetchData = async () => {
+      if (!user) return;
+
+      try {
+        // Fetch help requests
+        const { data: helpRequestsData } = await supabase
+          .from('help_requests')
+          .select('*')
+          .eq('student_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (helpRequestsData) {
+          setHelpRequests(helpRequestsData);
+        }
+
+        // Fetch connections
+        const { data: connectionsData } = await supabase
+          .from('connections')
+          .select(`
+            *,
+            caregiver_profile:profiles!connections_caregiver_id_fkey(*)
+          `)
+          .eq('student_id', user.id);
+
+        if (connectionsData) {
+          setConnections(connectionsData);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  if (!profile || !thriveSprite) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">{t('general.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        <Header
+          helpRequests={helpRequests}
+          connections={connections}
+          historyModalOpen={historyModalOpen}
+          setHistoryModalOpen={setHistoryModalOpen}
+          getUrgencyEmoji={getUrgencyEmoji}
+          getStatusColor={getStatusColor}
+          handleConnectionAdded={handleConnectionAdded}
+          i18n={i18n}
+        />
+
+        {/* Dashboard Content */}
+        <div className="grid gap-6">
+          <div className="bg-card rounded-lg p-6">
+            <h1 className="text-2xl font-bold mb-4">
+              {t('studentDash.welcome', { name: profile.username })}
+            </h1>
+            <p className="text-muted-foreground">
+              {t('studentDash.subtitle')}
+            </p>
+          </div>
+
+          {/* Help Request Section */}
+          <div className="bg-card rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">
+              {t('studentDash.needHelp')}
+            </h2>
+            <Button className="w-full md:w-auto">
+              {t('studentDash.requestHelp')}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
