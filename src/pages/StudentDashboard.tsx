@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -160,6 +160,7 @@ export default function StudentDashboard() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent' | null>(null);
+  const emotionRef = useRef<HTMLDivElement>(null);
   const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
@@ -290,6 +291,18 @@ export default function StudentDashboard() {
       default: return '🟢';
     }
   };
+
+  useEffect(() => {
+  function handleClickOutside(event: MouseEvent) {
+    if (emotionRef.current && !emotionRef.current.contains(event.target as Node)) {
+      setUrgency(null);
+    }
+  }
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -427,9 +440,11 @@ export default function StudentDashboard() {
               <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
               <p className="text-muted-foreground">{t('studentDash.caregiversNotified')}</p>
             </div>
-
+            
+            {/* form botoes */}
+            
             <form onSubmit={handleHelpRequest} className="space-y-8">
-           <div>
+           <div ref={emotionRef}>
   <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
     <button
       type="button"
