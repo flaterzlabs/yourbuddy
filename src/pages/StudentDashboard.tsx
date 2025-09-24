@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { ToastAction } from '@/components/ui/toast';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageToggle } from '@/components/language-toggle';
@@ -13,11 +12,11 @@ import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 type Connection = Database['public']['Tables']['connections']['Row'] & {
@@ -28,19 +27,126 @@ type Connection = Database['public']['Tables']['connections']['Row'] & {
 };
 
 // --- Componente para menu mobile ---
-function MobileMenu({ children }: { children: React.ReactNode }) {
+function MobileMenu({
+  helpRequests,
+  historyModalOpen,
+  setHistoryModalOpen,
+  handleConnectionAdded,
+  connections,
+  i18n,
+  t,
+  signOut,
+  navigate,
+}: {
+  helpRequests: HelpRequest[];
+  historyModalOpen: boolean;
+  setHistoryModalOpen: (open: boolean) => void;
+  handleConnectionAdded: () => void;
+  connections: Connection[];
+  i18n: any;
+  t: any;
+  signOut: () => Promise<void>;
+  navigate: (path: string) => void;
+}) {
   return (
     <div className="md:hidden">
-      <Sheet>
-        <SheetTrigger asChild>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="transition-colors duration-200">
             <Menu className="h-6 w-6" />
           </Button>
-        </SheetTrigger>
-        <SheetContent side="right" className="p-4 flex flex-col gap-4">
-          {children}
-        </SheetContent>
-      </Sheet>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent align="end" className="flex flex-col gap-2 p-2 min-w-[3rem]">
+          {/* Histórico de pedidos */}
+          <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
+                <ClipboardList className="h-5 w-5" />
+                {helpRequests.length > 0 && (
+                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
+                    {helpRequests.length}
+                  </span>
+                )}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md max-h-[80vh]">
+              <DialogHeader>
+                <DialogTitle>
+                  {t("studentDash.historyTitle")} ({helpRequests.length.toString().padStart(2, "0")})
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {helpRequests.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-4">
+                    {t("studentDash.noneYet")}
+                  </p>
+                ) : (
+                  helpRequests.map((request) => (
+                    <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span>{request.urgency === "urgent" ? "🔴" : request.urgency === "attention" ? "🟡" : "🟢"}</span>
+                          <Badge variant={request.status === "open" ? "destructive" : request.status === "answered" ? "secondary" : "outline"}>
+                            {request.status === "open" && <><Clock className="h-3 w-3 mr-1" />{t("studentDash.status.waiting")}</>}
+                            {request.status === "answered" && <><CheckCircle className="h-3 w-3 mr-1" />{t("studentDash.status.answered")}</>}
+                            {request.status === "closed" && <><XCircle className="h-3 w-3 mr-1" />{t("studentDash.status.closed")}</>}
+                          </Badge>
+                        </div>
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(request.created_at).toLocaleDateString(i18n.language)}
+                        </span>
+                      </div>
+                      {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
+                    </div>
+                  ))
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Conexões */}
+          <SettingsModal
+            onConnectionAdded={handleConnectionAdded}
+            connections={connections}
+            trigger={
+              <Button variant="ghost" size="icon" className="transition-colors duration-200">
+                <Link className="h-5 w-5" />
+              </Button>
+            }
+          />
+
+          {/* Idioma */}
+          <LanguageToggle
+            trigger={
+              <Button variant="ghost" size="icon" className="transition-colors duration-200">
+                <span className="font-semibold">{i18n.language.startsWith("pt") ? "PT" : "EN"}</span>
+              </Button>
+            }
+          />
+
+          {/* Tema */}
+          <ThemeToggle />
+
+          {/* Logout */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="transition-colors duration-200 hover:bg-purple-600 hover:text-white"
+            onClick={async () => {
+              await signOut();
+              toast({
+                title: t("auth.toast.loggedOut"),
+                description: t("auth.toast.seeYou"),
+                variant: "student",
+              });
+              navigate("/auth");
+            }}
+          >
+            <XCircle className="h-5 w-5" />
+          </Button>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
@@ -281,49 +387,17 @@ export default function StudentDashboard() {
           </div>
 
           {/* Mobile menu */}
-          <MobileMenu>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
-                <ClipboardList className="h-5 w-5" />
-              </Button>
-            </DialogTrigger>
-
-            <SettingsModal
-              onConnectionAdded={handleConnectionAdded}
-              connections={connections}
-              trigger={
-                <Button variant="ghost" size="icon" className="transition-colors duration-200">
-                  <Link className="h-5 w-5" />
-                </Button>
-              }
-            />
-
-            <LanguageToggle
-              trigger={
-                <Button variant="ghost" size="icon" className="transition-colors duration-200">
-                  <span className="font-semibold">{i18n.language.startsWith('pt') ? 'PT' : 'EN'}</span>
-                </Button>
-              }
-            />
-
-            <ThemeToggle />
-
-            <Button
-              variant="ghost"
-              className="transition-colors duration-200 hover:bg-purple-600 hover:text-white"
-              onClick={async () => {
-                await signOut();
-                toast({
-                  title: t('auth.toast.loggedOut'),
-                  description: t('auth.toast.seeYou'),
-                  variant: 'student',
-                });
-                navigate('/auth');
-              }}
-            >
-              {t('common.logout')}
-            </Button>
-          </MobileMenu>
+          <MobileMenu
+            helpRequests={helpRequests}
+            historyModalOpen={historyModalOpen}
+            setHistoryModalOpen={setHistoryModalOpen}
+            handleConnectionAdded={handleConnectionAdded}
+            connections={connections}
+            i18n={i18n}
+            t={t}
+            signOut={signOut}
+            navigate={navigate}
+          />
         </div>
 
         {/* Conteúdo principal */}
