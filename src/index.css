@@ -7,13 +7,13 @@
 @layer base {
   :root {
     /* Light theme - Warm & cozy */
-  --background: 40 40% 96%; /* bege claro */
+  --background: 210 40% 97%; /* azul bebê muito claro */
   --foreground: 220 25% 20%; /* texto escuro com bom contraste */
 
-  --card: 0 0% 100%;
+  --card: 210 30% 98%; /* cartões com leve tom azul bebê */
   --card-foreground: 220 25% 20%;
 
-  --popover: 0 0% 100%;
+  --popover: 210 30% 98%;
   --popover-foreground: 220 25% 20%;
 
   /* Primary - Azul mais vivo */
@@ -36,7 +36,7 @@
   --warning-light: 30 90% 88%;
 
   /* Muted */
-  --muted: 40 30% 92%;
+  --muted: 210 25% 94%; /* cinza azulado mais aconchegante */
   --muted-foreground: 220 15% 40%;
 
   /* Accent - Roxo mais aconchegante */
@@ -46,8 +46,8 @@
   --destructive: 0 75% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 40 25% 85%;
-  --input: 40 20% 94%;
+  --border: 210 20% 88%; /* bordas com tom azul bebê */
+  --input: 210 25% 95%; /* inputs com azul bebê */
   --ring: 215 80% 55%;
 
   --radius: 1rem;
@@ -145,7 +145,7 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--muted)));
+    background: linear-gradient(135deg, hsl(210 40% 97%), hsl(210 30% 94%));
   }
 
   /* Custom scrollbar for better UX */
