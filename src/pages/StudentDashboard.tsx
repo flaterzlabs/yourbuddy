@@ -429,31 +429,35 @@ export default function StudentDashboard() {
             </div>
 
             <form onSubmit={handleHelpRequest} className="space-y-8">
-           <div>
+              
+              {/* EMOTIONAL BUTTONS*/}
+              
+          <div>
   <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
     <button
       type="button"
       onClick={() => setUrgency('ok')}
-      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''}`}
+      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''} w-16 h-16 sm:w-24 sm:h-24`}
     >
       <span className="text-4xl sm:text-6xl">😊</span>
     </button>
     <button
       type="button"
       onClick={() => setUrgency('attention')}
-      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''}`}
+      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''} w-16 h-16 sm:w-24 sm:h-24`}
     >
       <span className="text-4xl sm:text-6xl">😟</span>
     </button>
     <button
       type="button"
       onClick={() => setUrgency('urgent')}
-      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''}`}
+      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''} w-16 h-16 sm:w-24 sm:h-24`}
     >
       <span className="text-4xl sm:text-6xl">😭</span>
     </button>
   </div>
 </div>
+
 
 
               {/* BOTÃO SOS */}
