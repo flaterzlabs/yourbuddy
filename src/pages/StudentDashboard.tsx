@@ -295,19 +295,16 @@ export default function StudentDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-<div className="flex justify-between items-center mb-8">
-  {/* Logo e título - visíveis apenas no desktop/tablet */}
-  <div className="hidden sm:flex flex-col items-center gap-2">
-    <BuddyLogo size="lg" />
-    <h2 className="text-lg font-semibold text-muted-foreground">
-      {profile?.role === 'student'
-        ? t('studentDash.titleStudent')
-        : t('studentDash.title')}
-    </h2>
-  </div>
-
-  
-</div>
+        <div className="flex justify-between items-center mb-8">
+          {/* Logo e título - visíveis apenas no desktop/tablet */}
+          <div className="hidden sm:flex flex-col items-center gap-2">
+            <BuddyLogo size="lg" />
+            <h2 className="text-lg font-semibold text-muted-foreground">
+              {profile?.role === 'student'
+                ? t('studentDash.titleStudent')
+                : t('studentDash.title')}
+            </h2>
+          </div>
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
@@ -411,7 +408,7 @@ export default function StudentDashboard() {
          {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
   <div className="flex flex-col items-center text-center sm:ml-4">
     <h1 className="text-2xl sm:text-3xl font-bold text-primary">
-      {t('studentDash.greeting', { name: profile?.name })}
+      {t('studentDash.greeting', { name: profile?.username })}
     </h1>
     <p className="text-base sm:text-xl text-muted-foreground">
       {t('studentDash.feelingToday')}
@@ -438,33 +435,31 @@ export default function StudentDashboard() {
               
               {/* EMOTIONAL BUTTONS*/}
               
-          <div>
-  <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
-    <button
-      type="button"
-      onClick={() => setUrgency('ok')}
-      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
-    >
-      <span className="text-5xl sm:text-6xl">😊</span>
-    </button>
-    <button
-      type="button"
-      onClick={() => setUrgency('attention')}
-      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
-    >
-      <span className="text-5xl sm:text-6xl">😟</span>
-    </button>
-    <button
-      type="button"
-      onClick={() => setUrgency('urgent')}
-      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
-    >
-      <span className="text-5xl sm:text-6xl">😭</span>
-    </button>
-  </div>
-</div>
-
-
+              <div>
+                <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
+                  <button
+                    type="button"
+                    onClick={() => setUrgency('ok')}
+                    className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
+                  >
+                    <span className="text-5xl sm:text-6xl">😊</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUrgency('attention')}
+                    className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
+                  >
+                    <span className="text-5xl sm:text-6xl">😟</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUrgency('urgent')}
+                    className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
+                  >
+                    <span className="text-5xl sm:text-6xl">😭</span>
+                  </button>
+                </div>
+              </div>
 
               {/* BOTÃO SOS */}
               <div className="flex justify-center items-center h-full w-full">
@@ -473,14 +468,7 @@ export default function StudentDashboard() {
                   variant="ghost"
                   size="lg"
                   disabled={loading}
-                  className="flex h-24 w-24 items-center justify-center 
-                            rounded-2xl 
-                            bg-gradient-to-br from-red-500 via-red-600 to-red-700 
-                            text-white 
-                            shadow-[0_0_25px_rgba(220,38,38,0.75)]
-                            hover:shadow-[0_0_30px_rgba(248,80,80,1)]
-                            hover:scale-105 active:scale-95 
-                            transition-all duration-200"
+                  className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-white shadow-[0_0_25px_rgba(220,38,38,0.75)] hover:shadow-[0_0_30px_rgba(248,80,80,1)] hover:scale-105 active:scale-95 transition-all duration-200"
                 >
                   {loading ? (
                     <span className="text-white text-base font-bold">{t('studentDash.sending')}</span>
