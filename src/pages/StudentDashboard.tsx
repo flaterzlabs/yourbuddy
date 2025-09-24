@@ -408,7 +408,7 @@ export default function StudentDashboard() {
               <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 {t('studentDash.hello', { name: profile?.username })}
               </h1>
-              <p className="text-xl text-muted-foreground">{t('studentDash.feelingToday')}</p>
+              <p className="hidden sm:block text-xl text-muted-foreground">{t('studentDash.feelingToday')}</p>
             </div>
           </div>
 
