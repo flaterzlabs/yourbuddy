@@ -229,6 +229,57 @@ export default function StudentDashboard() {
     fetchConnections();
   }, [user?.id]);
 
+  // Listen for help request status updates from caregivers
+  useEffect(() => {
+    if (!user) return;
+
+    const statusChannel = supabase
+      .channel(`help-status-student-${user.id}`)
+      .on('broadcast', { event: 'status-update' }, (payload) => {
+        const data = payload.payload;
+        if (data?.status) {
+          const statusText = data.status === 'answered' ? 'respondido' : 'finalizado';
+          toast({
+            title: 'Pedido atualizado!',
+            description: `Seu pedido foi ${statusText} pelo professor/responsável.`,
+            variant: 'student',
+            duration: 4000,
+          });
+          fetchHelpRequests();
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(statusChannel);
+    };
+  }, [user?.id]);
+
+  // Listen for real-time help request changes
+  useEffect(() => {
+    if (!user) return;
+
+    const helpRequestsChannel = supabase
+      .channel(`help-requests-student-${user.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'help_requests',
+          filter: `student_id=eq.${user.id}`,
+        },
+        (payload) => {
+          fetchHelpRequests();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(helpRequestsChannel);
+    };
+  }, [user?.id]);
+
   const handleHelpRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -251,6 +302,31 @@ export default function StudentDashboard() {
       }).select().single();
 
       if (error) throw error;
+
+      // Send broadcast notification to caregivers
+      try {
+        const broadcastChannel = supabase.channel('help-requests-broadcast');
+        await broadcastChannel.subscribe();
+        
+        // Small delay to ensure subscription is ready
+        setTimeout(async () => {
+          await broadcastChannel.send({
+            type: 'broadcast',
+            event: 'new-help',
+            payload: {
+              student_id: user.id,
+              urgency,
+              message: message || undefined,
+              created_at: new Date().toISOString(),
+            },
+          });
+          
+          // Clean up channel after sending
+          setTimeout(() => supabase.removeChannel(broadcastChannel), 1000);
+        }, 100);
+      } catch (broadcastError) {
+        console.log('Broadcast notification failed:', broadcastError);
+      }
 
       toast({
         title: t('studentDash.sentTitle'),

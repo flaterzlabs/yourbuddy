@@ -306,9 +306,12 @@ export default function CaregiverDashboard() {
       // Notify the student via broadcast
       if (request?.student_id) {
         try {
-          await supabase
-            .channel(`help-status-student-${request.student_id}`)
-            .send({
+          const notificationChannel = supabase.channel(`help-status-student-${request.student_id}`);
+          await notificationChannel.subscribe();
+          
+          // Small delay to ensure subscription is ready
+          setTimeout(async () => {
+            await notificationChannel.send({
               type: 'broadcast',
               event: 'status-update',
               payload: {
@@ -318,6 +321,10 @@ export default function CaregiverDashboard() {
                 updated_at: new Date().toISOString(),
               },
             });
+            
+            // Clean up channel after sending
+            setTimeout(() => supabase.removeChannel(notificationChannel), 1000);
+          }, 100);
         } catch (e) {
           // Best effort - ignore broadcast failures
           console.log('Broadcast notification failed:', e);
