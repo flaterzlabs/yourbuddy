@@ -570,7 +570,7 @@ export default function StudentDashboard() {
                   {loading ? (
                     <span className="text-white text-base font-bold">{t('studentDash.sending')}</span>
                   ) : (
-                    <span role="img" aria-label="sos" className="text-7xl leading-none">💬</span>
+                    <span role="img" aria-label="sos" className="text-7xl leading-none">🤝</span>
                   )}
                 </Button>
               </div>
