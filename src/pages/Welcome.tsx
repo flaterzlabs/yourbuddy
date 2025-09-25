@@ -64,7 +64,7 @@ export default function Welcome() {
 
         {/* Continue Button */}
 <div className="flex flex-col items-center gap-4">
-  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-md">
+  <div className="flex flex-col sm:flex-row sm:justify-center gap-3 sm:gap-4 w-full max-w-md">
     <Button
       variant="hero"
       size="lg"
@@ -86,6 +86,7 @@ export default function Welcome() {
     </Button>
   </div>
 </div>
+
             
             {/* Link for Parents/Educators */}
             <button
