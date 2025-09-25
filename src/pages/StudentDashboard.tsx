@@ -491,7 +491,7 @@ export default function StudentDashboard() {
         {/* Conteúdo principal */}
         <div className="max-w-2xl mx-auto">
           {/* Welcome Section */}
-<div className="hidden sm:block text-center mb-8">
+<div className="hidden mb-16 sm:block text-center mb-8">
   <div className="mb-4">
     <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
       {t('studentDash.hello', { name: profile?.username })}
