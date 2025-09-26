@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
+
 import { StudentAvatar } from '@/components/student-avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
@@ -426,13 +426,6 @@ export default function CaregiverDashboard() {
             <Button
               variant="ghost" 
               size="icon"
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
-            >
-              <LanguageToggle />
-            </Button>
-            <Button
-              variant="ghost" 
-              size="icon"
               className="rounded-full border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
             >
               <ThemeToggle />
@@ -497,16 +490,7 @@ export default function CaregiverDashboard() {
                     <ThemeToggle trigger={
                       <div className="flex items-center gap-3 w-full">
                         <div className="h-5 w-5 flex items-center justify-center">🌙</div>
-                        <span>Tema</span>
-                      </div>
-                    } />
-                  </div>
-                  
-                  <div className="flex items-center gap-3 px-3 py-2">
-                    <LanguageToggle trigger={
-                      <div className="flex items-center gap-3 w-full">
-                        <div className="h-5 w-5 flex items-center justify-center">🌐</div>
-                        <span>Idioma</span>
+                        <span>Theme</span>
                       </div>
                     } />
                   </div>

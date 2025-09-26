@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useTranslation } from 'react-i18next';
 import { Link, UserPlus, Users, GraduationCap } from 'lucide-react';
 
 interface SettingsModalProps {
@@ -27,14 +26,12 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
   const [isConnecting, setIsConnecting] = useState(false);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language.startsWith('pt') ? 'pt-BR' : 'en-US';
 
   const formatDate = (date: string) => {
     try {
-      return new Intl.DateTimeFormat(locale).format(new Date(date));
+      return new Intl.DateTimeFormat('en-US').format(new Date(date));
     } catch {
-      return new Date(date).toLocaleDateString(locale);
+      return new Date(date).toLocaleDateString('en-US');
     }
   };
 
@@ -53,26 +50,24 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
       const result = data as any;
       if (result.success) {
         toast({
-          title: t('settingsModal.toast.successTitle'),
-          description: t('settingsModal.toast.successDesc', {
-            username: result.caregiver.username,
-          }),
+          title: 'Connection successful!',
+          description: `Connected with ${result.caregiver.username}`,
         });
         setCaregiverCode('');
         setOpen(false);
         onConnectionAdded?.();
       } else {
         toast({
-          title: t('settingsModal.toast.errorTitle'),
-          description: result.error ?? t('settingsModal.toast.errorDesc'),
+          title: 'Connection failed',
+          description: result.error ?? 'Invalid code or connection already exists.',
           variant: "destructive",
         });
       }
     } catch (error) {
       console.error('Connection error:', error);
       toast({
-        title: t('settingsModal.toast.errorTitle'),
-        description: t('settingsModal.toast.errorDesc'),
+        title: 'Connection failed',
+        description: 'Invalid code or connection already exists.',
         variant: "destructive",
       });
     } finally {
@@ -93,25 +88,25 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Link className="h-5 w-5" />
-            {t('settingsModal.title')}
+            Connections
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleConnectCaregiver} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="caregiver-code" className="flex items-center gap-2">
               <UserPlus className="h-4 w-4" />
-              {t('settingsModal.connectLabel')}
+              Connect with Teacher/Caregiver
             </Label>
             <Input
               id="caregiver-code"
-              placeholder={t('settingsModal.codePlaceholder')}
+              placeholder="Enter 8-digit code"
               value={caregiverCode}
               onChange={(e) => setCaregiverCode(e.target.value.toUpperCase())}
               maxLength={8}
               className="text-center font-mono text-lg tracking-wider"
             />
             <p className="text-sm text-muted-foreground">
-              {t('settingsModal.codeHelper')}
+              Ask your teacher or caregiver for their connection code
             </p>
           </div>
           <Button 
@@ -119,7 +114,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
             className="w-full" 
             disabled={isConnecting || !caregiverCode.trim()}
           >
-            {isConnecting ? t('settingsModal.connecting') : t('settingsModal.connectButton')}
+            {isConnecting ? 'Connecting...' : 'Connect'}
           </Button>
         </form>
         
@@ -127,12 +122,12 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
         <div className="mt-6 pt-4 border-t border-border">
           <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
             <Users className="h-4 w-4" />
-            {t('settingsModal.connectedCaregivers')}
+            My Connections
           </h3>
           
           {connections.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              {t('settingsModal.emptyState')}
+              No connections yet. Connect with your teacher or caregiver using their code.
             </p>
           ) : (
             <div className="space-y-3">
@@ -155,19 +150,17 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
                     </div>
                     <div>
                       <h4 className="font-medium text-sm">
-                        {connection.caregiver_profile?.username || t('settingsModal.role.fallback')}
+                        {connection.caregiver_profile?.username || 'Teacher/Caregiver'}
                       </h4>
                       <p className="text-xs text-muted-foreground">
-                        {t('settingsModal.connectedOn', {
-                          date: formatDate(connection.created_at),
-                        })}
+                        Connected on {formatDate(connection.created_at)}
                       </p>
                     </div>
                   </div>
                   <Badge variant="secondary" className="text-xs px-2 py-1">
                     {connection.caregiver_profile?.role === 'educator'
-                      ? t('settingsModal.role.educator')
-                      : t('settingsModal.role.caregiver')}
+                      ? 'Teacher'
+                      : 'Caregiver'}
                   </Badge>
                 </div>
               ))}

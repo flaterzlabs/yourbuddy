@@ -5,17 +5,14 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
 import { RoleCard } from '@/components/role-card';
 import { useAuth } from '@/hooks/use-auth';
 import { toast } from '@/hooks/use-toast';
 import { Users, GraduationCap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export default function CaregiverAuth() {
-  const { t } = useTranslation();
   const [isSignUp, setIsSignUp] = useState(true);
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -37,14 +34,14 @@ export default function CaregiverAuth() {
   const roles = [
     {
       id: 'caregiver',
-      title: t('roles.caregiver.title'),
-      description: t('roles.caregiver.desc'),
+      title: 'Caregiver/Parent',
+      description: 'I want to support my child or student.',
       icon: Users,
     },
     {
       id: 'educator',
-      title: t('roles.educator.title'),
-      description: t('roles.educator.desc'),
+      title: 'Educator/Teacher',
+      description: 'I teach and want to help my students communicate.',
       icon: GraduationCap,
     },
   ];
@@ -58,26 +55,26 @@ export default function CaregiverAuth() {
         const { error } = await signUp(identifier, password, selectedRole, username);
         if (error) throw error;
 
-        toast({ title: t('auth.toast.created'), description: t('auth.toast.verify') });
+        toast({ title: 'Account created successfully!', description: 'Please check your email to verify your account.' });
       } else {
         const { error } = await signIn(identifier, password);
         if (error) throw error;
 
-        toast({ title: t('auth.toast.logged'), description: t('auth.toast.welcome') });
+        toast({ title: 'Logged in successfully!', description: 'Welcome back!' });
         navigate('/dashboard');
       }
     } catch (error: any) {
-      let message = t('auth.toast.genericError');
+      let message = 'An unexpected error occurred. Please try again.';
 
       if (error.message?.includes('Invalid login credentials')) {
-        message = t('auth.toast.invalidCreds');
+        message = 'Invalid email/username or password. Please try again.';
       } else if (error.message?.includes('User already registered')) {
-        message = t('auth.toast.alreadyRegistered');
+        message = 'An account with this email already exists.';
       } else if (error.message?.includes('Password should be at least')) {
-        message = t('auth.toast.weakPassword');
+        message = 'Password should be at least 6 characters long.';
       }
 
-      toast({ title: t('auth.toast.errorTitle'), description: message, variant: 'destructive' });
+      toast({ title: 'Error', description: message, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -86,8 +83,8 @@ export default function CaregiverAuth() {
   const handleResetPassword = async () => {
     if (!identifier) {
       toast({
-        title: t('auth.toast.errorTitle'),
-        description: t('auth.toast.enterIdentifier'),
+        title: 'Error',
+        description: 'Please enter your email or username first.',
         variant: 'destructive',
       });
       return;
@@ -99,13 +96,13 @@ export default function CaregiverAuth() {
       if (error) throw error;
 
       toast({
-        title: t('auth.toast.resetSentTitle'),
-        description: t('auth.toast.resetSentDescription'),
+        title: 'Password reset sent!',
+        description: 'Check your email for password reset instructions.',
       });
     } catch (error: any) {
       toast({
-        title: t('auth.toast.errorTitle'),
-        description: error.message || t('auth.toast.genericError'),
+        title: 'Error',
+        description: error.message || 'An unexpected error occurred. Please try again.',
         variant: 'destructive',
       });
     } finally {
@@ -120,7 +117,6 @@ export default function CaregiverAuth() {
         <div className="flex justify-between items-center mb-8">
           <BuddyLogo size="lg" />
           <div className="flex gap-2">
-            <LanguageToggle />
             <ThemeToggle />
           </div>
         </div>
@@ -130,17 +126,17 @@ export default function CaregiverAuth() {
           <Card className="p-8 bg-gradient-card shadow-medium">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2 bg-gradient-hero bg-clip-text text-transparent">
-                {isSignUp ? t('caregiverAuth.signup') : t('caregiverAuth.login')}
+                {isSignUp ? 'Create Caregiver Account' : 'Caregiver Sign In'}
               </h1>
               <p className="text-muted-foreground">
-                {isSignUp ? t('caregiverAuth.joinBuddy') : t('caregiverAuth.accessBuddy')}
+                {isSignUp ? 'Join BUDDY to support your students!' : 'Access your caregiver dashboard'}
               </p>
             </div>
 
             {/* Role Selection for Sign Up */}
             {isSignUp && (
               <div className="mb-6">
-                <Label className="text-sm font-medium mb-4 block">{t('caregiverAuth.howUse')}</Label>
+                <Label className="text-sm font-medium mb-4 block">How will you use BUDDY?</Label>
                 <div className="grid gap-3">
                   {roles.map((role) => (
                     <RoleCard
@@ -160,26 +156,26 @@ export default function CaregiverAuth() {
               {isSignUp ? (
                 <>
                   <div>
-                    <Label htmlFor="username">{t('auth.username')}</Label>
+                    <Label htmlFor="username">Username</Label>
                     <Input
                       id="username"
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder={t('auth.usernamePlaceholder')}
+                      placeholder="Enter your username"
                       className="mt-1"
                       required
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="identifier">{t('auth.email')}</Label>
+                    <Label htmlFor="identifier">Email</Label>
                     <Input
                       id="identifier"
                       type="email"
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
-                      placeholder={t('auth.emailPlaceholder')}
+                      placeholder="Enter your email address"
                       className="mt-1"
                       required
                     />
@@ -187,13 +183,13 @@ export default function CaregiverAuth() {
                 </>
               ) : (
                 <div>
-                  <Label htmlFor="identifier">{t('auth.emailOrUsername')}</Label>
+                  <Label htmlFor="identifier">Email or Username</Label>
                   <Input
                     id="identifier"
                     type="text"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
-                    placeholder={t('auth.emailOrUsernamePlaceholder')}
+                    placeholder="Enter your email or username"
                     className="mt-1"
                     required
                   />
@@ -201,20 +197,20 @@ export default function CaregiverAuth() {
               )}
 
               <div>
-                <Label htmlFor="password">{t('auth.password')}</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t('auth.passwordPlaceholder')}
+                  placeholder="Enter your password"
                   className="mt-1"
                   required
                 />
               </div>
 
               <Button type="submit" variant="hero" size="lg" disabled={loading} className="w-full">
-                {loading ? t('auth.processing') : isSignUp ? t('caregiverAuth.signup') : t('caregiverAuth.login')}
+                {loading ? 'Processing...' : isSignUp ? 'Create Account' : 'Sign In'}
               </Button>
             </form>
 
@@ -226,7 +222,7 @@ export default function CaregiverAuth() {
                   className="text-sm text-primary hover:underline"
                   disabled={resetting}
                 >
-                  {resetting ? t('auth.resetting') : t('auth.forgotPassword')}
+                  {resetting ? 'Sending reset email...' : 'Forgot your password?'}
                 </button>
               </div>
             )}
@@ -243,7 +239,7 @@ export default function CaregiverAuth() {
                 }}
                 className="text-primary hover:underline"
               >
-                {isSignUp ? t('caregiverAuth.toggleToLogin') : t('caregiverAuth.toggleToSignup')}
+                {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
               </button>
             </div>
 
@@ -253,7 +249,7 @@ export default function CaregiverAuth() {
                 onClick={() => navigate('/')}
                 className="text-muted-foreground hover:underline text-sm"
               >
-                {t('caregiverAuth.backToStudent')}
+                Back to student view
               </button>
             </div>
           </Card>

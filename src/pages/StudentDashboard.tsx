@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
+
 import { StudentAvatar } from '@/components/student-avatar';
 import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
@@ -112,15 +112,6 @@ function MobileMenu({
             trigger={
               <Button variant="ghost" size="icon" className="transition-colors duration-200">
                 <Link className="h-5 w-5" />
-              </Button>
-            }
-          />
-
-          {/* Idioma */}
-          <LanguageToggle
-            trigger={
-              <Button variant="ghost" size="icon" className="transition-colors duration-200">
-                <span className="font-semibold">{i18n.language.startsWith("pt") ? "PT" : "EN"}</span>
               </Button>
             }
           />
@@ -473,14 +464,6 @@ export default function StudentDashboard() {
               trigger={
                 <Button variant="ghost" size="icon" className="transition-colors duration-200">
                   <Link className="h-5 w-5" />
-                </Button>
-              }
-            />
-
-            <LanguageToggle
-              trigger={
-                <Button variant="ghost" size="icon" className="transition-colors duration-200">
-                  <span className="font-semibold">{i18n.language.startsWith('pt') ? 'PT' : 'EN'}</span>
                 </Button>
               }
             />

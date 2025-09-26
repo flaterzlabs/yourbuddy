@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
 import { RoleCard } from '@/components/role-card';
 import { useAuth } from '@/hooks/use-auth';
 import { useNavigate } from 'react-router-dom';
 import { User, Users, GraduationCap } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 
 export default function Welcome() {
-  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const selectedRole = 'student'; // Fixed role for students
@@ -33,7 +30,6 @@ export default function Welcome() {
         <div className="flex justify-between items-center mb-12">
           <BuddyLogo size="lg" />
           <div className="flex gap-2">
-            <LanguageToggle />
             <ThemeToggle />
           </div>
         </div>
@@ -42,10 +38,10 @@ export default function Welcome() {
         <div className="max-w-sm sm:max-w-2xl md:max-w-4xl mx-auto text-center">
           <div className="mb-8 md:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-hero bg-clip-text text-transparent">
-              {t('welcome.title')}
+              Welcome to BUDDY!
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-lg md:max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
-              {t('welcome.subtitle')}
+              A special communication platform for neurodivergent children and their support network.
             </p>
           </div>
 
@@ -53,8 +49,8 @@ export default function Welcome() {
          <div className="mb-8 md:mb-12">
    <div className="max-w-xs sm:max-w-sm mx-auto">
      <RoleCard
-       title={t('roles.student.title')}
-       description={t('roles.student.desc')}
+       title="Student"
+       description="I want to communicate with my teachers and family."
        icon={User}
        selected={true}
        onClick={() => {}}
@@ -72,7 +68,7 @@ export default function Welcome() {
       className="px-8 sm:px-12 w-full sm:w-auto transition-all duration-300 ease-in-out 
                  hover:scale-105 active:scale-95"
     >
-      {t('welcome.start')}
+      Get Started
     </Button>
 
     <Button
@@ -82,7 +78,7 @@ export default function Welcome() {
       className="px-6 sm:px-8 w-full sm:w-auto transition-all duration-300 ease-in-out 
                  hover:scale-105 active:scale-95 hover:bg-gradient-primary hover:text-white hover:border-transparent"
     >
-      {t('welcome.haveAccount')}
+      I have an account
     </Button>
   </div>
 </div>
@@ -93,7 +89,7 @@ export default function Welcome() {
               onClick={() => navigate('/caregiver-auth')}
               className="text-primary hover:underline text-sm font-medium mt-4"
             >
-              {t('welcome.caregiverLink')}
+              Are you a teacher or parent?
             </button>
           
 
@@ -103,22 +99,22 @@ export default function Welcome() {
               <div className="w-12 h-12 bg-success/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <User className="h-6 w-6 text-success" />
               </div>
-              <h3 className="font-semibold mb-2">{t('welcome.features.avatarTitle')}</h3>
-              <p className="text-sm text-muted-foreground">{t('welcome.features.avatarDesc')}</p>
+              <h3 className="font-semibold mb-2">Personalized Avatar</h3>
+              <p className="text-sm text-muted-foreground">Choose or create your unique digital character.</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-warning/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Users className="h-6 w-6 text-warning" />
               </div>
-              <h3 className="font-semibold mb-2">{t('welcome.features.secureTitle')}</h3>
-              <p className="text-sm text-muted-foreground">{t('welcome.features.secureDesc')}</p>
+              <h3 className="font-semibold mb-2">Secure Connection</h3>
+              <p className="text-sm text-muted-foreground">Safe communication with trusted adults only.</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <GraduationCap className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold mb-2">{t('welcome.features.easyTitle')}</h3>
-              <p className="text-sm text-muted-foreground">{t('welcome.features.easyDesc')}</p>
+              <h3 className="font-semibold mb-2">Easy Communication</h3>
+              <p className="text-sm text-muted-foreground">Express your needs with simple, intuitive tools.</p>
             </div>
           </div>
         </div>
