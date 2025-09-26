@@ -284,45 +284,26 @@ export default function StudentDashboard() {
   }, [user?.id]);
 
   const handleEmojiClick = (selectedUrgency: 'ok' | 'attention' | 'urgent') => {
-    if (!user) return;
-    
-    // If clicking the same emoji that's pending, cancel it
-    if (pendingUrgency === selectedUrgency && sendTimer) {
-      clearTimeout(sendTimer);
-      setSendTimer(null);
-      setPendingUrgency(null);
-      setCountdown(0);
-      return;
-    }
-    
-    // Clear any existing timer
-    if (sendTimer) {
-      clearTimeout(sendTimer);
-    }
-    
-    // Set new pending urgency and start countdown
-    setPendingUrgency(selectedUrgency);
-    setCountdown(2);
-    
-    // Start countdown timer
-    const countdownInterval = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(countdownInterval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    
-    // Set timer to send help request
-    const timer = setTimeout(() => {
-      sendHelpRequest(selectedUrgency);
-      clearInterval(countdownInterval);
-    }, 2000);
-    
-    setSendTimer(timer);
-  };
+  if (!user) return;
+
+  if (pendingUrgency === selectedUrgency && sendTimer) {
+    clearTimeout(sendTimer);
+    setSendTimer(null);
+    setPendingUrgency(null);
+    return;
+  }
+
+  if (sendTimer) clearTimeout(sendTimer);
+
+  setPendingUrgency(selectedUrgency);
+
+  // 4 segundos
+  const timer = setTimeout(() => {
+    sendHelpRequest(selectedUrgency);
+  }, 4000);
+
+  setSendTimer(timer);
+};
 
   const sendHelpRequest = async (urgencyLevel: 'ok' | 'attention' | 'urgent') => {
     if (!user) return;
@@ -589,13 +570,6 @@ export default function StudentDashboard() {
                         <div className="absolute -top-1 -right-1">
                           <Loader2 className="h-4 w-4 animate-spin text-primary" />
                         </div>
-                        {countdown > 0 && (
-                          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
-                            <span className="text-xs font-bold text-primary bg-background px-2 py-1 rounded">
-                              {countdown}
-                            </span>
-                          </div>
-                        )}
                       </>
                     )}
                   </button>
@@ -616,13 +590,6 @@ export default function StudentDashboard() {
                         <div className="absolute -top-1 -right-1">
                           <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />
                         </div>
-                        {countdown > 0 && (
-                          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
-                            <span className="text-xs font-bold text-yellow-600 bg-background px-2 py-1 rounded">
-                              {countdown}
-                            </span>
-                          </div>
-                        )}
                       </>
                     )}
                   </button>
@@ -643,13 +610,6 @@ export default function StudentDashboard() {
                         <div className="absolute -top-1 -right-1">
                           <Loader2 className="h-4 w-4 animate-spin text-red-500" />
                         </div>
-                        {countdown > 0 && (
-                          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
-                            <span className="text-xs font-bold text-red-600 bg-background px-2 py-1 rounded">
-                              {countdown}
-                            </span>
-                          </div>
-                        )}
                       </>
                     )}
                   </button>
@@ -657,12 +617,12 @@ export default function StudentDashboard() {
                 
                 {/* Feedback text */}
                 {pendingUrgency && (
-                  <div className="text-center mt-4">
-                    <p className="text-sm text-muted-foreground">
-                      Enviando pedido de ajuda... Toque novamente para cancelar
-                    </p>
-                  </div>
-                )}
+  <div className="text-center pt-6">
+    <p className="text-sm text-muted-foreground">
+      Enviando pedido de ajuda... Toque novamente para cancelar
+    </p>
+  </div>
+)}
               </div>
             </div>
           </Card>
