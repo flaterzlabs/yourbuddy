@@ -11,7 +11,7 @@ import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut } from "lucide-react";
+import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2 } from "lucide-react";
 
 import { Database } from '@/integrations/supabase/types';
 import { useTranslation } from 'react-i18next';
@@ -160,6 +160,9 @@ export default function StudentDashboard() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent' | null>(null);
+  const [pendingUrgency, setPendingUrgency] = useState<'ok' | 'attention' | 'urgent' | null>(null);
+  const [sendTimer, setSendTimer] = useState<NodeJS.Timeout | null>(null);
+  const [countdown, setCountdown] = useState(0);
   const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
@@ -280,25 +283,56 @@ export default function StudentDashboard() {
     };
   }, [user?.id]);
 
-  const handleHelpRequest = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleEmojiClick = (selectedUrgency: 'ok' | 'attention' | 'urgent') => {
     if (!user) return;
-    if (!urgency) {
-      toast({
-        title: t('auth.toast.errorTitle'),
-        description: "Por favor, selecione como você está se sentindo antes de enviar o pedido.",
-        variant: 'destructive',
-        duration: 3000,
-      });
+    
+    // If clicking the same emoji that's pending, cancel it
+    if (pendingUrgency === selectedUrgency && sendTimer) {
+      clearTimeout(sendTimer);
+      setSendTimer(null);
+      setPendingUrgency(null);
+      setCountdown(0);
       return;
     }
+    
+    // Clear any existing timer
+    if (sendTimer) {
+      clearTimeout(sendTimer);
+    }
+    
+    // Set new pending urgency and start countdown
+    setPendingUrgency(selectedUrgency);
+    setCountdown(2);
+    
+    // Start countdown timer
+    const countdownInterval = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(countdownInterval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    // Set timer to send help request
+    const timer = setTimeout(() => {
+      sendHelpRequest(selectedUrgency);
+      clearInterval(countdownInterval);
+    }, 2000);
+    
+    setSendTimer(timer);
+  };
 
+  const sendHelpRequest = async (urgencyLevel: 'ok' | 'attention' | 'urgent') => {
+    if (!user) return;
+    
     setLoading(true);
     try {
       const { data, error } = await supabase.from('help_requests').insert({
         student_id: user.id,
         message: message || undefined,
-        urgency,
+        urgency: urgencyLevel,
       }).select().single();
 
       if (error) throw error;
@@ -308,25 +342,29 @@ export default function StudentDashboard() {
         const broadcastChannel = supabase.channel('help-requests-broadcast');
         await broadcastChannel.subscribe();
         
-        // Small delay to ensure subscription is ready
         setTimeout(async () => {
           await broadcastChannel.send({
             type: 'broadcast',
             event: 'new-help',
             payload: {
               student_id: user.id,
-              urgency,
+              urgency: urgencyLevel,
               message: message || undefined,
               created_at: new Date().toISOString(),
             },
           });
           
-          // Clean up channel after sending
           setTimeout(() => supabase.removeChannel(broadcastChannel), 1000);
         }, 100);
       } catch (broadcastError) {
         console.log('Broadcast notification failed:', broadcastError);
       }
+
+      // Success animation and notification
+      setUrgency(urgencyLevel);
+      setTimeout(() => {
+        setUrgency(null);
+      }, 1000);
 
       toast({
         title: t('studentDash.sentTitle'),
@@ -337,7 +375,6 @@ export default function StudentDashboard() {
 
       fetchHelpRequests();
       setMessage('');
-      setUrgency(null);
     } catch (error) {
       toast({
         title: t('auth.toast.errorTitle'),
@@ -347,8 +384,20 @@ export default function StudentDashboard() {
       });
     } finally {
       setLoading(false);
+      setPendingUrgency(null);
+      setSendTimer(null);
+      setCountdown(0);
     }
   };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (sendTimer) {
+        clearTimeout(sendTimer);
+      }
+    };
+  }, [sendTimer]);
 
   const getStatusColor = (status: string): 'default' | 'destructive' | 'secondary' | 'outline' => {
     switch (status) {
@@ -519,62 +568,103 @@ export default function StudentDashboard() {
               <p className="hidden sm:block text-muted-foreground mb-4">{t('studentDash.caregiversNotified')}</p>
             </div>
 
-            <form onSubmit={handleHelpRequest} className="space-y-8">
+            <div className="space-y-8">
               
-              {/* EMOTIONAL BUTTONS*/}
-              
-          <div>
-  <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
-    <button
-      type="button"
-      onClick={() => setUrgency('ok')}
-      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
-    >
-      <span className="text-5xl sm:text-6xl">😊</span>
-    </button>
-    <button
-      type="button"
-      onClick={() => setUrgency('attention')}
-      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
-    >
-      <span className="text-5xl sm:text-6xl">😟</span>
-    </button>
-    <button
-      type="button"
-      onClick={() => setUrgency('urgent')}
-      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
-    >
-      <span className="text-5xl sm:text-6xl">😭</span>
-    </button>
-  </div>
-</div>
-
-
-
-              {/* BOTÃO SOS */}
-              <div className="flex justify-center items-center h-full w-full">
-                <Button
-                  type="submit"
-                  variant="ghost"
-                  size="lg"
-                  disabled={loading}
-                  className="flex h-24 w-24 items-center justify-center 
-                            rounded-2xl 
-                            bg-gradient-to-br from-red-500 via-red-600 to-red-700 
-                            text-white 
-                            shadow-[0_0_25px_rgba(220,38,38,0.75)]
-                            hover:shadow-[0_0_30px_rgba(248,80,80,1)]
-                            hover:scale-105 active:scale-95 
-                            transition-all duration-200"
-                >
-                  {loading ? (
-                    <span className="text-white text-base font-bold">{t('studentDash.sending')}</span>
-                  ) : (
-                    <span role="img" aria-label="sos" className="text-7xl leading-none">➡️</span>
-                  )}
-                </Button>
+              {/* EMOTIONAL BUTTONS */}
+              <div>
+                <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
+                  <button
+                    type="button"
+                    onClick={() => handleEmojiClick('ok')}
+                    disabled={loading}
+                    className={`emotion-button emotion-happy relative
+                      ${urgency === 'ok' ? 'selected animate-bounce' : ''} 
+                      ${pendingUrgency === 'ok' ? 'pending' : ''}
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
+                    aria-label={pendingUrgency === 'ok' ? 'Cancelar envio' : 'Estou bem - clique para enviar ajuda'}
+                  >
+                    <span className="text-5xl sm:text-6xl">😊</span>
+                    {pendingUrgency === 'ok' && (
+                      <>
+                        <div className="absolute -top-1 -right-1">
+                          <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                        </div>
+                        {countdown > 0 && (
+                          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
+                            <span className="text-xs font-bold text-primary bg-background px-2 py-1 rounded">
+                              {countdown}
+                            </span>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </button>
+                  
+                  <button
+                    type="button"
+                    onClick={() => handleEmojiClick('attention')}
+                    disabled={loading}
+                    className={`emotion-button emotion-need relative
+                      ${urgency === 'attention' ? 'selected animate-bounce' : ''} 
+                      ${pendingUrgency === 'attention' ? 'pending' : ''}
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
+                    aria-label={pendingUrgency === 'attention' ? 'Cancelar envio' : 'Preciso de atenção - clique para enviar ajuda'}
+                  >
+                    <span className="text-5xl sm:text-6xl">😟</span>
+                    {pendingUrgency === 'attention' && (
+                      <>
+                        <div className="absolute -top-1 -right-1">
+                          <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />
+                        </div>
+                        {countdown > 0 && (
+                          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
+                            <span className="text-xs font-bold text-yellow-600 bg-background px-2 py-1 rounded">
+                              {countdown}
+                            </span>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </button>
+                  
+                  <button
+                    type="button"
+                    onClick={() => handleEmojiClick('urgent')}
+                    disabled={loading}
+                    className={`emotion-button emotion-urgent relative
+                      ${urgency === 'urgent' ? 'selected animate-bounce' : ''} 
+                      ${pendingUrgency === 'urgent' ? 'pending' : ''}
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
+                    aria-label={pendingUrgency === 'urgent' ? 'Cancelar envio' : 'É urgente - clique para enviar ajuda'}
+                  >
+                    <span className="text-5xl sm:text-6xl">😭</span>
+                    {pendingUrgency === 'urgent' && (
+                      <>
+                        <div className="absolute -top-1 -right-1">
+                          <Loader2 className="h-4 w-4 animate-spin text-red-500" />
+                        </div>
+                        {countdown > 0 && (
+                          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
+                            <span className="text-xs font-bold text-red-600 bg-background px-2 py-1 rounded">
+                              {countdown}
+                            </span>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </button>
+                </div>
+                
+                {/* Feedback text */}
+                {pendingUrgency && (
+                  <div className="text-center mt-4">
+                    <p className="text-sm text-muted-foreground">
+                      Enviando pedido de ajuda... Toque novamente para cancelar
+                    </p>
+                  </div>
+                )}
               </div>
-            </form>
+            </div>
           </Card>
         </div>
       </div>
