@@ -5,13 +5,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+
 import { StudentAvatar } from '@/components/student-avatar';
 import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2 } from "lucide-react";
+
 import { Database } from '@/integrations/supabase/types';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -23,13 +26,15 @@ type Connection = Database['public']['Tables']['connections']['Row'] & {
   };
 };
 
-// Mobile Menu Component
+// --- Componente para menu mobile ---
 function MobileMenu({
   helpRequests,
   historyModalOpen,
   setHistoryModalOpen,
   handleConnectionAdded,
   connections,
+  i18n,
+  t,
   signOut,
   navigate,
 }: {
@@ -38,6 +43,8 @@ function MobileMenu({
   setHistoryModalOpen: (open: boolean) => void;
   handleConnectionAdded: () => void;
   connections: Connection[];
+  i18n: any;
+  t: any;
   signOut: () => Promise<void>;
   navigate: (path: string) => void;
 }) {
@@ -51,7 +58,7 @@ function MobileMenu({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="flex flex-col gap-2 p-2 min-w-[3rem]">
-          {/* Request History */}
+          {/* Histórico de pedidos */}
           <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
@@ -66,13 +73,13 @@ function MobileMenu({
             <DialogContent className="max-w-md max-h-[80vh]">
               <DialogHeader>
                 <DialogTitle>
-                  Request History ({helpRequests.length.toString().padStart(2, "0")})
+                  {t("studentDash.historyTitle")} ({helpRequests.length.toString().padStart(2, "0")})
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {helpRequests.length === 0 ? (
                   <p className="text-muted-foreground text-center py-4">
-                    No requests yet
+                    {t("studentDash.noneYet")}
                   </p>
                 ) : (
                   helpRequests.map((request) => (
@@ -81,13 +88,13 @@ function MobileMenu({
                         <div className="flex items-center gap-2">
                           <span>{request.urgency === "urgent" ? "🔴" : request.urgency === "attention" ? "🟡" : "🟢"}</span>
                           <Badge variant={request.status === "open" ? "destructive" : request.status === "answered" ? "secondary" : "outline"}>
-                            {request.status === "open" && <><Clock className="h-3 w-3 mr-1" />Waiting</>}
-                            {request.status === "answered" && <><CheckCircle className="h-3 w-3 mr-1" />Answered</>}
-                            {request.status === "closed" && <><XCircle className="h-3 w-3 mr-1" />Closed</>}
+                            {request.status === "open" && <><Clock className="h-3 w-3 mr-1" />{t("studentDash.status.waiting")}</>}
+                            {request.status === "answered" && <><CheckCircle className="h-3 w-3 mr-1" />{t("studentDash.status.answered")}</>}
+                            {request.status === "closed" && <><XCircle className="h-3 w-3 mr-1" />{t("studentDash.status.closed")}</>}
                           </Badge>
                         </div>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(request.created_at).toLocaleDateString('en-US')}
+                          {new Date(request.created_at).toLocaleDateString(i18n.language)}
                         </span>
                       </div>
                       {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
@@ -98,7 +105,7 @@ function MobileMenu({
             </DialogContent>
           </Dialog>
 
-          {/* Connections */}
+          {/* Conexões */}
           <SettingsModal
             onConnectionAdded={handleConnectionAdded}
             connections={connections}
@@ -109,7 +116,7 @@ function MobileMenu({
             }
           />
 
-          {/* Theme Toggle */}
+          {/* Tema */}
           <ThemeToggle />
 
           {/* Logout */}
@@ -120,8 +127,8 @@ function MobileMenu({
             onClick={async () => {
               await signOut();
               toast({
-                title: "Logged out successfully",
-                description: "See you soon!",
+                title: t("auth.toast.loggedOut"),
+                description: t("auth.toast.seeYou"),
                 variant: "student",
               });
               navigate("/auth");
@@ -136,6 +143,7 @@ function MobileMenu({
 }
 
 export default function StudentDashboard() {
+  const { t, i18n } = useTranslation();
   const { user, profile, thriveSprite, signOut } = useAuth();
   const navigate = useNavigate();
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
@@ -177,7 +185,7 @@ export default function StudentDashboard() {
         return {
           ...connection,
           caregiver_profile: caregiverProfile || {
-            username: 'Teacher/Caregiver',
+            username: 'Professor/Responsável',
             role: 'caregiver'
           }
         };
@@ -192,8 +200,8 @@ export default function StudentDashboard() {
   const handleConnectionAdded = () => {
     fetchConnections();
     toast({
-      title: "Connection established!",
-      description: "You have been successfully connected to your teacher/caregiver.",
+      title: "Conexão estabelecida!",
+      description: "Você foi conectado com sucesso ao professor/responsável.",
       duration: 3000,
       variant: 'student',
     });
@@ -224,10 +232,10 @@ export default function StudentDashboard() {
       .on('broadcast', { event: 'status-update' }, (payload) => {
         const data = payload.payload;
         if (data?.status) {
-          const statusText = data.status === 'answered' ? 'answered' : 'closed';
+          const statusText = data.status === 'answered' ? 'respondido' : 'finalizado';
           toast({
-            title: 'Request updated!',
-            description: `Your request has been ${statusText} by your teacher/caregiver.`,
+            title: 'Pedido atualizado!',
+            description: `Seu pedido foi ${statusText} pelo professor/responsável.`,
             variant: 'student',
             duration: 4000,
           });
@@ -267,26 +275,26 @@ export default function StudentDashboard() {
   }, [user?.id]);
 
   const handleEmojiClick = (selectedUrgency: 'ok' | 'attention' | 'urgent') => {
-    if (!user) return;
+  if (!user) return;
 
-    if (pendingUrgency === selectedUrgency && sendTimer) {
-      clearTimeout(sendTimer);
-      setSendTimer(null);
-      setPendingUrgency(null);
-      return;
-    }
+  if (pendingUrgency === selectedUrgency && sendTimer) {
+    clearTimeout(sendTimer);
+    setSendTimer(null);
+    setPendingUrgency(null);
+    return;
+  }
 
-    if (sendTimer) clearTimeout(sendTimer);
+  if (sendTimer) clearTimeout(sendTimer);
 
-    setPendingUrgency(selectedUrgency);
+  setPendingUrgency(selectedUrgency);
 
-    // 4 seconds delay
-    const timer = setTimeout(() => {
-      sendHelpRequest(selectedUrgency);
-    }, 4000);
+  // 4 segundos
+  const timer = setTimeout(() => {
+    sendHelpRequest(selectedUrgency);
+  }, 4000);
 
-    setSendTimer(timer);
-  };
+  setSendTimer(timer);
+};
 
   const sendHelpRequest = async (urgencyLevel: 'ok' | 'attention' | 'urgent') => {
     if (!user) return;
@@ -331,8 +339,8 @@ export default function StudentDashboard() {
       }, 1000);
 
       toast({
-        title: 'Request sent!',
-        description: 'Your help request has been sent to your teacher/caregiver.',
+        title: t('studentDash.sentTitle'),
+        description: t('studentDash.sentDesc'),
         duration: 3000,
         variant: 'student',
       });
@@ -341,8 +349,8 @@ export default function StudentDashboard() {
       setMessage('');
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'There was an error sending your request. Please try again.',
+        title: t('auth.toast.errorTitle'),
+        description: t('studentDash.sendError'),
         variant: 'destructive',
         duration: 3000,
       });
@@ -384,25 +392,25 @@ export default function StudentDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
         
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          {/* Logo and title - visible only on desktop/tablet */}
-          <div className="hidden sm:flex flex-col items-center gap-2">
-            <BuddyLogo size="lg" />
-            <h2 className="text-lg font-semibold text-muted-foreground">
-              {profile?.role === 'student' ? 'Student Dashboard' : 'Dashboard'}
-            </h2>
-          </div>
+       {/* Header */}
+<div className="flex justify-between items-center mb-8">
+  {/* Logo e título - visíveis apenas no desktop/tablet */}
+  <div className="hidden sm:flex flex-col items-center gap-2">
+    <BuddyLogo size="lg" />
+    <h2 className="text-lg font-semibold text-muted-foreground">
+      {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
+    </h2>
+  </div>
 
-          {/* Greeting - always visible, but on mobile takes the place of logo */}
-          <div className="flex flex-col items-center text-center sm:hidden">
-            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-              Hello, {profile?.username || 'Student'}!
-            </h1>
-            <p className="text-base sm:text-xl text-muted-foreground">
-              How are you feeling today?
-            </p>
-          </div>
+  {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
+<div className="flex flex-col items-center text-center sm:hidden">
+    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+      {t('studentDash.hello', { name: profile?.username })}
+    </h1>
+    <p className="text-base sm:text-xl text-muted-foreground">
+      {t('studentDash.feelingToday')}
+    </p>
+</div>
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
@@ -420,12 +428,12 @@ export default function StudentDashboard() {
               <DialogContent className="max-w-md max-h-[80vh]">
                 <DialogHeader>
                   <DialogTitle>
-                    Request History ({helpRequests.length.toString().padStart(2, '0')})
+                    {t('studentDash.historyTitle')} ({helpRequests.length.toString().padStart(2, '0')})
                   </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {helpRequests.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">No requests yet</p>
+                    <p className="text-muted-foreground text-center py-4">{t('studentDash.noneYet')}</p>
                   ) : (
                     helpRequests.map((request) => (
                       <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
@@ -433,13 +441,13 @@ export default function StudentDashboard() {
                           <div className="flex items-center gap-2">
                             <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
                             <Badge variant={getStatusColor(request.status || 'open')}>
-                              {request.status === 'open' && <><Clock className="h-3 w-3 mr-1" />Waiting</>}
-                              {request.status === 'answered' && <><CheckCircle className="h-3 w-3 mr-1" />Answered</>}
-                              {request.status === 'closed' && <><XCircle className="h-3 w-3 mr-1" />Closed</>}
+                              {request.status === 'open' && <><Clock className="h-3 w-3 mr-1" />{t('studentDash.status.waiting')}</>}
+                              {request.status === 'answered' && <><CheckCircle className="h-3 w-3 mr-1" />{t('studentDash.status.answered')}</>}
+                              {request.status === 'closed' && <><XCircle className="h-3 w-3 mr-1" />{t('studentDash.status.closed')}</>}
                             </Badge>
                           </div>
                           <span className="text-xs text-muted-foreground">
-                            {new Date(request.created_at).toLocaleDateString('en-US')}
+                            {new Date(request.created_at).toLocaleDateString(i18n.language)}
                           </span>
                         </div>
                         {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
@@ -468,15 +476,14 @@ export default function StudentDashboard() {
               onClick={async () => {
                 await signOut();
                 toast({
-                  title: 'Logged out successfully',
-                  description: 'See you soon!',
+                  title: t('auth.toast.loggedOut'),
+                  description: t('auth.toast.seeYou'),
                   variant: 'student',
                 });
                 navigate('/auth');
               }}
             >
-              <LogOut className="h-5 w-5 mr-2" />
-              Logout
+              {t('common.logout')}
             </Button>
           </div>
 
@@ -487,183 +494,121 @@ export default function StudentDashboard() {
             setHistoryModalOpen={setHistoryModalOpen}
             handleConnectionAdded={handleConnectionAdded}
             connections={connections}
+            i18n={i18n}
+            t={t}
             signOut={signOut}
             navigate={navigate}
           />
         </div>
 
-        {/* Greeting section for larger screens */}
-        <div className="text-center mb-12 hidden sm:block">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">
-            Hello, {profile?.username || 'Student'}!
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-            How are you feeling today?
-          </p>
-        </div>
+        {/* Conteúdo principal */}
+        <div className="max-w-2xl mx-auto">
+      {/* Welcome Section */}
+<div className="hidden sm:block text-center mb-8">
+  <div className="mb-4">
+    <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+      {t('studentDash.hello', { name: profile?.username })}
+    </h1>
+    <p className="text-xl text-muted-foreground">
+      {t('studentDash.feelingToday')}
+    </p>
+  </div>
+</div>
 
-        {/* Main content area */}
-        <div className="max-w-4xl mx-auto">
-          {/* Avatar Section */}
-          <div className="flex justify-center mb-12">
-            <StudentAvatar 
-              imageUrl={thriveSprite?.image_url}
-              className="w-24 h-24 md:w-32 md:h-32" 
-              size={128}
-            />
-          </div>
 
-          {/* Status Selection */}
-          <Card className="p-8 mb-8 shadow-lg bg-card/50 backdrop-blur border-0 bg-gradient-to-br from-card to-card/80">
+          {/* Help Request Form */}
+        <Card className="p-8 sm:p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                Need help with something?
-              </h2>
-              <p className="text-muted-foreground text-lg">
-                Click on how you're feeling and let your teacher know you need help!
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {/* I'm OK */}
-              <Card 
-                className={`p-6 cursor-pointer transition-all duration-300 hover:scale-105 border-2 ${
-                  urgency === 'ok' 
-                    ? 'border-green-500 bg-green-500/10 shadow-lg shadow-green-500/20' 
-                    : pendingUrgency === 'ok'
-                    ? 'border-green-400 bg-green-400/20 animate-pulse'
-                    : 'border-border hover:border-green-300'
-                }`}
-                onClick={() => handleEmojiClick('ok')}
-              >
-                <div className="text-center">
-                  <div className="text-6xl mb-4">🟢</div>
-                  <h3 className="text-xl font-semibold mb-2">I'm OK</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Everything is going well, just checking in!
-                  </p>
-                </div>
-              </Card>
-
-              {/* Need Attention */}
-              <Card 
-                className={`p-6 cursor-pointer transition-all duration-300 hover:scale-105 border-2 ${
-                  urgency === 'attention' 
-                    ? 'border-yellow-500 bg-yellow-500/10 shadow-lg shadow-yellow-500/20' 
-                    : pendingUrgency === 'attention'
-                    ? 'border-yellow-400 bg-yellow-400/20 animate-pulse'
-                    : 'border-border hover:border-yellow-300'
-                }`}
-                onClick={() => handleEmojiClick('attention')}
-              >
-                <div className="text-center">
-                  <div className="text-6xl mb-4">🟡</div>
-                  <h3 className="text-xl font-semibold mb-2">Need Attention</h3>
-                  <p className="text-muted-foreground text-sm">
-                    I could use some help when you have a moment
-                  </p>
-                </div>
-              </Card>
-
-              {/* Urgent Help */}
-              <Card 
-                className={`p-6 cursor-pointer transition-all duration-300 hover:scale-105 border-2 ${
-                  urgency === 'urgent' 
-                    ? 'border-red-500 bg-red-500/10 shadow-lg shadow-red-500/20' 
-                    : pendingUrgency === 'urgent'
-                    ? 'border-red-400 bg-red-400/20 animate-pulse'
-                    : 'border-border hover:border-red-300'
-                }`}
-                onClick={() => handleEmojiClick('urgent')}
-              >
-                <div className="text-center">
-                  <div className="text-6xl mb-4">🔴</div>
-                  <h3 className="text-xl font-semibold mb-2">Urgent Help</h3>
-                  <p className="text-muted-foreground text-sm">
-                    I need help right now, please!
-                  </p>
-                </div>
-              </Card>
-            </div>
-
-            {/* Message input */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">
-                Want to add a message? (optional)
-              </label>
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Tell your teacher what you need help with..."
-                className="w-full p-3 border border-border rounded-lg resize-none h-24 bg-background/50"
-                maxLength={200}
-              />
-              <div className="text-xs text-muted-foreground mt-1 text-right">
-                {message.length}/200 characters
-              </div>
-            </div>
-
-            {/* Status indicators */}
-            {pendingUrgency && (
-              <div className="text-center mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Sending request in 3 seconds... Click again to cancel</span>
-                </div>
-              </div>
-            )}
-
-            {loading && (
-              <div className="text-center mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Sending your request...</span>
-                </div>
-              </div>
-            )}
-          </Card>
-
-          {/* Connection Status */}
-          {connections.length === 0 && (
-            <Card className="p-6 mb-8 bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2 text-amber-800 dark:text-amber-200">
-                  No connections yet
-                </h3>
-                <p className="text-amber-700 dark:text-amber-300 mb-4">
-                  You need to connect with a teacher or caregiver to send help requests.
-                </p>
-                <SettingsModal
-                  onConnectionAdded={handleConnectionAdded}
-                  connections={connections}
-                  trigger={
-                    <Button variant="outline" className="border-amber-300 text-amber-800 hover:bg-amber-100 dark:text-amber-200 dark:hover:bg-amber-900/30">
-                      <Link className="h-4 w-4 mr-2" />
-                      Connect with Teacher/Caregiver
-                    </Button>
-                  }
+              <div className="flex items-center justify-center mx-auto mb-4">
+                <StudentAvatar
+                  imageUrl={thriveSprite?.image_url}
+                  seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
+                  style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
+                  size={120}
+                  className="border-4 border-success rounded-full shadow-md shadow-green-500"
                 />
               </div>
-            </Card>
-          )}
+              <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
+              <p className="hidden sm:block text-muted-foreground mb-4">{t('studentDash.caregiversNotified')}</p>
+            </div>
 
-          {/* Active connections info */}
-          {connections.length > 0 && (
-            <Card className="p-6 mb-8 bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2 text-green-800 dark:text-green-200">
-                  Connected to {connections.length} teacher{connections.length > 1 ? 's' : ''}/caregiver{connections.length > 1 ? 's' : ''}
-                </h3>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {connections.map((connection) => (
-                    <Badge key={connection.id} variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200">
-                      {connection.caregiver_profile.username}
-                    </Badge>
-                  ))}
+            <div className="space-y-8">
+              
+              {/* EMOTIONAL BUTTONS */}
+              <div>
+                <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
+                  <button
+                    type="button"
+                    onClick={() => handleEmojiClick('ok')}
+                    disabled={loading}
+                    className={`emotion-button emotion-happy relative
+                      ${urgency === 'ok' ? 'selected animate-bounce' : ''} 
+                      ${pendingUrgency === 'ok' ? 'pending' : ''}
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
+                    aria-label={pendingUrgency === 'ok' ? 'Cancelar envio' : 'Estou bem - clique para enviar ajuda'}
+                  >
+                    <span className="text-5xl sm:text-6xl">😊</span>
+                    {pendingUrgency === 'ok' && (
+                      <>
+                        <div className="absolute -top-1 -right-1">
+                          <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                        </div>
+                      </>
+                    )}
+                  </button>
+                  
+                  <button
+                    type="button"
+                    onClick={() => handleEmojiClick('attention')}
+                    disabled={loading}
+                    className={`emotion-button emotion-need relative
+                      ${urgency === 'attention' ? 'selected animate-bounce' : ''} 
+                      ${pendingUrgency === 'attention' ? 'pending' : ''}
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
+                    aria-label={pendingUrgency === 'attention' ? 'Cancelar envio' : 'Preciso de atenção - clique para enviar ajuda'}
+                  >
+                    <span className="text-5xl sm:text-6xl">😟</span>
+                    {pendingUrgency === 'attention' && (
+                      <>
+                        <div className="absolute -top-1 -right-1">
+                          <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />
+                        </div>
+                      </>
+                    )}
+                  </button>
+                  
+                  <button
+                    type="button"
+                    onClick={() => handleEmojiClick('urgent')}
+                    disabled={loading}
+                    className={`emotion-button emotion-urgent relative
+                      ${urgency === 'urgent' ? 'selected animate-bounce' : ''} 
+                      ${pendingUrgency === 'urgent' ? 'pending' : ''}
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
+                    aria-label={pendingUrgency === 'urgent' ? 'Cancelar envio' : 'É urgente - clique para enviar ajuda'}
+                  >
+                    <span className="text-5xl sm:text-6xl">😭</span>
+                    {pendingUrgency === 'urgent' && (
+                      <>
+                        <div className="absolute -top-1 -right-1">
+                          <Loader2 className="h-4 w-4 animate-spin text-red-500" />
+                        </div>
+                      </>
+                    )}
+                  </button>
                 </div>
+                
+                {/* Feedback text */}
+                {pendingUrgency && (
+  <div className="text-center pt-6">
+    <p className="text-sm text-muted-foreground">
+      Enviando pedido de ajuda... Toque novamente para cancelar
+    </p>
+  </div>
+)}
               </div>
-            </Card>
-          )}
+            </div>
+          </Card>
         </div>
       </div>
     </div>
