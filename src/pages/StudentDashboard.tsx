@@ -14,7 +14,6 @@ import { toast } from '@/hooks/use-toast';
 import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2 } from "lucide-react";
 
 import { Database } from '@/integrations/supabase/types';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -33,8 +32,6 @@ function MobileMenu({
   setHistoryModalOpen,
   handleConnectionAdded,
   connections,
-  i18n,
-  t,
   signOut,
   navigate,
 }: {
@@ -43,8 +40,6 @@ function MobileMenu({
   setHistoryModalOpen: (open: boolean) => void;
   handleConnectionAdded: () => void;
   connections: Connection[];
-  i18n: any;
-  t: any;
   signOut: () => Promise<void>;
   navigate: (path: string) => void;
 }) {
@@ -73,13 +68,13 @@ function MobileMenu({
             <DialogContent className="max-w-md max-h-[80vh]">
               <DialogHeader>
                 <DialogTitle>
-                  {t("studentDash.historyTitle")} ({helpRequests.length.toString().padStart(2, "0")})
+                  Request History ({helpRequests.length.toString().padStart(2, "0")})
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {helpRequests.length === 0 ? (
                   <p className="text-muted-foreground text-center py-4">
-                    {t("studentDash.noneYet")}
+                    No requests yet
                   </p>
                 ) : (
                   helpRequests.map((request) => (
@@ -88,13 +83,13 @@ function MobileMenu({
                         <div className="flex items-center gap-2">
                           <span>{request.urgency === "urgent" ? "🔴" : request.urgency === "attention" ? "🟡" : "🟢"}</span>
                           <Badge variant={request.status === "open" ? "destructive" : request.status === "answered" ? "secondary" : "outline"}>
-                            {request.status === "open" && <><Clock className="h-3 w-3 mr-1" />{t("studentDash.status.waiting")}</>}
-                            {request.status === "answered" && <><CheckCircle className="h-3 w-3 mr-1" />{t("studentDash.status.answered")}</>}
-                            {request.status === "closed" && <><XCircle className="h-3 w-3 mr-1" />{t("studentDash.status.closed")}</>}
+                            {request.status === "open" && <><Clock className="h-3 w-3 mr-1" />Waiting</>}
+                            {request.status === "answered" && <><CheckCircle className="h-3 w-3 mr-1" />Answered</>}
+                            {request.status === "closed" && <><XCircle className="h-3 w-3 mr-1" />Closed</>}
                           </Badge>
                         </div>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(request.created_at).toLocaleDateString(i18n.language)}
+                          {new Date(request.created_at).toLocaleDateString('en-US')}
                         </span>
                       </div>
                       {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
@@ -127,8 +122,8 @@ function MobileMenu({
             onClick={async () => {
               await signOut();
               toast({
-                title: t("auth.toast.loggedOut"),
-                description: t("auth.toast.seeYou"),
+                title: "Logged out",
+                description: "See you soon!",
                 variant: "student",
               });
               navigate("/auth");
@@ -143,7 +138,6 @@ function MobileMenu({
 }
 
 export default function StudentDashboard() {
-  const { t, i18n } = useTranslation();
   const { user, profile, thriveSprite, signOut } = useAuth();
   const navigate = useNavigate();
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
@@ -339,8 +333,8 @@ export default function StudentDashboard() {
       }, 1000);
 
       toast({
-        title: t('studentDash.sentTitle'),
-        description: t('studentDash.sentDesc'),
+        title: 'Request Sent!',
+        description: 'Your help request has been sent to your teacher/caregiver.',
         duration: 3000,
         variant: 'student',
       });
@@ -349,8 +343,8 @@ export default function StudentDashboard() {
       setMessage('');
     } catch (error) {
       toast({
-        title: t('auth.toast.errorTitle'),
-        description: t('studentDash.sendError'),
+        title: "Error",
+        description: "Failed to send help request. Please try again.",
         variant: 'destructive',
         duration: 3000,
       });
@@ -398,18 +392,18 @@ export default function StudentDashboard() {
   <div className="hidden sm:flex flex-col items-center gap-2">
     <BuddyLogo size="lg" />
     <h2 className="text-lg font-semibold text-muted-foreground">
-      {profile?.role === 'student' ? t('studentDash.titleStudent') : t('studentDash.title')}
+      Student Dashboard
     </h2>
   </div>
 
   {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
 <div className="flex flex-col items-center text-center sm:hidden">
-    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-      {t('studentDash.hello', { name: profile?.username })}
-    </h1>
-    <p className="text-base sm:text-xl text-muted-foreground">
-      {t('studentDash.feelingToday')}
-    </p>
+    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+      Hello, {profile?.username}!
+    </h1>
+    <p className="text-base sm:text-xl text-muted-foreground">
+      How are you feeling today?
+    </p>
 </div>
 
           {/* Desktop menu */}
@@ -427,13 +421,13 @@ export default function StudentDashboard() {
               </DialogTrigger>
               <DialogContent className="max-w-md max-h-[80vh]">
                 <DialogHeader>
-                  <DialogTitle>
-                    {t('studentDash.historyTitle')} ({helpRequests.length.toString().padStart(2, '0')})
-                  </DialogTitle>
+                <DialogTitle>
+                  Request History ({helpRequests.length.toString().padStart(2, '0')})
+                </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {helpRequests.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">{t('studentDash.noneYet')}</p>
+                    <p className="text-muted-foreground text-center py-4">No requests yet</p>
                   ) : (
                     helpRequests.map((request) => (
                       <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
@@ -441,13 +435,13 @@ export default function StudentDashboard() {
                           <div className="flex items-center gap-2">
                             <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
                             <Badge variant={getStatusColor(request.status || 'open')}>
-                              {request.status === 'open' && <><Clock className="h-3 w-3 mr-1" />{t('studentDash.status.waiting')}</>}
-                              {request.status === 'answered' && <><CheckCircle className="h-3 w-3 mr-1" />{t('studentDash.status.answered')}</>}
-                              {request.status === 'closed' && <><XCircle className="h-3 w-3 mr-1" />{t('studentDash.status.closed')}</>}
+                              {request.status === 'open' && <><Clock className="h-3 w-3 mr-1" />Waiting</>}
+                              {request.status === 'answered' && <><CheckCircle className="h-3 w-3 mr-1" />Answered</>}
+                              {request.status === 'closed' && <><XCircle className="h-3 w-3 mr-1" />Closed</>}
                             </Badge>
                           </div>
                           <span className="text-xs text-muted-foreground">
-                            {new Date(request.created_at).toLocaleDateString(i18n.language)}
+                            {new Date(request.created_at).toLocaleDateString('en-US')}
                           </span>
                         </div>
                         {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
@@ -476,14 +470,14 @@ export default function StudentDashboard() {
               onClick={async () => {
                 await signOut();
                 toast({
-                  title: t('auth.toast.loggedOut'),
-                  description: t('auth.toast.seeYou'),
+                  title: "Logged out",
+                  description: "See you soon!",
                   variant: 'student',
                 });
                 navigate('/auth');
               }}
             >
-              {t('common.logout')}
+              Logout
             </Button>
           </div>
 
@@ -494,8 +488,6 @@ export default function StudentDashboard() {
             setHistoryModalOpen={setHistoryModalOpen}
             handleConnectionAdded={handleConnectionAdded}
             connections={connections}
-            i18n={i18n}
-            t={t}
             signOut={signOut}
             navigate={navigate}
           />
@@ -507,10 +499,10 @@ export default function StudentDashboard() {
 <div className="hidden sm:block text-center mb-8">
   <div className="mb-4">
     <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-      {t('studentDash.hello', { name: profile?.username })}
+      Hello, {profile?.username}!
     </h1>
     <p className="text-xl text-muted-foreground">
-      {t('studentDash.feelingToday')}
+      How are you feeling today?
     </p>
   </div>
 </div>
@@ -528,8 +520,8 @@ export default function StudentDashboard() {
                   className="border-4 border-success rounded-full shadow-md shadow-green-500"
                 />
               </div>
-              <h2 className="text-2xl font-bold mb-2">{t('studentDash.needHelpTitle')}</h2>
-              <p className="hidden sm:block text-muted-foreground mb-4">{t('studentDash.caregiversNotified')}</p>
+              <h2 className="text-2xl font-bold mb-2">Do you need help?</h2>
+              <p className="hidden sm:block text-muted-foreground mb-4">Your teachers/caregivers will be notified</p>
             </div>
 
             <div className="space-y-8">
