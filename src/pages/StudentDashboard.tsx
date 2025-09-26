@@ -162,9 +162,6 @@ export default function StudentDashboard() {
   const [urgency, setUrgency] = useState<'ok' | 'attention' | 'urgent' | null>(null);
   const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
-   // 🔹 Estados para o clique duplo
-  const [selectedEmoji, setSelectedEmoji] = useState<"ok" | "attention" | "urgent" | null>(null);
-  const [confirming, setConfirming] = useState(false);
 
   const fetchConnections = async () => {
     if (!user) return;
@@ -283,19 +280,53 @@ export default function StudentDashboard() {
     };
   }, [user?.id]);
 
-  // 🔹 Envia o pedido ao confirmar
-  const handleHelpRequest = async () => {
+  const handleHelpRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!user) return;
-    if (!urgency) return;
+    if (!urgency) {
+      toast({
+        title: t('auth.toast.errorTitle'),
+        description: "Por favor, selecione como você está se sentindo antes de enviar o pedido.",
+        variant: 'destructive',
+        duration: 3000,
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const { error } = await supabase.from('help_requests').insert({
+      const { data, error } = await supabase.from('help_requests').insert({
         student_id: user.id,
+        message: message || undefined,
         urgency,
-      });
+      }).select().single();
 
       if (error) throw error;
+
+      // Send broadcast notification to caregivers
+      try {
+        const broadcastChannel = supabase.channel('help-requests-broadcast');
+        await broadcastChannel.subscribe();
+        
+        // Small delay to ensure subscription is ready
+        setTimeout(async () => {
+          await broadcastChannel.send({
+            type: 'broadcast',
+            event: 'new-help',
+            payload: {
+              student_id: user.id,
+              urgency,
+              message: message || undefined,
+              created_at: new Date().toISOString(),
+            },
+          });
+          
+          // Clean up channel after sending
+          setTimeout(() => supabase.removeChannel(broadcastChannel), 1000);
+        }, 100);
+      } catch (broadcastError) {
+        console.log('Broadcast notification failed:', broadcastError);
+      }
 
       toast({
         title: t('studentDash.sentTitle'),
@@ -305,9 +336,8 @@ export default function StudentDashboard() {
       });
 
       fetchHelpRequests();
+      setMessage('');
       setUrgency(null);
-      setSelectedEmoji(null);
-      setConfirming(false);
     } catch (error) {
       toast({
         title: t('auth.toast.errorTitle'),
@@ -319,25 +349,6 @@ export default function StudentDashboard() {
       setLoading(false);
     }
   };
-
-  // 🔹 Clique no emoji
-  const handleEmojiClick = (choice: "ok" | "attention" | "urgent") => {
-    if (selectedEmoji === choice && confirming) {
-      handleHelpRequest(); // segundo clique → envia
-    } else {
-      setSelectedEmoji(choice);
-      setUrgency(choice);
-      setConfirming(true);
-
-      // cancela se não confirmar em 5s
-      setTimeout(() => {
-        setConfirming(false);
-        setSelectedEmoji(null);
-        setUrgency(null);
-      }, 5000);
-    }
-  };
-
 
   const getStatusColor = (status: string): 'default' | 'destructive' | 'secondary' | 'outline' => {
     switch (status) {
@@ -493,8 +504,7 @@ export default function StudentDashboard() {
 
 
           {/* Help Request Form */}
-        {/* Emojis de ajuda */}
-          <Card className="p-8 sm:p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
+        <Card className="p-8 sm:p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mx-auto mb-4">
                 <StudentAvatar
@@ -509,47 +519,62 @@ export default function StudentDashboard() {
               <p className="hidden sm:block text-muted-foreground mb-4">{t('studentDash.caregiversNotified')}</p>
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-6 p-6">
-              <h1 className="text-2xl font-bold">Peça Ajuda</h1>
+            <form onSubmit={handleHelpRequest} className="space-y-8">
+              
+              {/* EMOTIONAL BUTTONS*/}
+              
+          <div>
+  <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
+    <button
+      type="button"
+      onClick={() => setUrgency('ok')}
+      className={`emotion-button emotion-happy ${urgency === 'ok' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
+    >
+      <span className="text-5xl sm:text-6xl">😊</span>
+    </button>
+    <button
+      type="button"
+      onClick={() => setUrgency('attention')}
+      className={`emotion-button emotion-need ${urgency === 'attention' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
+    >
+      <span className="text-5xl sm:text-6xl">😟</span>
+    </button>
+    <button
+      type="button"
+      onClick={() => setUrgency('urgent')}
+      className={`emotion-button emotion-urgent ${urgency === 'urgent' ? 'selected' : ''} w-18 h-18 sm:w-24 sm:h-24`}
+    >
+      <span className="text-5xl sm:text-6xl">😭</span>
+    </button>
+  </div>
+</div>
 
-              <div className="flex gap-6">
-                {/* Emoji OK */}
-                <button
-                  type="button"
-                  onClick={() => handleEmojiClick("ok")}
-                  className={`relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-all ${selectedEmoji === "ok" ? "scale-110" : ""}`}
-                >
-                  <span className="text-5xl sm:text-6xl">🙂</span>
-                  {selectedEmoji === "ok" && confirming && (
-                    <span className="absolute inset-0 rounded-full border-4 border-green-400 animate-ping" />
-                  )}
-                </button>
 
-                {/* Emoji Attention */}
-                <button
-                  type="button"
-                  onClick={() => handleEmojiClick("attention")}
-                  className={`relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-all ${selectedEmoji === "attention" ? "scale-110" : ""}`}
-                >
-                  <span className="text-5xl sm:text-6xl">😟</span>
-                  {selectedEmoji === "attention" && confirming && (
-                    <span className="absolute inset-0 rounded-full border-4 border-yellow-400 animate-ping" />
-                  )}
-                </button>
 
-                {/* Emoji Urgent */}
-                <button
-                  type="button"
-                  onClick={() => handleEmojiClick("urgent")}
-                  className={`relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-all ${selectedEmoji === "urgent" ? "scale-110" : ""}`}
+              {/* BOTÃO SOS */}
+              <div className="flex justify-center items-center h-full w-full">
+                <Button
+                  type="submit"
+                  variant="ghost"
+                  size="lg"
+                  disabled={loading}
+                  className="flex h-24 w-24 items-center justify-center 
+                            rounded-2xl 
+                            bg-gradient-to-br from-red-500 via-red-600 to-red-700 
+                            text-white 
+                            shadow-[0_0_25px_rgba(220,38,38,0.75)]
+                            hover:shadow-[0_0_30px_rgba(248,80,80,1)]
+                            hover:scale-105 active:scale-95 
+                            transition-all duration-200"
                 >
-                  <span className="text-5xl sm:text-6xl">🚨</span>
-                  {selectedEmoji === "urgent" && confirming && (
-                    <span className="absolute inset-0 rounded-full border-4 border-red-500 animate-ping" />
+                  {loading ? (
+                    <span className="text-white text-base font-bold">{t('studentDash.sending')}</span>
+                  ) : (
+                    <span role="img" aria-label="sos" className="text-7xl leading-none">➡️</span>
                   )}
-                </button>
+                </Button>
               </div>
-            </div>
+            </form>
           </Card>
         </div>
       </div>
