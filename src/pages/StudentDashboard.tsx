@@ -559,7 +559,7 @@ export default function StudentDashboard() {
                     onClick={() => handleEmojiClick('ok')}
                     disabled={loading}
                     className={`emotion-button emotion-happy relative
-                      ${urgency === 'ok' ? 'selected animate-bounce shadow-lg shadow-green-500/50' : ''} 
+                      ${urgency === 'ok' ? 'selected animate-bounce' : ''} 
                       ${pendingUrgency === 'ok' ? 'pending' : ''}
                       w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
                     aria-label={pendingUrgency === 'ok' ? 'Cancelar envio' : 'Estou bem - clique para enviar ajuda'}
@@ -579,7 +579,7 @@ export default function StudentDashboard() {
                     onClick={() => handleEmojiClick('attention')}
                     disabled={loading}
                     className={`emotion-button emotion-need relative
-                      ${urgency === 'attention' ? 'selected animate-bounce shadow-lg shadow-yellow-500/50' : ''} 
+                      ${urgency === 'attention' ? 'selected animate-bounce' : ''} 
                       ${pendingUrgency === 'attention' ? 'pending' : ''}
                       w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
                     aria-label={pendingUrgency === 'attention' ? 'Cancelar envio' : 'Preciso de atenção - clique para enviar ajuda'}
@@ -599,7 +599,7 @@ export default function StudentDashboard() {
                     onClick={() => handleEmojiClick('urgent')}
                     disabled={loading}
                     className={`emotion-button emotion-urgent relative
-                      ${urgency === 'urgent' ? 'selected animate-bounce shadow-lg shadow-red-500/50' : ''} 
+                      ${urgency === 'urgent' ? 'selected animate-bounce' : ''} 
                       ${pendingUrgency === 'urgent' ? 'pending' : ''}
                       w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
                     aria-label={pendingUrgency === 'urgent' ? 'Cancelar envio' : 'É urgente - clique para enviar ajuda'}
