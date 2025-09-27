@@ -592,7 +592,7 @@ export default function StudentDashboard() {
                 {/* Feedback text */}
                 {pendingUrgency && (
   <div className="text-center pt-6">
-    <p className="text-sm text-muted-foreground">
+    <p className="text-base text-muted-foreground">
      Sending help request... Tap again to cancel!
     </p>
   </div>
