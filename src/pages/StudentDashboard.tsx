@@ -552,13 +552,13 @@ export default function StudentDashboard() {
                       ${urgency === 'ok' ? 'selected animate-bounce shadow-lg shadow-green-500/50' : ''} 
                       ${pendingUrgency === 'ok' ? 'pending' : ''}
                       w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
-                    aria-label={pendingUrgency === 'ok' ? 'Cancelar envio' : 'Estou bem - clique para enviar ajuda'}
+                    aria-label={pendingUrgency === 'ok' ? 'Cancel request' : "I'm fine – click to ask for help"}
                   >
                     <span className="text-5xl sm:text-6xl">😊</span>
-                    {pendingUrgency === 'ok' && (
+                    {pendingUrgency === 'ok' && (I'm fine – click to ask for help'
                       <>
                         <div className="absolute -top-1 -right-1">
-                          <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                          <Loader2 className="h-4 w-4 animate-spin text-green/500" />
                         </div>
                       </>
                     )}
@@ -572,7 +572,7 @@ export default function StudentDashboard() {
                       ${urgency === 'attention' ? 'selected animate-bounce shadow-lg shadow-yellow-500/50' : ''} 
                       ${pendingUrgency === 'attention' ? 'pending' : ''}
                       w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
-                    aria-label={pendingUrgency === 'attention' ? 'Cancelar envio' : 'Preciso de atenção - clique para enviar ajuda'}
+                    aria-label={pendingUrgency === 'attention' ? 'Cancel request' : 'Need Attention - click to ask for help'}
                   >
                     <span className="text-5xl sm:text-6xl">😟</span>
                     {pendingUrgency === 'attention' && (
@@ -592,7 +592,7 @@ export default function StudentDashboard() {
                       ${urgency === 'urgent' ? 'selected animate-bounce shadow-lg shadow-red-500/50' : ''} 
                       ${pendingUrgency === 'urgent' ? 'pending' : ''}
                       w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
-                    aria-label={pendingUrgency === 'urgent' ? 'Cancelar envio' : 'É urgente - clique para enviar ajuda'}
+                    aria-label={pendingUrgency === 'urgent' ? 'Cancel request' : 'Urgent - click to ask for help'}
                   >
                     <span className="text-5xl sm:text-6xl">😭</span>
                     {pendingUrgency === 'urgent' && (
@@ -609,7 +609,7 @@ export default function StudentDashboard() {
                 {pendingUrgency && (
   <div className="text-center pt-6">
     <p className="text-sm text-muted-foreground">
-      Enviando pedido de ajuda... Toque novamente para cancelar
+     Sending help request... Tap again to cancel!
     </p>
   </div>
 )}
