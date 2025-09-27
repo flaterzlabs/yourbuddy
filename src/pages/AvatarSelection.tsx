@@ -3,11 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { LanguageToggle } from '@/components/language-toggle';
 import { AvatarSelector } from '@/components/avatar-selector';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function AvatarSelection() {
   const [selectedSeed, setSelectedSeed] = useState<string>('');
@@ -15,6 +17,7 @@ export default function AvatarSelection() {
   const [loading, setLoading] = useState(false);
   const { user, refreshProfile } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const avatarStyles = [
     'adventurer',
     'adventurer-neutral',
@@ -62,16 +65,16 @@ export default function AvatarSelection() {
       await refreshProfile();
 
       toast({
-        title: 'Avatar saved successfully!',
-        description: 'Your avatar has been updated.',
+        title: t('avatar.toast.savedTitle'),
+        description: t('avatar.toast.savedDesc'),
       });
 
       navigate('/dashboard');
     } catch (error) {
       console.error('Error saving avatar:', error);
       toast({
-        title: 'Error saving avatar',
-        description: 'There was a problem saving your avatar. Please try again.',
+        title: t('avatar.toast.errorTitle'),
+        description: t('avatar.toast.errorDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -104,16 +107,16 @@ export default function AvatarSelection() {
       await refreshProfile();
 
       toast({
-        title: 'Avatar saved successfully!',
-        description: 'Your avatar has been updated.',
+        title: t('avatar.toast.savedTitle'),
+        description: t('avatar.toast.savedDesc'),
       });
 
       navigate('/dashboard');
     } catch (error) {
       console.error('Error saving avatar:', error);
       toast({
-        title: 'Error saving avatar',
-        description: 'There was a problem saving your avatar. Please try again.',
+        title: t('avatar.toast.errorTitle'),
+        description: t('avatar.toast.errorDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -133,6 +136,7 @@ export default function AvatarSelection() {
         <div className="flex justify-between items-center mb-8">
           <BuddyLogo size="lg" />
           <div className="flex gap-2">
+            <LanguageToggle />
             <ThemeToggle />
           </div>
         </div>
@@ -153,7 +157,7 @@ export default function AvatarSelection() {
                 variant="hero"
                 size="lg"
               >
-                {loading ? 'Saving...' : 'Continue'}
+                {loading ? t('avatar.saving') : t('avatar.continue')}
               </Button>
               <Button
                 variant="outline"
@@ -161,7 +165,7 @@ export default function AvatarSelection() {
                 disabled={loading}
                 onClick={handleRandomAvatar}
               >
-                Random Pick & Save
+                {t('avatar.randomPick')}
               </Button>
             </div>
           </Card>

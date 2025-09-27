@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Shuffle, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface AvatarSelectorProps {
   onSelect: (seed: string, style: string) => void;
@@ -10,6 +11,7 @@ interface AvatarSelectorProps {
 }
 
 export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: AvatarSelectorProps) {
+  const { t } = useTranslation();
   const avatarStyles = [
     'adventurer',
     'adventurer-neutral',
@@ -57,8 +59,8 @@ export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: Avatar
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h3 className="text-xl font-bold mb-2">Choose Your Avatar</h3>
-        <p className="text-muted-foreground">Select an avatar that represents you</p>
+        <h3 className="text-xl font-bold mb-2">{t('avatar.title')}</h3>
+        <p className="text-muted-foreground">{t('avatar.subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-4 gap-3">
@@ -92,7 +94,7 @@ export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: Avatar
       <div className="text-center">
         <Button variant="outline" onClick={generateNewSeeds} className="gap-2">
           <Shuffle className="h-4 w-4" />
-          Generate New Avatars
+          {t('avatar.generateNew')}
         </Button>
       </div>
     </div>

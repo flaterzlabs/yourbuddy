@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { LanguageToggle } from '@/components/language-toggle';
 import { StudentAvatar } from '@/components/student-avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,6 +29,7 @@ import {
   GraduationCap,
 } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
@@ -43,6 +45,7 @@ type HelpRequest = Database['public']['Tables']['help_requests']['Row'] & {
 };
 
 export default function CaregiverDashboard() {
+  const { t, i18n } = useTranslation();
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -175,11 +178,12 @@ export default function CaregiverDashboard() {
         const rec = e?.payload;
         if (!rec || !activeIds.has(rec.student_id)) return;
         const conn = connections.find((c) => c.student_id === rec.student_id);
-        const name = conn?.student_profile?.username || 'Student';
+        const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
         const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
+        // === Alteração: Adicionado viewportId ===
         toast({
-          title: 'New Help Request',
-          description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
+          title: t('caregiverDash.newHelpTitle'),
+          description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
           variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
         });
         fetchHelpRequests();
@@ -212,11 +216,12 @@ export default function CaregiverDashboard() {
 
           if (payload.eventType === 'INSERT') {
             const conn = connections.find((c) => c.student_id === rec.student_id);
-            const name = conn?.student_profile?.username || 'Student';
+            const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
             const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
+            // === Alteração: Adicionado viewportId ===
             toast({
-              title: 'New Help Request',
-              description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
+              title: t('caregiverDash.newHelpTitle'),
+              description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
               variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
             });
           }
@@ -246,25 +251,28 @@ export default function CaregiverDashboard() {
       const result = data as { success: boolean; error?: string; student?: any };
 
       if (result.success && result.student) {
+        // === Alteração: Adicionado viewportId ===
         toast({
-          title: 'Student connected!',
-          description: `Connected with ${result.student.username} (${result.student.student_code})`,
+          title: 'Estudante conectado!',
+          description: `Conectado com ${result.student.username} (${result.student.student_code})`,
           variant: 'caregiver-success',
         });
         setStudentCode('');
-        fetchConnections();
+        fetchConnections(); // This will refresh the "Meus Alunos" section
       } else {
+        // === Alteração: Adicionado viewportId ===
         toast({
-          title: 'Error',
-          description: result.error || 'Invalid code',
+          title: 'Erro',
+          description: result.error || 'Código inválido',
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Error connecting to student:', error);
+      // === Alteração: Adicionado viewportId ===
       toast({
-        title: 'Error',
-        description: 'Could not connect. Please try again.',
+        title: 'Erro',
+        description: 'Não foi possível conectar. Tente novamente.',
         variant: 'destructive',
       });
     } finally {
@@ -288,9 +296,10 @@ export default function CaregiverDashboard() {
 
       if (error) throw error;
 
+      // === Alteração: Adicionado viewportId ===
       toast({
-        title: action === 'answered' ? 'Marked as answered' : 'Request completed',
-        description: 'The student has been notified.',
+        title: action === 'answered' ? 'Marcado como respondido' : 'Pedido finalizado',
+        description: 'O estudante foi notificado.',
         variant: 'caregiver-success',
       });
 
@@ -322,12 +331,14 @@ export default function CaregiverDashboard() {
         }
       }
 
+      // Atualiza imediatamente enquanto o realtime notifica
       fetchHelpRequests();
     } catch (error) {
       console.error('Error updating help request:', error);
+      // === Alteração: Adicionado viewportId ===
       toast({
-        title: 'Error',
-        description: 'Could not update the request.',
+        title: 'Erro',
+        description: 'Não foi possível atualizar o pedido.',
         variant: 'destructive',
       });
     }
@@ -366,7 +377,6 @@ export default function CaregiverDashboard() {
   const closedHelpRequests = helpRequests.filter(
     (r) => r.status === 'answered' || r.status === 'closed',
   );
-  
   const helpRequestsByMonth = useMemo(() => {
     const months: { key: string; date: Date }[] = [];
     const now = new Date();
@@ -384,20 +394,19 @@ export default function CaregiverDashboard() {
     });
 
     return months.map(({ key, date }) => ({
-      month: date.toLocaleDateString('en-US', { month: 'short' }),
-      fullLabel: date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+      month: date.toLocaleDateString(i18n.language, { month: 'short' }),
+      fullLabel: date.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' }),
       requests: counters.get(key) ?? 0,
     }));
-  }, [helpRequests]);
-  
+  }, [helpRequests, i18n.language]);
   const monthlyChartConfig = useMemo(
     () => ({
       requests: {
-        label: 'Help Requests',
+        label: t('caregiverDash.chartRequestsLabel'),
         color: 'hsl(var(--primary))',
       },
     }),
-    [],
+    [t],
   );
 
   return (
@@ -408,12 +417,19 @@ export default function CaregiverDashboard() {
           <div className="flex flex-col items-center gap-2">
             <BuddyLogo size={isMobile ? "md" : "lg"} />
             <h2 className={`text-lg font-semibold text-muted-foreground ${isMobile ? "hidden" : ""}`}>
-              {profile?.role === 'educator' ? 'Educator Dashboard' : 'Caregiver Dashboard'}
+              {profile?.role === 'educator' ? t('caregiverDash.titleEducator') : t('caregiverDash.title')}
             </h2>
           </div>
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2">
+            <Button
+              variant="ghost" 
+              size="icon"
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
+            >
+              <LanguageToggle />
+            </Button>
             <Button
               variant="ghost" 
               size="icon"
@@ -426,15 +442,15 @@ export default function CaregiverDashboard() {
               onClick={async () => {
                 await signOut();
                 toast({ 
-                  title: 'Logged out successfully', 
-                  description: 'See you later!',
+                  title: t('auth.toast.loggedOut'), 
+                  description: t('auth.toast.seeYou'),
                   variant: 'caregiver-success',
                 });
                 navigate('/auth');
               }}
               className="rounded-xl border border-border/50 bg-background/50 hover:bg-purple-600 hover:text-white transition-all duration-300 px-4"
             >
-              Sign out
+              {t('common.logout')}
             </Button>
           </div>
 
@@ -464,7 +480,7 @@ export default function CaregiverDashboard() {
                   className="justify-start gap-3 h-12"
                 >
                   <BarChart3 className="h-5 w-5" />
-                  Overview
+                  Visão Geral
                 </Button>
                 
                 <Button
@@ -473,7 +489,7 @@ export default function CaregiverDashboard() {
                   className="justify-start gap-3 h-12"
                 >
                   <GraduationCap className="h-5 w-5" />
-                  My Students
+                  Meus Alunos
                 </Button>
                 
                 <div className="border-t pt-4 mt-4 space-y-2">
@@ -481,7 +497,16 @@ export default function CaregiverDashboard() {
                     <ThemeToggle trigger={
                       <div className="flex items-center gap-3 w-full">
                         <div className="h-5 w-5 flex items-center justify-center">🌙</div>
-                        <span>Theme</span>
+                        <span>Tema</span>
+                      </div>
+                    } />
+                  </div>
+                  
+                  <div className="flex items-center gap-3 px-3 py-2">
+                    <LanguageToggle trigger={
+                      <div className="flex items-center gap-3 w-full">
+                        <div className="h-5 w-5 flex items-center justify-center">🌐</div>
+                        <span>Idioma</span>
                       </div>
                     } />
                   </div>
@@ -491,16 +516,16 @@ export default function CaregiverDashboard() {
                     onClick={async () => {
                       await signOut();
                       toast({ 
-                        title: 'Logged out successfully', 
-                        description: 'See you later!',
+                        title: t('auth.toast.loggedOut'), 
+                        description: t('auth.toast.seeYou'),
                         variant: 'caregiver-success',
                       });
                       navigate('/auth');
                     }}
-                    className="justify-start gap-3 h-12 w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+                    className="justify-start gap-3 h-12 w-full text-destructive hover:text-destructive"
                   >
-                    <div className="h-5 w-5 flex items-center justify-center">👋</div>
-                    Sign out
+                    <XCircle className="h-5 w-5" />
+                    {t('common.logout')}
                   </Button>
                 </div>
               </div>
@@ -508,117 +533,146 @@ export default function CaregiverDashboard() {
           </Sheet>
         </div>
 
-        {/* Welcome Section for Desktop */}
-        <div className="text-center mb-8 hidden md:block">
-          <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-            Hello, {profile?.username}!
-          </h1>
-          <p className="text-xl text-muted-foreground">Welcome to your dashboard</p>
-        </div>
+        <div className="max-w-6xl mx-auto">
+          {/* Welcome Section - Centered */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">
+              {t('caregiverDash.headerHello', { name: profile?.username })}
+            </h1>
+            <p className="text-xl text-muted-foreground">{t('caregiverDash.subtitle')}</p>
+          </div>
 
-        {/* Quick Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="p-6 bg-gradient-card shadow-medium">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Connected Students</p>
-                <p className="text-3xl font-bold text-success">{activeConnections.length}</p>
+          {/* Desktop Layout */}
+          <div className={`grid lg:grid-cols-2 gap-8 ${isMobile ? 'hidden' : ''}`}>
+            {/* Stats Overview */}
+            <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-xl font-bold mb-2">Visão Geral</h2>
+                <p className="text-muted-foreground text-sm">Estatísticas dos seus alunos</p>
               </div>
-              <Users className="h-8 w-8 text-success" />
-            </div>
-          </Card>
-          
-          <Card className="p-6 bg-gradient-card shadow-medium">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Open Requests</p>
-                <p className="text-3xl font-bold text-warning">{openHelpRequests.length}</p>
-              </div>
-              <AlertTriangle className="h-8 w-8 text-warning" />
-            </div>
-          </Card>
-          
-          <Card className="p-6 bg-gradient-card shadow-medium">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Resolved Requests</p>
-                <p className="text-3xl font-bold text-primary">{closedHelpRequests.length}</p>
-              </div>
-              <CheckCircle className="h-8 w-8 text-primary" />
-            </div>
-          </Card>
-        </div>
 
-        {/* Chart Section */}
-        <Card className="p-6 bg-gradient-card shadow-medium mb-8">
-          <h3 className="text-lg font-semibold mb-4">Help Requests Per Month</h3>
-          <ChartContainer config={monthlyChartConfig} className="h-64">
-            <BarChart data={helpRequestsByMonth}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="requests" fill="var(--color-requests)" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ChartContainer>
-        </Card>
-
-        {/* Desktop Layout */}
-        <div className="hidden md:grid md:grid-cols-2 gap-8">
-          {/* Help Requests Column */}
-          <div>
-            <Card className="p-6 bg-gradient-card shadow-medium">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">Help Requests</h2>
-                <Badge variant="destructive" className="px-3 py-1">
-                  Open: {openHelpRequests.length}
-                </Badge>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                <div className="text-3xl font-bold text-primary">{activeConnections.length}</div>
+                <div className="text-sm text-muted-foreground">
+                  {t('caregiverDash.statConnected')}
+                </div>
               </div>
-              
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {openHelpRequests.length === 0 ? (
+              <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                <div className="text-3xl font-bold text-warning">{openHelpRequests.length}</div>
+                <div className="text-sm text-muted-foreground">
+                  {t('caregiverDash.statOpenRequests')}
+                </div>
+              </div>
+              <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                <div className="text-3xl font-bold text-emerald-500">
+                  {closedHelpRequests.length}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {t('caregiverDash.statClosedRequests')}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold mb-4">
+                {t('caregiverDash.requestsPerMonth')}
+              </h3>
+              <ChartContainer config={monthlyChartConfig} className="w-full h-64">
+                <BarChart data={helpRequestsByMonth}>
+                  <CartesianGrid vertical={false} strokeDasharray="4 4" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                  <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                  <ChartTooltip content={<ChartTooltipContent labelKey="fullLabel" />} />
+                  <Bar dataKey="requests" fill="var(--color-requests)" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ChartContainer>
+            </div>
+            </Card>
+
+            {/* Help Requests */}
+            <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
+              <div className="flex items-center gap-3 mb-6">
+                <AlertTriangle className="h-6 w-6 text-warning" />
+                <h2 className="text-xl font-bold">{t('caregiverDash.helpRequests')}</h2>
+                {openHelpRequests.length > 0 && (
+                  <Badge variant="destructive">
+                    {t('caregiverDash.openCount', { count: openHelpRequests.length })}
+                  </Badge>
+                )}
+              </div>
+
+              <div className="space-y-4 max-h-[32rem] overflow-y-auto">
+                {helpRequests.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-muted-foreground">No pending help requests</p>
+                    <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">{t('caregiverDash.emptyHelp')}</p>
                   </div>
                 ) : (
-                  openHelpRequests.map((request) => (
-                    <div key={request.id} className="p-4 bg-background/50 rounded-lg border border-border">
+                  helpRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className="p-4 bg-background/50 rounded-lg border border-border"
+                    >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-2">
-                            <span className="text-lg">{getUrgencyEmoji(request.urgency || 'ok')}</span>
-                            <div>
-                              <p className="font-medium text-sm">
-                                {request.student_profile?.username ||
-                                'Student'}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {new Date(request.created_at).toLocaleString('en-US')}
-                              </p>
-                            </div>
+                          <span className="text-lg">
+                            {getUrgencyEmoji(request.urgency || 'ok')}
+                          </span>
+                          <div>
+                            <h4 className="font-semibold">
+                              {request.student_profile?.username ||
+                                t('caregiverDash.studentFallback')}
+                            </h4>
+                            <p className="text-sm text-muted-foreground">
+                              {new Date(request.created_at).toLocaleString(i18n.language)}
+                            </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="destructive" className="text-xs">
-                            <Clock className="h-3 w-3 mr-1" />
-                            Waiting
-                          </Badge>
-                        </div>
+                        <Badge variant={getStatusColor(request.status || 'open')}>
+                          {request.status === 'open' && (
+                            <>
+                              <Clock className="h-3 w-3 mr-1" />
+                              {t('studentDash.status.waiting')}
+                            </>
+                          )}
+                          {request.status === 'answered' && (
+                            <>
+                              <CheckCircle className="h-3 w-3 mr-1" />
+                              {t('studentDash.status.answered')}
+                            </>
+                          )}
+                          {request.status === 'closed' && (
+                            <>
+                              <XCircle className="h-3 w-3 mr-1" />
+                              {t('studentDash.status.closed')}
+                            </>
+                          )}
+                        </Badge>
                       </div>
+
                       {request.message && (
-                        <p className="text-sm text-muted-foreground mb-3 p-2 bg-muted/50 rounded">
-                          {request.message}
+                        <p className="text-sm mb-3 p-3 bg-background rounded border border-border">
+                          "{request.message}"
                         </p>
                       )}
-                      <div className="flex gap-2 justify-end">
-                        <Button
-                          size="sm"
-                          onClick={() => handleHelpRequestAction(request.id, 'answered')}
-                          className="text-xs"
-                        >
-                          Mark as Complete
-                        </Button>
-                      </div>
+
+                      {request.status === 'open' && (
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="success"
+                            onClick={() => handleHelpRequestAction(request.id, 'closed')}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            {t('caregiverDash.finish')}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   ))
                 )}
@@ -626,130 +680,318 @@ export default function CaregiverDashboard() {
             </Card>
           </div>
 
-          {/* Students Column */}
-          <div>
-            <Card className="p-6 bg-gradient-card shadow-medium">
-              <h2 className="text-xl font-bold mb-4">My Students</h2>
-              
+          {/* Mobile Help Requests */}
+          {isMobile && (
+            <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
+              <div className="flex items-center gap-3 mb-6">
+                <AlertTriangle className="h-6 w-6 text-warning" />
+                <h2 className="text-lg font-bold">{t('caregiverDash.helpRequests')}</h2>
+                {openHelpRequests.length > 0 && (
+                  <Badge variant="destructive">
+                    {openHelpRequests.length}
+                  </Badge>
+                )}
+              </div>
+
+              <div className="space-y-3 max-h-[20rem] overflow-y-auto">
+                {helpRequests.length === 0 ? (
+                  <div className="text-center py-6">
+                    <MessageSquare className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground text-sm">{t('caregiverDash.emptyHelp')}</p>
+                  </div>
+                ) : (
+                  helpRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className="p-3 bg-background/50 rounded-lg border border-border"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">
+                            {getUrgencyEmoji(request.urgency || 'ok')}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-medium text-sm truncate">
+                              {request.student_profile?.username ||
+                                t('caregiverDash.studentFallback')}
+                            </h4>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(request.created_at).toLocaleString(i18n.language)}
+                            </p>
+                          </div>
+                        </div>
+                        <Badge variant={getStatusColor(request.status || 'open')} className="text-xs">
+                          {request.status === 'open' && t('studentDash.status.waiting')}
+                          {request.status === 'answered' && t('studentDash.status.answered')}
+                          {request.status === 'closed' && t('studentDash.status.closed')}
+                        </Badge>
+                      </div>
+
+                      {request.message && (
+                        <p className="text-xs mb-2 p-2 bg-background rounded border border-border line-clamp-2">
+                          "{request.message}"
+                        </p>
+                      )}
+
+                      {request.status === 'open' && (
+                        <Button
+                          size="sm"
+                          variant="success"
+                          onClick={() => handleHelpRequestAction(request.id, 'closed')}
+                          className="w-full text-xs h-8"
+                        >
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          {t('caregiverDash.finish')}
+                        </Button>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </Card>
+          )}
+
+          {/* Meus Alunos - Desktop Only */}
+          {!isMobile && (
+            <Card className="mt-8 p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
+              <div className="flex items-center gap-3 mb-6">
+                <Users className="h-6 w-6 text-primary" />
+                <h2 className="text-xl font-bold">{t('caregiverDash.myStudents')}</h2>
+              </div>
+
               {activeConnections.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-muted-foreground">No connected students yet</p>
+                  <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">{t('caregiverDash.noStudents')}</p>
                   <p className="text-sm text-muted-foreground mt-2">
-                    Use the connect code to add students
+                    {t('caregiverDash.useCodeToConnect')}
                   </p>
                 </div>
               ) : (
-                <div className="space-y-4 max-h-96 overflow-y-auto">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {activeConnections.map((connection) => (
-                    <div key={connection.id} className="flex items-center gap-4 p-4 bg-background/50 rounded-lg border border-border">
-                      <StudentAvatar
-                        imageUrl={connection.thrive_sprite?.image_url}
-                        seed={connection.thrive_sprite ? (connection.thrive_sprite.options as any)?.seed : undefined}
-                        style={connection.thrive_sprite ? (connection.thrive_sprite.options as any)?.style : undefined}
-                        size={48}
-                        className="border-2 border-success rounded-full"
-                      />
-                      <div className="flex-1">
-                        <h4 className="font-medium text-sm">
-                          {connection.student_profile?.username ||
-                            'Student'}
-                        </h4>
-                        <p className="text-xs text-muted-foreground">
-                          Connected on {new Date(connection.created_at).toLocaleDateString('en-US')}
-                        </p>
+                    <div
+                      key={connection.id}
+                      className="p-4 bg-background/50 rounded-lg border border-border hover:shadow-soft transition-all"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <StudentAvatar
+                          imageUrl={connection.thrive_sprite?.image_url}
+                          seed={
+                            connection.thrive_sprite
+                              ? (connection.thrive_sprite.options as any)?.seed
+                              : undefined
+                          }
+                          style={
+                            connection.thrive_sprite
+                              ? (connection.thrive_sprite.options as any)?.style
+                              : undefined
+                          }
+                          size={48}
+                          className="border-2 border-primary/20"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-foreground">
+                            {connection.student_profile?.username ||
+                              t('caregiverDash.studentFallback')}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {t('caregiverDash.connectedOn', {
+                              date: new Date(connection.created_at).toLocaleDateString(i18n.language),
+                            })}
+                          </p>
+                        </div>
+                        <Badge variant="secondary" className="text-xs">
+                          <Activity className="h-3 w-3 mr-1" />
+                          {t('caregiverDash.active')}
+                        </Badge>
                       </div>
-                      <Badge variant="secondary" className="text-xs">
-                        Active
-                      </Badge>
                     </div>
                   ))}
                 </div>
               )}
             </Card>
-          </div>
-        </div>
+          )}
 
-        {/* Mobile Help Requests Modal */}
-        <Dialog open={overviewModalOpen} onOpenChange={setOverviewModalOpen}>
-          <DialogContent className="max-w-md max-h-[80vh]">
-            <DialogHeader>
-              <DialogTitle>Help Requests</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-3 max-h-96 overflow-y-auto">
-              {openHelpRequests.length === 0 ? (
-                <p className="text-muted-foreground text-center py-4">No pending requests</p>
-              ) : (
-                openHelpRequests.map((request) => (
-                  <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
-                        <div>
-                          <p className="font-medium text-sm">
-                            {request.student_profile?.username || 'Student'}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(request.created_at).toLocaleString('en-US')}
-                          </p>
+          {/* Connection Code Card */}
+          {profile?.caregiver_code && (
+            <Card className={`mt-6 p-4 ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg`}>
+              <div className={`${isMobile ? 'flex flex-col gap-4' : 'flex items-center justify-between'}`}>
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-primary/20 rounded-xl">
+                    <UserPlus className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className={isMobile ? 'flex-1' : ''}>
+                    <h3 className={`font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}>
+                      {t('caregiverDash.connectionCode')}
+                    </h3>
+                    <p className={`text-muted-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>
+                      Compartilhe com alunos para conectar
+                    </p>
+                  </div>
+                </div>
+                <div className={`flex items-center gap-3 ${isMobile ? 'justify-center' : ''}`}>
+                  <Badge
+                    variant="outline"
+                    className={`font-mono border-primary/50 bg-primary/5 ${
+                      isMobile ? 'text-base px-3 py-1.5' : 'text-lg px-4 py-2'
+                    }`}
+                  >
+                    {profile.caregiver_code}
+                  </Badge>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={async () => {
+                      if (!profile?.caregiver_code) return;
+                      try {
+                        await navigator.clipboard.writeText(profile.caregiver_code);
+                        setCopyStatus('copied');
+                        toast({
+                          title: t('caregiverDash.copySuccessTitle'),
+                          description: t('caregiverDash.copySuccessDesc'),
+                          variant: 'caregiver-success',
+                        });
+                      } catch (error) {
+                        console.error('Erro ao copiar código do cuidador', error);
+                        toast({
+                          title: t('caregiverDash.copyErrorTitle'),
+                          description: t('caregiverDash.copyErrorDesc'),
+                          variant: 'destructive',
+                        });
+                      }
+                    }}
+                    className="h-9 w-9 p-0 border border-primary/40 bg-white/5 hover:bg-primary/10 hover:border-primary/60 transition-colors"
+                  >
+                    {copyStatus === 'copied' ? (
+                      <Check className="h-5 w-5 text-success" />
+                    ) : (
+                      <Copy className="h-5 w-5 text-primary" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* Overview Modal */}
+          <Dialog open={overviewModalOpen} onOpenChange={setOverviewModalOpen}>
+            <DialogContent className="max-w-sm mx-auto max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Visão Geral
+                </DialogTitle>
+              </DialogHeader>
+              
+              <div className="space-y-4 py-4">
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
+                    <div className="text-2xl font-bold text-primary">{activeConnections.length}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {t('caregiverDash.statConnected')}
+                    </div>
+                  </div>
+                  <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
+                    <div className="text-2xl font-bold text-warning">{openHelpRequests.length}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {t('caregiverDash.statOpenRequests')}
+                    </div>
+                  </div>
+                  <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
+                    <div className="text-2xl font-bold text-emerald-500">
+                      {closedHelpRequests.length}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {t('caregiverDash.statClosedRequests')}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-semibold mb-3">
+                    {t('caregiverDash.requestsPerMonth')}
+                  </h3>
+                  <ChartContainer config={monthlyChartConfig} className="w-full h-48">
+                    <BarChart data={helpRequestsByMonth}>
+                      <CartesianGrid vertical={false} strokeDasharray="4 4" />
+                      <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                      <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                      <ChartTooltip content={<ChartTooltipContent labelKey="fullLabel" />} />
+                      <Bar dataKey="requests" fill="var(--color-requests)" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ChartContainer>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Students Modal */}
+          <Dialog open={studentsModalOpen} onOpenChange={setStudentsModalOpen}>
+            <DialogContent className="max-w-sm mx-auto max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <GraduationCap className="h-5 w-5" />
+                  Meus Alunos
+                </DialogTitle>
+              </DialogHeader>
+              
+              <div className="py-4">
+                {activeConnections.length === 0 ? (
+                  <div className="text-center py-6">
+                    <Users className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground text-sm">{t('caregiverDash.noStudents')}</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {t('caregiverDash.useCodeToConnect')}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {activeConnections.map((connection) => (
+                      <div
+                        key={connection.id}
+                        className="p-3 bg-background/50 rounded-lg border border-border"
+                      >
+                        <div className="flex items-center gap-3">
+                          <StudentAvatar
+                            imageUrl={connection.thrive_sprite?.image_url}
+                            seed={
+                              connection.thrive_sprite
+                                ? (connection.thrive_sprite.options as any)?.seed
+                                : undefined
+                            }
+                            style={
+                              connection.thrive_sprite
+                                ? (connection.thrive_sprite.options as any)?.style
+                                : undefined
+                            }
+                            size={36}
+                            className="border-2 border-primary/20"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-medium text-sm truncate">
+                              {connection.student_profile?.username ||
+                                t('caregiverDash.studentFallback')}
+                            </h3>
+                            <p className="text-xs text-muted-foreground">
+                              {t('caregiverDash.connectedOn', {
+                                date: new Date(connection.created_at).toLocaleDateString(i18n.language),
+                              })}
+                            </p>
+                          </div>
+                          <Badge variant="secondary" className="text-xs px-2 py-1">
+                            <Activity className="h-2 w-2 mr-1" />
+                            {t('caregiverDash.active')}
+                          </Badge>
                         </div>
                       </div>
-                      <div className="text-xs">
-                        {request.status === 'open' && 'Waiting'}
-                        {request.status === 'answered' && 'Answered'}
-                        {request.status === 'closed' && 'Closed'}
-                      </div>
-                    </div>
-                    {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
-                    <div className="flex gap-2 justify-end mt-2">
-                      <Button
-                        size="sm"
-                        onClick={() => handleHelpRequestAction(request.id, 'answered')}
-                        className="text-xs"
-                      >
-                        Complete
-                      </Button>
-                    </div>
+                    ))}
                   </div>
-                ))
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        {/* Mobile Students Modal */}
-        <Dialog open={studentsModalOpen} onOpenChange={setStudentsModalOpen}>
-          <DialogContent className="max-w-md max-h-[80vh]">
-            <DialogHeader>
-              <DialogTitle>My Students</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-3 max-h-96 overflow-y-auto">
-              {activeConnections.length === 0 ? (
-                <p className="text-muted-foreground text-center py-4">No students connected</p>
-              ) : (
-                activeConnections.map((connection) => (
-                  <div key={connection.id} className="flex items-center gap-3 p-3 bg-background/50 rounded-lg border border-border">
-                    <StudentAvatar
-                      imageUrl={connection.thrive_sprite?.image_url}
-                      seed={connection.thrive_sprite ? (connection.thrive_sprite.options as any)?.seed : undefined}
-                      style={connection.thrive_sprite ? (connection.thrive_sprite.options as any)?.style : undefined}
-                      size={40}
-                      className="border-2 border-success rounded-full"
-                    />
-                    <div className="flex-1">
-                      <h4 className="font-medium text-sm">
-                        {connection.student_profile?.username || 'Student'}
-                      </h4>
-                      <p className="text-xs text-muted-foreground">
-                        Connected {new Date(connection.created_at).toLocaleDateString('en-US')}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
-
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </div>
   );
