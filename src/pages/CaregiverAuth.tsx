@@ -35,7 +35,7 @@ export default function CaregiverAuth() {
     {
       id: 'caregiver',
       title: 'Caregiver',
-      description: 'Support and monitor student well-being',
+      description: "Support and monitor your child's well-being",
       icon: Users,
     },
     {
@@ -126,17 +126,17 @@ export default function CaregiverAuth() {
           <Card className="p-8 bg-gradient-card shadow-medium">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2 bg-gradient-hero bg-clip-text text-transparent">
-                {isSignUp ? 'Caregiver/Educator Sign Up' : 'Caregiver/Educator Sign In'}
+                {isSignUp ? 'Caregiver or Educator Sign Up' : 'Caregiver or Educator Sign In'}
               </h1>
               <p className="text-muted-foreground">
-                {isSignUp ? 'Join BUDDY as a caregiver or educator' : 'Access your caregiver/educator dashboard'}
+                {isSignUp ? 'Join BUDDY as a Caregiver or Educator' : 'Access your Caregiver or Educator Dashboard'}
               </p>
             </div>
 
             {/* Role Selection for Sign Up */}
             {isSignUp && (
               <div className="mb-6">
-                <Label className="text-sm font-medium mb-4 block">How will you use BUDDY?</Label>
+                <Label className="text-sm font-medium mb-4 block">How will you use ThriveSprite?</Label>
                 <div className="grid gap-3">
                   {roles.map((role) => (
                     <RoleCard
@@ -210,7 +210,7 @@ export default function CaregiverAuth() {
               </div>
 
               <Button type="submit" variant="hero" size="lg" disabled={loading} className="w-full">
-                {loading ? 'Processing...' : isSignUp ? 'Sign Up as Caregiver/Educator' : 'Sign In'}
+                {loading ? 'Processing...' : isSignUp ? 'Sign Up as Caregiver or Educator' : 'Sign In'}
               </Button>
             </form>
 
@@ -249,7 +249,7 @@ export default function CaregiverAuth() {
                 onClick={() => navigate('/')}
                 className="text-muted-foreground hover:underline text-sm"
               >
-                Back to student view
+                Back to Student View
               </button>
             </div>
           </Card>
