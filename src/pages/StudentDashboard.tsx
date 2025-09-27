@@ -115,11 +115,10 @@ function MobileMenu({
             }
           />
 
-          {/* Idioma */}
-          <LanguageToggle
+          <ThemeToggle
             trigger={
               <Button variant="ghost" size="icon" className="transition-colors duration-200">
-                <span className="font-semibold">{i18n.language.startsWith("pt") ? "PT" : "EN"}</span>
+                🌙
               </Button>
             }
           />
@@ -476,10 +475,10 @@ export default function StudentDashboard() {
               }
             />
 
-            <LanguageToggle
+            <ThemeToggle
               trigger={
                 <Button variant="ghost" size="icon" className="transition-colors duration-200">
-                  <span className="font-semibold">{i18n.language.startsWith('pt') ? 'PT' : 'EN'}</span>
+                  🌙
                 </Button>
               }
             />

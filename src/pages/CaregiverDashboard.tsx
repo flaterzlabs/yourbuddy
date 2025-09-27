@@ -28,7 +28,6 @@ import {
   GraduationCap,
 } from 'lucide-react';
 import { Database } from '@/integrations/supabase/types';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
@@ -44,7 +43,6 @@ type HelpRequest = Database['public']['Tables']['help_requests']['Row'] & {
 };
 
 export default function CaregiverDashboard() {
-  const { t, i18n } = useTranslation();
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -175,14 +173,14 @@ export default function CaregiverDashboard() {
       .channel('help-requests-broadcast')
       .on('broadcast', { event: 'new-help' }, (e: any) => {
         const rec = e?.payload;
-        if (!rec || !activeIds.has(rec.student_id)) return;
+      if (!rec || !activeIds.has(rec.student_id)) return;
         const conn = connections.find((c) => c.student_id === rec.student_id);
-        const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
+        const name = conn?.student_profile?.username || 'Unknown Student';
         const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
         // === Alteração: Adicionado viewportId ===
         toast({
-          title: t('caregiverDash.newHelpTitle'),
-          description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
+          title: 'New Help Request',
+          description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
           variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
         });
         fetchHelpRequests();
@@ -215,12 +213,11 @@ export default function CaregiverDashboard() {
 
           if (payload.eventType === 'INSERT') {
             const conn = connections.find((c) => c.student_id === rec.student_id);
-            const name = conn?.student_profile?.username || t('caregiverDash.studentFallback');
+            const name = conn?.student_profile?.username || 'Unknown Student';
             const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
-            // === Alteração: Adicionado viewportId ===
             toast({
-              title: t('caregiverDash.newHelpTitle'),
-              description: `${getUrgencyEmoji(rec.urgency || 'ok')} ${t('caregiverDash.newHelpFrom', { name })}`,
+              title: 'New Help Request',
+              description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
               variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
             });
           }
@@ -393,19 +390,19 @@ export default function CaregiverDashboard() {
     });
 
     return months.map(({ key, date }) => ({
-      month: date.toLocaleDateString(i18n.language, { month: 'short' }),
-      fullLabel: date.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' }),
+      month: date.toLocaleDateString('en-US', { month: 'short' }),
+      fullLabel: date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
       requests: counters.get(key) ?? 0,
     }));
-  }, [helpRequests, i18n.language]);
+  }, [helpRequests]);
   const monthlyChartConfig = useMemo(
     () => ({
       requests: {
-        label: t('caregiverDash.chartRequestsLabel'),
+        label: 'Requests',
         color: 'hsl(var(--primary))',
       },
     }),
-    [t],
+    [],
   );
 
   return (
@@ -416,7 +413,7 @@ export default function CaregiverDashboard() {
           <div className="flex flex-col items-center gap-2">
             <BuddyLogo size={isMobile ? "md" : "lg"} />
             <h2 className={`text-lg font-semibold text-muted-foreground ${isMobile ? "hidden" : ""}`}>
-              {profile?.role === 'educator' ? t('caregiverDash.titleEducator') : t('caregiverDash.title')}
+              {profile?.role === 'educator' ? 'Educator Dashboard' : 'Caregiver Dashboard'}
             </h2>
           </div>
           
@@ -434,15 +431,15 @@ export default function CaregiverDashboard() {
               onClick={async () => {
                 await signOut();
                 toast({ 
-                  title: t('auth.toast.loggedOut'), 
-                  description: t('auth.toast.seeYou'),
+                  title: 'Signed out successfully', 
+                  description: 'See you next time!',
                   variant: 'caregiver-success',
                 });
                 navigate('/auth');
               }}
               className="rounded-xl border border-border/50 bg-background/50 hover:bg-purple-600 hover:text-white transition-all duration-300 px-4"
             >
-              {t('common.logout')}
+              Logout
             </Button>
           </div>
 
@@ -484,21 +481,12 @@ export default function CaregiverDashboard() {
                   Meus Alunos
                 </Button>
                 
-                <div className="border-t pt-4 mt-4 space-y-2">
+                  <div className="border-t pt-4 mt-4 space-y-2">
                   <div className="flex items-center gap-3 px-3 py-2">
                     <ThemeToggle trigger={
                       <div className="flex items-center gap-3 w-full">
                         <div className="h-5 w-5 flex items-center justify-center">🌙</div>
-                        <span>Tema</span>
-                      </div>
-                    } />
-                  </div>
-                  
-                  <div className="flex items-center gap-3 px-3 py-2">
-                    <LanguageToggle trigger={
-                      <div className="flex items-center gap-3 w-full">
-                        <div className="h-5 w-5 flex items-center justify-center">🌐</div>
-                        <span>Idioma</span>
+                        <span>Theme</span>
                       </div>
                     } />
                   </div>
