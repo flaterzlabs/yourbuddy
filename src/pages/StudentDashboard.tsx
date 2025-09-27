@@ -555,10 +555,10 @@ export default function StudentDashboard() {
                     aria-label={pendingUrgency === 'ok' ? 'Cancel request' : "I'm fine – click to ask for help"}
                   >
                     <span className="text-5xl sm:text-6xl">😊</span>
-                    {pendingUrgency === 'ok' && (I'm fine – click to ask for help'
+                    {pendingUrgency === 'ok' && (
                       <>
                         <div className="absolute -top-1 -right-1">
-                          <Loader2 className="h-4 w-4 animate-spin text-green/500" />
+                          <Loader2 className="h-4 w-4 animate-spin text-green-500" />
                         </div>
                       </>
                     )}
