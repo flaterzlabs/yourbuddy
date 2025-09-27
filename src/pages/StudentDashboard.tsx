@@ -5,7 +5,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
 import { StudentAvatar } from '@/components/student-avatar';
 import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';

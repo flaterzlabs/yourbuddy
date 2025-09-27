@@ -8,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
 import { toast } from '@/hooks/use-toast';
 
 export default function ResetPassword() {
@@ -141,7 +140,6 @@ export default function ResetPassword() {
         <div className="flex justify-between items-center mb-8">
           <BuddyLogo size="lg" />
           <div className="flex gap-2">
-            <LanguageToggle />
             <ThemeToggle />
           </div>
         </div>

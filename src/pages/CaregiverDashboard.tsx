@@ -5,7 +5,6 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
 import { StudentAvatar } from '@/components/student-avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
@@ -423,13 +422,6 @@ export default function CaregiverDashboard() {
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2">
-            <Button
-              variant="ghost" 
-              size="icon"
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
-            >
-              <LanguageToggle />
-            </Button>
             <Button
               variant="ghost" 
               size="icon"

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
 import { RoleCard } from '@/components/role-card';
 import { useAuth } from '@/hooks/use-auth';
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +32,6 @@ export default function Welcome() {
         <div className="flex justify-between items-center mb-12">
           <BuddyLogo size="lg" />
           <div className="flex gap-2">
-            <LanguageToggle />
             <ThemeToggle />
           </div>
         </div>

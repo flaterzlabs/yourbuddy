@@ -5,17 +5,14 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { LanguageToggle } from '@/components/language-toggle';
 import { RoleCard } from '@/components/role-card';
 import { useAuth } from '@/hooks/use-auth';
 import { toast } from '@/hooks/use-toast';
 import { User } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export default function Auth() {
-  const { t } = useTranslation();
   const [isSignUp, setIsSignUp] = useState(false);
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -48,8 +45,8 @@ export default function Auth() {
   const roles = [
     {
       id: 'student',
-      title: t('roles.student.title'),
-      description: t('roles.student.desc'),
+      title: 'Student',
+      description: 'Access learning tools and request help',
       icon: User,
     },
   ];
@@ -63,27 +60,27 @@ export default function Auth() {
         const { error } = await signUp(identifier, password, selectedRole, username);
         if (error) throw error;
 
-        toast({ title: t('auth.toast.created'), description: t('auth.toast.verify') });
+        toast({ title: 'Account created!', description: 'Please check your email to verify your account.' });
       } else {
         const { error } = await signIn(identifier, password);
         if (error) throw error;
 
-        toast({ title: t('auth.toast.logged'), description: t('auth.toast.welcome') });
+        toast({ title: 'Signed in successfully!', description: 'Welcome back to BUDDY!' });
         // Navigate immediately for better UX; ProtectedRoute will handle loading
         navigate('/dashboard');
       }
     } catch (error: any) {
-      let message = t('auth.toast.genericError');
+      let message = 'An unexpected error occurred. Please try again.';
 
       if (error.message?.includes('Invalid login credentials')) {
-        message = t('auth.toast.invalidCreds');
+        message = 'Invalid email or password. Please try again.';
       } else if (error.message?.includes('User already registered')) {
-        message = t('auth.toast.alreadyRegistered');
+        message = 'Email already registered. Try signing in instead.';
       } else if (error.message?.includes('Password should be at least')) {
-        message = t('auth.toast.weakPassword');
+        message = 'Password must be at least 6 characters long.';
       }
 
-      toast({ title: t('auth.toast.errorTitle'), description: message, variant: 'destructive' });
+      toast({ title: 'Error', description: message, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -92,8 +89,8 @@ export default function Auth() {
   const handleResetPassword = async () => {
     if (!identifier) {
       toast({
-        title: t('auth.toast.errorTitle'),
-        description: t('auth.toast.enterIdentifier'),
+        title: 'Error',
+        description: 'Please enter your email or username.',
         variant: 'destructive',
       });
       return;
@@ -105,13 +102,13 @@ export default function Auth() {
       if (error) throw error;
 
       toast({
-        title: t('auth.toast.resetSentTitle'),
-        description: t('auth.toast.resetSentDescription'),
+        title: 'Reset link sent',
+        description: 'Check your email for a password reset link.',
       });
     } catch (error: any) {
       toast({
-        title: t('auth.toast.errorTitle'),
-        description: error.message || t('auth.toast.genericError'),
+        title: 'Error',
+        description: error.message || 'An unexpected error occurred. Please try again.',
         variant: 'destructive',
       });
     } finally {
@@ -126,7 +123,6 @@ export default function Auth() {
         <div className="flex justify-between items-center mb-8">
           <BuddyLogo size="lg" />
           <div className="flex gap-2">
-            <LanguageToggle />
             <ThemeToggle />
           </div>
         </div>
@@ -136,17 +132,17 @@ export default function Auth() {
           <Card className="p-8 bg-gradient-card shadow-medium">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2 bg-gradient-hero bg-clip-text text-transparent">
-                {isSignUp ? t('auth.signup') : t('auth.login')}
+                {isSignUp ? 'Sign Up' : 'Sign In'}
               </h1>
               <p className="text-muted-foreground">
-                {isSignUp ? t('auth.joinBuddy') : t('auth.accessBuddy')}
+                {isSignUp ? 'Join BUDDY and start your journey' : 'Access your BUDDY dashboard'}
               </p>
             </div>
 
             {/* Role Selection for Sign Up */}
             {isSignUp && (
               <div className="mb-6">
-                <Label className="text-sm font-medium mb-4 block">{t('auth.howUse')}</Label>
+                <Label className="text-sm font-medium mb-4 block">How will you use BUDDY?</Label>
                 <div className="grid gap-3">
                   {roles.map((role) => (
                     <RoleCard
@@ -165,13 +161,13 @@ export default function Auth() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {isSignUp && (
                 <div>
-                  <Label htmlFor="username">{t('auth.username')}</Label>
+                  <Label htmlFor="username">Username</Label>
                   <Input
                     id="username"
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder={t('auth.usernamePlaceholder')}
+                    placeholder="Choose a username"
                     className="mt-1"
                     required
                   />
@@ -180,7 +176,7 @@ export default function Auth() {
 
               <div>
                 <Label htmlFor="identifier">
-                  {isSignUp ? t('auth.email') : t('auth.emailOrUsername')}
+                  {isSignUp ? 'Email' : 'Email or Username'}
                 </Label>
                 <Input
                   id="identifier"
@@ -188,7 +184,7 @@ export default function Auth() {
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   placeholder={
-                    isSignUp ? t('auth.emailPlaceholder') : t('auth.emailOrUsernamePlaceholder')
+                    isSignUp ? 'your.email@example.com' : 'Email or username'
                   }
                   className="mt-1"
                   required
@@ -196,20 +192,20 @@ export default function Auth() {
               </div>
 
               <div>
-                <Label htmlFor="password">{t('auth.password')}</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t('auth.passwordPlaceholder')}
+                  placeholder="Your password"
                   className="mt-1"
                   required
                 />
               </div>
 
               <Button type="submit" variant="hero" size="lg" disabled={loading} className="w-full">
-                {loading ? t('auth.processing') : isSignUp ? t('auth.signup') : t('auth.login')}
+                {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Sign In'}
               </Button>
             </form>
 
@@ -221,7 +217,7 @@ export default function Auth() {
                   className="text-sm text-primary hover:underline"
                   disabled={resetting}
                 >
-                  {resetting ? t('auth.resetting') : t('auth.forgotPassword')}
+                  {resetting ? 'Sending...' : 'Forgot password?'}
                 </button>
               </div>
             )}
@@ -238,7 +234,7 @@ export default function Auth() {
                 }}
                 className="text-primary hover:underline"
               >
-                {isSignUp ? t('auth.toggleToLogin') : t('auth.toggleToSignup')}
+                {isSignUp ? 'Already have an account? Sign in' : 'Need an account? Sign up'}
               </button>
             </div>
 
@@ -248,7 +244,7 @@ export default function Auth() {
                 onClick={() => navigate('/')}
                 className="text-muted-foreground hover:underline text-sm"
               >
-                {t('auth.backToHome')}
+                Back to home
               </button>
             </div>
           </Card>
