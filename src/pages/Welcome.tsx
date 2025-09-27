@@ -51,7 +51,6 @@ export default function Welcome() {
      <RoleCard
        title="Student"
        description="I am a student and I want to ask for help when I need it"
-       className="text-base"
        icon={User}
        selected={true}
        onClick={() => {}}
@@ -88,7 +87,7 @@ export default function Welcome() {
             {/* Link for Parents/Educators */}
             <button
               onClick={() => navigate('/caregiver-auth')}
-              className="text-primary hover:underline text-base font-medium mt-4"
+              className="text-primary hover:underline text-sm font-medium mt-4"
             >
               Are you a parent or educator? Click here
             </button>
