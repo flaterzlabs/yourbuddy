@@ -38,10 +38,10 @@ export default function Welcome() {
         <div className="max-w-sm sm:max-w-2xl md:max-w-4xl mx-auto text-center">
           <div className="mb-8 md:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-hero bg-clip-text text-transparent">
-              Welcome to BUDDY
+              Welcome to ThriveSprite
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-lg md:max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
-              Your digital companion for well-being
+              A special communication platform for neurodivergent children, connecting students with their caregivers and educators in a simple and caring way.
             </p>
           </div>
 
@@ -50,7 +50,7 @@ export default function Welcome() {
    <div className="max-w-xs sm:max-w-sm mx-auto">
      <RoleCard
        title="Student"
-       description="Access learning tools and request help"
+       description="I am a student and I want to ask for help when I need it"
        icon={User}
        selected={true}
        onClick={() => {}}
@@ -100,7 +100,7 @@ export default function Welcome() {
                 <User className="h-6 w-6 text-success" />
               </div>
               <h3 className="font-semibold mb-2">Personal Avatar</h3>
-              <p className="text-sm text-muted-foreground">Choose and customize your unique avatar</p>
+              <p className="text-sm text-muted-foreground">Choose your unique avatar</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-warning/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
