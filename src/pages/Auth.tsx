@@ -135,7 +135,7 @@ export default function Auth() {
                 {isSignUp ? 'Sign Up' : 'Sign In'}
               </h1>
               <p className="text-muted-foreground">
-                {isSignUp ? 'Join BUDDY and start your journey' : 'Access your BUDDY dashboard'}
+                {isSignUp ? 'Join ThriveSprite and start your journey' : 'Access your ThriveSprite dashboard'}
               </p>
             </div>
 
