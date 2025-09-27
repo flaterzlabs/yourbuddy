@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
+import { useTranslation } from 'react-i18next';
 import Welcome from './pages/Welcome';
 import Auth from './pages/Auth';
 import CaregiverAuth from './pages/CaregiverAuth';
@@ -18,13 +19,14 @@ const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
+  const { t } = useTranslation();
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">{t('general.loading')}</p>
         </div>
       </div>
     );
@@ -39,13 +41,14 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function DashboardRouter() {
   const { profile, thriveSprite, loading } = useAuth();
+  const { t } = useTranslation();
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading profile...</p>
+          <p className="text-muted-foreground">{t('general.loadingProfile')}</p>
         </div>
       </div>
     );
@@ -65,50 +68,48 @@ function DashboardRouter() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-        <p className="text-muted-foreground">Loading profile...</p>
+        <p className="text-muted-foreground">{t('general.loadingProfile')}</p>
       </div>
     </div>
   );
 }
 
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-        <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter basename={import.meta.env.BASE_URL}>
-              <Routes>
-                <Route path="/" element={<Welcome />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/caregiver-auth" element={<CaregiverAuth />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route
-                  path="/avatar-selection"
-                  element={
-                    <ProtectedRoute>
-                      <AvatarSelection />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <DashboardRouter />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <Routes>
+              <Route path="/" element={<Welcome />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/caregiver-auth" element={<CaregiverAuth />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route
+                path="/avatar-selection"
+                element={
+                  <ProtectedRoute>
+                    <AvatarSelection />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardRouter />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </ThemeProvider>
+  </QueryClientProvider>
+);
 
 export default App;
