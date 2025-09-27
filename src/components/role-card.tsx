@@ -32,7 +32,7 @@ export function RoleCard({ title, description, icon: Icon, onClick, selected }: 
       <h3 className={`text-xl font-bold mb-2 transition-all duration-300 ease-in-out ${selected ? 'text-white' : 'text-foreground'}`}>
         {title}
       </h3>
-      <p className={`text-sm transition-all duration-300 ease-in-out ${selected ? 'text-white/80' : 'text-muted-foreground'}`}>
+      <p className={`text-base transition-all duration-300 ease-in-out ${selected ? 'text-white/80' : 'text-muted-foreground'}`}>
         {description}
       </p>
     </div>
