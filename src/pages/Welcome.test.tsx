@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
-import { renderWithI18n } from '@/test/test-utils';
+import { render } from '@testing-library/react';
 import Welcome from './Welcome';
 
 // Mocks simples para isolar o componente
@@ -28,8 +28,8 @@ beforeEach(() => {
 
 describe('Welcome page', () => {
   it('renders and navigates to auth on Get started', () => {
-    renderWithI18n(<Welcome />);
-    const btn = screen.getByRole('button', { name: /get started|começar/i });
+    render(<Welcome />);
+    const btn = screen.getByRole('button', { name: /get started/i });
     fireEvent.click(btn);
     expect(navigateMock).toHaveBeenCalledWith('/auth', expect.any(Object));
   });
