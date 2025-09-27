@@ -129,7 +129,7 @@ export default function CaregiverAuth() {
                 {isSignUp ? 'Caregiver or Educator Sign Up' : 'Caregiver or Educator Sign In'}
               </h1>
               <p className="text-muted-foreground">
-                {isSignUp ? 'Join BUDDY as a Caregiver or Educator' : 'Access your Caregiver or Educator Dashboard'}
+                {isSignUp ? 'Join ThriveSprite as a Caregiver or Educator' : 'Access your Caregiver or Educator Dashboard'}
               </p>
             </div>
 
@@ -162,7 +162,7 @@ export default function CaregiverAuth() {
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Choose a username"
+                      placeholder="Choose a Username"
                       className="mt-1"
                       required
                     />
