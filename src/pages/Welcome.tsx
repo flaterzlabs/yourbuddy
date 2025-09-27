@@ -50,7 +50,7 @@ export default function Welcome() {
    <div className="max-w-xs sm:max-w-sm mx-auto">
      <RoleCard
        title="Student"
-       description="I am a student and I want to ask for help when I need it"
+       description="I am a student who wants to communicate better"
        icon={User}
        selected={true}
        onClick={() => {}}
