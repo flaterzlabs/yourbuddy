@@ -508,7 +508,7 @@ export default function StudentDashboard() {
 
 
           {/* Help Request Form */}
-        <Card className="p-8 sm:p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
+        <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mx-auto mb-4">
                 <StudentAvatar
