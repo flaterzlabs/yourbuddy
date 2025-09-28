@@ -490,8 +490,8 @@ export default function StudentDashboard() {
                     {pendingUrgency === 'urgent' && <>
                         <div className="absolute -top-3 -right-3">
                           <Loader2 
-                            className="h-6 w-6 animate-spin text-red-500 drop-shadow-[0_0_8px_rgba(34,197,94,0.9)] drop-shadow-[0_0_12px_rgba(34,197,94,0.7)]"
-                            strokeWidth={4} 
+                            className="h-6 w-6 animate-spin text-red-500"
+                            strokeWidth={3} 
                             />
                         </div>
                       </>}
