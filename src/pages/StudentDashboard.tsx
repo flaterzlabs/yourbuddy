@@ -344,7 +344,7 @@ export default function StudentDashboard() {
        {/* Header */}
       <div className="flex justify-between items-center mb-8">
   {/* Logo e título - visíveis apenas no desktop/tablet */}
-  <div className="hidden sm:flex flex-col items-center gap-1">
+  <div className="hidden sm:flex flex-col items-center gap-2 ">
     <BuddyLogo size="lg" />
     <h2 className="text-lg font-semibold text-muted-foreground">
       {profile?.role === 'student' ? 'Student Dashboard' : 'Dashboard'}
