@@ -458,7 +458,7 @@ export default function StudentDashboard() {
                       w-18 h-18 sm:w-28 sm:h-28 transition-all duration-200`} aria-label={pendingUrgency === 'ok' ? 'Cancel request' : "I'm fine – click to ask for help"}>
                     <span className="text-5xl sm:text-7xl">😊</span>
                     {pendingUrgency === 'ok' && <>
-                        <div className="absolute -top-1 -right-1">
+                        <div className="absolute -top-1 -right-2">
                           <Loader2 className="h-6 w-6 animate-spin text-green-500" />
                         </div>
                       </>}
@@ -470,7 +470,7 @@ export default function StudentDashboard() {
                       w-18 h-18 sm:w-28 sm:h-28 transition-all duration-200`} aria-label={pendingUrgency === 'attention' ? 'Cancel request' : 'Need Attention - click to ask for help'}>
                     <span className="text-5xl sm:text-7xl">😟</span>
                     {pendingUrgency === 'attention' && <>
-                        <div className="absolute -top-1 -right-1">
+                        <div className="absolute -top-3 -right-3">
                           <Loader2 className="h-6 w-6 animate-spin text-yellow-500" />
                         </div>
                       </>}
@@ -482,7 +482,7 @@ export default function StudentDashboard() {
                       w-18 h-18 sm:w-28 sm:h-28 transition-all duration-200`} aria-label={pendingUrgency === 'urgent' ? 'Cancel request' : 'Urgent - click to ask for help'}>
                     <span className="text-5xl sm:text-7xl">😭</span>
                     {pendingUrgency === 'urgent' && <>
-                        <div className="absolute -top-1 -right-1">
+                        <div className="absolute -top-2 -right-2">
                           <Loader2 className="h-6 w-6 animate-spin text-red-500" />
                         </div>
                       </>}
