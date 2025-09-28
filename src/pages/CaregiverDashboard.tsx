@@ -541,6 +541,20 @@ export default function CaregiverDashboard() {
               <h3 className="text-lg font-semibold mb-4">
                 Requests Per Month
               </h3>
+              
+              <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline">
+      {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem onClick={() => setChartPeriod('daily')}>Daily</DropdownMenuItem>
+    <DropdownMenuItem onClick={() => setChartPeriod('weekly')}>Weekly</DropdownMenuItem>
+    <DropdownMenuItem onClick={() => setChartPeriod('monthly')}>Monthly</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+              
               <ChartContainer config={monthlyChartConfig} className="w-full h-64">
                 <BarChart data={helpRequestsChartData}>
                   <CartesianGrid vertical={false} strokeDasharray="4 4" />
@@ -789,6 +803,21 @@ export default function CaregiverDashboard() {
                   <h3 className="text-sm font-semibold mb-3">
                     Requests Per Month
                   </h3>
+
+                  <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline">
+      {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem onClick={() => setChartPeriod('daily')}>Daily</DropdownMenuItem>
+    <DropdownMenuItem onClick={() => setChartPeriod('weekly')}>Weekly</DropdownMenuItem>
+    <DropdownMenuItem onClick={() => setChartPeriod('monthly')}>Monthly</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+                  
                   <ChartContainer config={monthlyChartConfig} className="w-full h-48">
                     <BarChart data={helpRequestsChartData}>
                       <CartesianGrid vertical={false} strokeDasharray="4 4" />
