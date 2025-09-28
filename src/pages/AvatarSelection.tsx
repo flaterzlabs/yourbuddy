@@ -28,7 +28,6 @@ export default function AvatarSelection() {
     'croodles',
     'croodles-neutral',
     'fun-emoji',
-    'identicon',
     'lorelei',
     'lorelei-neutral',
     'micah',
@@ -37,8 +36,6 @@ export default function AvatarSelection() {
     'personas',
     'pixel-art',
     'pixel-art-neutral',
-    'rings',
-    'shapes',
     'thumbs',
   ];
 
