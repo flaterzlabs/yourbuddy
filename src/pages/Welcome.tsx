@@ -40,10 +40,12 @@ export default function Welcome() {
         {/* Main Content */}
         <div className="max-w-sm sm:max-w-2xl md:max-w-4xl mx-auto text-center">
           <div className="mb-8 md:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-hero bg-clip-text text-transparent">
-              Welcome to ThriveSprite
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-lg md:max-w-2xl mx-auto leading-relaxed px-4 md:px-0 md:text-5xl font-extrabold">Welcome to ThriveSprite!</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-hero bg-clip-text text-transparent">WELCOME,
+Together we thrive, together we shine
+          </h1>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-lg md:max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
+              A special communication platform for neurodivergent children, connecting students with their caregivers and educators in a simple and caring way.
+            </p>
           </div>
 
           {/* Student Focus Section */}
