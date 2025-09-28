@@ -367,7 +367,7 @@ export default function StudentDashboard() {
               <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
                   <ClipboardList className="h-5 w-5" />
-                  {helpRequests.length > 0 && <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
+                  {helpRequests.length > 0 && <span className="absolute -top-1 -right-1 h-6 w-6 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
                       {helpRequests.length}
                     </span>}
                 </Button>
@@ -459,10 +459,7 @@ export default function StudentDashboard() {
                     <span className="text-5xl sm:text-7xl">😊</span>
                     {pendingUrgency === 'ok' && <>
                         <div className="absolute -top-3 -right-3">
-                          <Loader2 
-                            className="h-6 w-6 animate-spin text-green-500"
-                            strokeWidth={3} 
-                            />
+                          <Loader2 className="h-6 w-6 animate-spin text-green-500" strokeWidth={3} />
                         </div>
                       </>}
                   </button>
@@ -474,10 +471,7 @@ export default function StudentDashboard() {
                     <span className="text-5xl sm:text-7xl">😟</span>
                     {pendingUrgency === 'attention' && <>
                         <div className="absolute -top-3 -right-3">
-                          <Loader2 
-                            className="h-6 w-6 animate-spin text-yellow-500"
-                            strokeWidth={3}
-                            />
+                          <Loader2 className="h-6 w-6 animate-spin text-yellow-500" strokeWidth={3} />
                         </div>
                       </>}
                   </button>
@@ -489,10 +483,7 @@ export default function StudentDashboard() {
                     <span className="text-5xl sm:text-7xl">😭</span>
                     {pendingUrgency === 'urgent' && <>
                         <div className="absolute -top-3 -right-3">
-                          <Loader2 
-                            className="h-6 w-6 animate-spin text-red-500"
-                            strokeWidth={3} 
-                            />
+                          <Loader2 className="h-6 w-6 animate-spin text-red-500" strokeWidth={3} />
                         </div>
                       </>}
                   </button>
