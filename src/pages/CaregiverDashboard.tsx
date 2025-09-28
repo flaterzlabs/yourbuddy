@@ -325,31 +325,56 @@ export default function CaregiverDashboard() {
         date
       });
     }
-    const counters = new Map<string, number>();
+    
+    // Initialize counters for each urgency level
+    const counters = new Map<string, { ok: number; attention: number; urgent: number }>();
+    
     helpRequests.forEach(request => {
       if (!request.created_at) return;
       const created = new Date(request.created_at);
       const key = `${created.getFullYear()}-${created.getMonth()}`;
-      counters.set(key, (counters.get(key) ?? 0) + 1);
+      const urgency = request.urgency || 'ok';
+      
+      const existing = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
+      if (urgency === 'ok') existing.ok += 1;
+      else if (urgency === 'attention') existing.attention += 1;
+      else if (urgency === 'urgent') existing.urgent += 1;
+      
+      counters.set(key, existing);
     });
+    
     return months.map(({
       key,
       date
-    }) => ({
-      month: date.toLocaleDateString('en-US', {
-        month: 'short'
-      }),
-      fullLabel: date.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric'
-      }),
-      requests: counters.get(key) ?? 0
-    }));
+    }) => {
+      const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
+      return {
+        month: date.toLocaleDateString('en-US', {
+          month: 'short'
+        }),
+        fullLabel: date.toLocaleDateString('en-US', {
+          month: 'long',
+          year: 'numeric'
+        }),
+        ok: counts.ok,
+        attention: counts.attention,
+        urgent: counts.urgent,
+        total: counts.ok + counts.attention + counts.urgent
+      };
+    });
   }, [helpRequests]);
   const monthlyChartConfig = useMemo(() => ({
-    requests: {
-      label: 'Requests',
-      color: 'hsl(var(--primary))'
+    ok: {
+      label: 'Low Priority',
+      color: 'hsl(142, 76%, 36%)'
+    },
+    attention: {
+      label: 'Medium Priority',
+      color: 'hsl(43, 96%, 56%)'
+    },
+    urgent: {
+      label: 'High Priority',
+      color: 'hsl(0, 84%, 60%)'
     }
   }), []);
   return <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -487,8 +512,19 @@ export default function CaregiverDashboard() {
                   <CartesianGrid vertical={false} strokeDasharray="4 4" />
                   <XAxis dataKey="month" axisLine={false} tickLine={false} />
                   <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
-                  <ChartTooltip content={<ChartTooltipContent labelKey="fullLabel" />} />
-                  <Bar dataKey="requests" fill="var(--color-requests)" radius={[8, 8, 0, 0]} />
+                  <ChartTooltip content={<ChartTooltipContent 
+                    labelKey="fullLabel" 
+                    labelFormatter={(value) => value}
+                    formatter={(value: any, name: string) => [
+                      value,
+                      name === 'ok' ? `🟢 Low Priority` : 
+                      name === 'attention' ? `🟡 Medium Priority` : 
+                      `🔴 High Priority`
+                    ]}
+                  />} />
+                  <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" radius={[0, 0, 0, 0]} />
+                  <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" radius={[0, 0, 4, 4]} />
                 </BarChart>
               </ChartContainer>
             </div>
@@ -724,8 +760,19 @@ export default function CaregiverDashboard() {
                       <CartesianGrid vertical={false} strokeDasharray="4 4" />
                       <XAxis dataKey="month" axisLine={false} tickLine={false} />
                       <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
-                      <ChartTooltip content={<ChartTooltipContent labelKey="fullLabel" />} />
-                      <Bar dataKey="requests" fill="var(--color-requests)" radius={[4, 4, 0, 0]} />
+                      <ChartTooltip content={<ChartTooltipContent 
+                        labelKey="fullLabel" 
+                        labelFormatter={(value) => value}
+                        formatter={(value: any, name: string) => [
+                          value,
+                          name === 'ok' ? `🟢 Low Priority` : 
+                          name === 'attention' ? `🟡 Medium Priority` : 
+                          `🔴 High Priority`
+                        ]}
+                      />} />
+                      <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" radius={[2, 2, 0, 0]} />
+                      <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" radius={[0, 0, 0, 0]} />
+                      <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" radius={[0, 0, 2, 2]} />
                     </BarChart>
                   </ChartContainer>
                 </div>
