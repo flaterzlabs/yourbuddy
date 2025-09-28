@@ -461,7 +461,7 @@ export default function StudentDashboard() {
                         <div className="absolute -top-3 -right-3">
                           <Loader2 
                             className="h-6 w-6 animate-spin text-green-500"
-                            strokeWidth={2} 
+                            strokeWidth={3} 
                             />
                         </div>
                       </>}
