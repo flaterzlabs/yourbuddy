@@ -455,11 +455,11 @@ export default function StudentDashboard() {
                   <button type="button" onClick={() => handleEmojiClick('ok')} disabled={loading} className={`emotion-button emotion-happy relative
                       ${urgency === 'ok' ? 'selected animate-bounce shadow-lg shadow-green-500/50' : ''} 
                       ${pendingUrgency === 'ok' ? 'pending' : ''}
-                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`} aria-label={pendingUrgency === 'ok' ? 'Cancel request' : "I'm fine – click to ask for help"}>
+                      w-18 h-18 sm:w-28 sm:h-28 transition-all duration-200`} aria-label={pendingUrgency === 'ok' ? 'Cancel request' : "I'm fine – click to ask for help"}>
                     <span className="text-5xl sm:text-7xl">😊</span>
                     {pendingUrgency === 'ok' && <>
                         <div className="absolute -top-1 -right-1">
-                          <Loader2 className="h-4 w-4 animate-spin text-green-500" />
+                          <Loader2 className="h-6 w-6 animate-spin text-green-500" />
                         </div>
                       </>}
                   </button>
@@ -467,7 +467,7 @@ export default function StudentDashboard() {
                   <button type="button" onClick={() => handleEmojiClick('attention')} disabled={loading} className={`emotion-button emotion-need relative
                       ${urgency === 'attention' ? 'selected animate-bounce shadow-lg shadow-yellow-500/50' : ''} 
                       ${pendingUrgency === 'attention' ? 'pending' : ''}
-                      w-18 h-18 sm:w-32 sm:h-32 transition-all duration-200`} aria-label={pendingUrgency === 'attention' ? 'Cancel request' : 'Need Attention - click to ask for help'}>
+                      w-18 h-18 sm:w-28 sm:h-28 transition-all duration-200`} aria-label={pendingUrgency === 'attention' ? 'Cancel request' : 'Need Attention - click to ask for help'}>
                     <span className="text-5xl sm:text-7xl">😟</span>
                     {pendingUrgency === 'attention' && <>
                         <div className="absolute -top-1 -right-1">
@@ -483,7 +483,7 @@ export default function StudentDashboard() {
                     <span className="text-5xl sm:text-7xl">😭</span>
                     {pendingUrgency === 'urgent' && <>
                         <div className="absolute -top-1 -right-1">
-                          <Loader2 className="h-8 w-8 animate-spin text-red-500" />
+                          <Loader2 className="h-6 w-6 animate-spin text-red-500" />
                         </div>
                       </>}
                   </button>
