@@ -544,22 +544,25 @@ export default function CaregiverDashboard() {
             </div>
 
             <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4">
-                Requests Per Month
-              </h3>
               
-              <DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <Button variant="outline">
-      {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
-    </Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuItem onClick={() => setChartPeriod('daily')}>Daily</DropdownMenuItem>
-    <DropdownMenuItem onClick={() => setChartPeriod('weekly')}>Weekly</DropdownMenuItem>
-    <DropdownMenuItem onClick={() => setChartPeriod('monthly')}>Monthly</DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
+             <div className="flex justify-between items-center mb-4">
+  <h3 className="text-lg font-semibold">
+    Requests Per Month
+  </h3>
+
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="outline">
+        {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+      <DropdownMenuItem onClick={() => setChartPeriod('daily')}>Daily</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => setChartPeriod('weekly')}>Weekly</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => setChartPeriod('monthly')}>Monthly</DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</div>
               
               <ChartContainer config={monthlyChartConfig} className="w-full h-64">
                 <BarChart data={helpRequestsChartData}>
@@ -806,22 +809,24 @@ export default function CaregiverDashboard() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-semibold mb-3">
-                    Requests Per Month
-                  </h3>
+                  <div className="flex justify-between items-center mb-4">
+  <h3 className="text-lg font-semibold">
+    Requests Per Month
+  </h3>
 
-                  <DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <Button variant="outline">
-      {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
-    </Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuItem onClick={() => setChartPeriod('daily')}>Daily</DropdownMenuItem>
-    <DropdownMenuItem onClick={() => setChartPeriod('weekly')}>Weekly</DropdownMenuItem>
-    <DropdownMenuItem onClick={() => setChartPeriod('monthly')}>Monthly</DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="outline">
+        {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+      <DropdownMenuItem onClick={() => setChartPeriod('daily')}>Daily</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => setChartPeriod('weekly')}>Weekly</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => setChartPeriod('monthly')}>Monthly</DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</div>
 
                   
                   <ChartContainer config={monthlyChartConfig} className="w-full h-48">
