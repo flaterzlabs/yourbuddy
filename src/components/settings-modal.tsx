@@ -99,7 +99,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
               value={caregiverCode}
               onChange={(e) => setCaregiverCode(e.target.value.toUpperCase())}
               maxLength={8}
-              className="text-center font-mono text-lg tracking-wider"
+              className="text-center text-lg tracking-wider"
             />
             <p className="text-sm text-muted-foreground">
               Ask your caregiver or educator for their connection code
