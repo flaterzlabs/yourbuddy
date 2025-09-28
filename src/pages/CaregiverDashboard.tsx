@@ -17,7 +17,7 @@ import { Database } from '@/integrations/supabase/types';
 import { useNavigate } from 'react-router-dom';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
-import { subMonths } from 'date-fns';
+import { subMonths, subWeeks, subDays, startOfWeek, endOfWeek, format } from 'date-fns';
 type Connection = Database['public']['Tables']['connections']['Row'] & {
   student_profile?: Database['public']['Tables']['profiles']['Row'];
   thrive_sprite?: Database['public']['Tables']['thrive_sprites']['Row'];
@@ -40,6 +40,7 @@ export default function CaregiverDashboard() {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied'>('idle');
   const [overviewModalOpen, setOverviewModalOpen] = useState(false);
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
+  const [chartPeriod, setChartPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
   useEffect(() => {
     if (copyStatus !== 'copied') return;
     const timeout = setTimeout(() => setCopyStatus('idle'), 2000);
@@ -312,18 +313,35 @@ export default function CaregiverDashboard() {
   const activeConnections = connections.filter(c => c.status === 'active');
   const openHelpRequests = helpRequests.filter(r => r.status === 'open');
   const closedHelpRequests = helpRequests.filter(r => r.status === 'answered' || r.status === 'closed');
-  const helpRequestsByMonth = useMemo(() => {
-    const months: {
-      key: string;
-      date: Date;
-    }[] = [];
+  const helpRequestsChartData = useMemo(() => {
     const now = new Date();
-    for (let i = 5; i >= 0; i--) {
-      const date = subMonths(now, i);
-      months.push({
-        key: `${date.getFullYear()}-${date.getMonth()}`,
-        date
-      });
+    let periods: { key: string; date: Date; }[] = [];
+    
+    if (chartPeriod === 'daily') {
+      for (let i = 6; i >= 0; i--) {
+        const date = subDays(now, i);
+        periods.push({
+          key: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+          date
+        });
+      }
+    } else if (chartPeriod === 'weekly') {
+      for (let i = 5; i >= 0; i--) {
+        const date = subWeeks(now, i);
+        const weekStart = startOfWeek(date);
+        periods.push({
+          key: `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`,
+          date: weekStart
+        });
+      }
+    } else {
+      for (let i = 5; i >= 0; i--) {
+        const date = subMonths(now, i);
+        periods.push({
+          key: `${date.getFullYear()}-${date.getMonth()}`,
+          date
+        });
+      }
     }
     
     // Initialize counters for each urgency level
@@ -332,9 +350,18 @@ export default function CaregiverDashboard() {
     helpRequests.forEach(request => {
       if (!request.created_at) return;
       const created = new Date(request.created_at);
-      const key = `${created.getFullYear()}-${created.getMonth()}`;
-      const urgency = request.urgency || 'ok';
+      let key = '';
       
+      if (chartPeriod === 'daily') {
+        key = `${created.getFullYear()}-${created.getMonth()}-${created.getDate()}`;
+      } else if (chartPeriod === 'weekly') {
+        const weekStart = startOfWeek(created);
+        key = `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`;
+      } else {
+        key = `${created.getFullYear()}-${created.getMonth()}`;
+      }
+      
+      const urgency = request.urgency || 'ok';
       const existing = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
       if (urgency === 'ok') existing.ok += 1;
       else if (urgency === 'attention') existing.attention += 1;
@@ -343,26 +370,33 @@ export default function CaregiverDashboard() {
       counters.set(key, existing);
     });
     
-    return months.map(({
-      key,
-      date
-    }) => {
+    return periods.map(({ key, date }) => {
       const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
+      let label = '';
+      let fullLabel = '';
+      
+      if (chartPeriod === 'daily') {
+        label = format(date, 'dd/MM');
+        fullLabel = format(date, 'dd/MM/yyyy');
+      } else if (chartPeriod === 'weekly') {
+        const weekEnd = endOfWeek(date);
+        label = `${format(date, 'dd/MM')}`;
+        fullLabel = `${format(date, 'dd/MM')} - ${format(weekEnd, 'dd/MM/yyyy')}`;
+      } else {
+        label = date.toLocaleDateString('en-US', { month: 'short' });
+        fullLabel = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      }
+      
       return {
-        month: date.toLocaleDateString('en-US', {
-          month: 'short'
-        }),
-        fullLabel: date.toLocaleDateString('en-US', {
-          month: 'long',
-          year: 'numeric'
-        }),
+        period: label,
+        fullLabel,
         ok: counts.ok,
         attention: counts.attention,
         urgent: counts.urgent,
         total: counts.ok + counts.attention + counts.urgent
       };
     });
-  }, [helpRequests]);
+  }, [helpRequests, chartPeriod]);
   const monthlyChartConfig = useMemo(() => ({
     ok: {
       label: 'Low Priority',
@@ -508,9 +542,9 @@ export default function CaregiverDashboard() {
                 Requests Per Month
               </h3>
               <ChartContainer config={monthlyChartConfig} className="w-full h-64">
-                <BarChart data={helpRequestsByMonth}>
+                <BarChart data={helpRequestsChartData}>
                   <CartesianGrid vertical={false} strokeDasharray="4 4" />
-                  <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                  <XAxis dataKey="period" axisLine={false} tickLine={false} />
                   <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
                   <ChartTooltip content={<ChartTooltipContent 
                     labelKey="fullLabel" 
@@ -756,9 +790,9 @@ export default function CaregiverDashboard() {
                     Requests Per Month
                   </h3>
                   <ChartContainer config={monthlyChartConfig} className="w-full h-48">
-                    <BarChart data={helpRequestsByMonth}>
+                    <BarChart data={helpRequestsChartData}>
                       <CartesianGrid vertical={false} strokeDasharray="4 4" />
-                      <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                      <XAxis dataKey="period" axisLine={false} tickLine={false} />
                       <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
                       <ChartTooltip content={<ChartTooltipContent 
                         labelKey="fullLabel" 
