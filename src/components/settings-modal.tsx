@@ -89,7 +89,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
         </DialogHeader>
         <form onSubmit={handleConnectCaregiver} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="caregiver-code" className="flex items-center gap-2">
+            <Label htmlFor="caregiver-code" className="flex items-center gap-4">
               <UserPlus className="h-4 w-4" />
               Connect with Caregiver/Educator
             </Label>
