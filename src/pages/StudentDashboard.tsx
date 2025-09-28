@@ -11,11 +11,9 @@ import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2 } from "lucide-react";
-
 import { Database } from '@/integrations/supabase/types';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 type Connection = Database['public']['Tables']['connections']['Row'] & {
   caregiver_profile: {
@@ -32,7 +30,7 @@ function MobileMenu({
   handleConnectionAdded,
   connections,
   signOut,
-  navigate,
+  navigate
 }: {
   helpRequests: HelpRequest[];
   historyModalOpen: boolean;
@@ -42,8 +40,7 @@ function MobileMenu({
   signOut: () => Promise<void>;
   navigate: (path: string) => void;
 }) {
-  return (
-    <div className="md:hidden">
+  return <div className="md:hidden">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="transition-colors duration-200">
@@ -57,11 +54,9 @@ function MobileMenu({
             <DialogTrigger asChild>
               <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
                 <ClipboardList className="h-5 w-5" />
-                {helpRequests.length > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
+                {helpRequests.length > 0 && <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
                     {helpRequests.length}
-                  </span>
-                )}
+                  </span>}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md max-h-[80vh]">
@@ -71,13 +66,9 @@ function MobileMenu({
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {helpRequests.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-4">
+                {helpRequests.length === 0 ? <p className="text-muted-foreground text-center py-4">
                     No requests yet
-                  </p>
-                ) : (
-                  helpRequests.map((request) => (
-                    <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                  </p> : helpRequests.map(request => <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <span>{request.urgency === "urgent" ? "🔴" : request.urgency === "attention" ? "🟡" : "🟢"}</span>
@@ -92,52 +83,42 @@ function MobileMenu({
                         </span>
                       </div>
                       {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
-                    </div>
-                  ))
-                )}
+                    </div>)}
               </div>
             </DialogContent>
           </Dialog>
 
           {/* Conexões */}
-          <SettingsModal
-            onConnectionAdded={handleConnectionAdded}
-            connections={connections}
-            trigger={
-              <Button variant="ghost" size="icon" className="transition-colors duration-200">
+          <SettingsModal onConnectionAdded={handleConnectionAdded} connections={connections} trigger={<Button variant="ghost" size="icon" className="transition-colors duration-200">
                 <Link className="h-5 w-5" />
-              </Button>
-            }
-          />
+              </Button>} />
 
           {/* Tema */}
           <ThemeToggle />
 
           {/* Logout */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="transition-colors duration-200 hover:bg-purple-600 hover:text-white"
-            onClick={async () => {
-              await signOut();
-              toast({
-                title: "Signed out successfully",
-                description: "See you next time!",
-                variant: "student",
-              });
-              navigate("/auth");
-            }}
-          >
+          <Button variant="ghost" size="icon" className="transition-colors duration-200 hover:bg-purple-600 hover:text-white" onClick={async () => {
+          await signOut();
+          toast({
+            title: "Signed out successfully",
+            description: "See you next time!",
+            variant: "student"
+          });
+          navigate("/auth");
+        }}>
             <LogOut className="h-5 w-5" />
           </Button>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
-  );
+    </div>;
 }
-
 export default function StudentDashboard() {
-  const { user, profile, thriveSprite, signOut } = useAuth();
+  const {
+    user,
+    profile,
+    thriveSprite,
+    signOut
+  } = useAuth();
   const navigate = useNavigate();
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [connections, setConnections] = useState<Connection[]>([]);
@@ -147,32 +128,29 @@ export default function StudentDashboard() {
   const [pendingUrgency, setPendingUrgency] = useState<'ok' | 'attention' | 'urgent' | null>(null);
   const [sendTimer, setSendTimer] = useState<NodeJS.Timeout | null>(null);
   const [countdown, setCountdown] = useState(0);
-  const [lastStatusChange, setLastStatusChange] = useState<{id: string, status: string} | null>(null);
+  const [lastStatusChange, setLastStatusChange] = useState<{
+    id: string;
+    status: string;
+  } | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
-
   const fetchConnections = async () => {
     if (!user) return;
     try {
-      const { data: connectionsData, error: connectionsError } = await supabase
-        .from('connections')
-        .select('*')
-        .eq('student_id', user.id)
-        .eq('status', 'active');
-
+      const {
+        data: connectionsData,
+        error: connectionsError
+      } = await supabase.from('connections').select('*').eq('student_id', user.id).eq('status', 'active');
       if (connectionsError) throw connectionsError;
       if (!connectionsData || connectionsData.length === 0) {
         setConnections([]);
         return;
       }
-
       const caregiverIds = connectionsData.map(conn => conn.caregiver_id);
-      const { data: profilesData, error: profilesError } = await supabase
-        .from('profiles')
-        .select('user_id, username, role')
-        .in('user_id', caregiverIds);
-
+      const {
+        data: profilesData,
+        error: profilesError
+      } = await supabase.from('profiles').select('user_id, username, role').in('user_id', caregiverIds);
       if (profilesError) throw profilesError;
-
       const connectionsWithProfiles = connectionsData.map(connection => {
         const caregiverProfile = profilesData?.find(profile => profile.user_id === connection.caregiver_id);
         return {
@@ -183,34 +161,30 @@ export default function StudentDashboard() {
           }
         };
       });
-
       setConnections(connectionsWithProfiles);
     } catch (error) {
       console.error('Error fetching connections:', error);
     }
   };
-
   const handleConnectionAdded = () => {
     fetchConnections();
     toast({
       title: "Conexão estabelecida!",
       description: "Você foi conectado com sucesso ao professor/responsável.",
       duration: 3000,
-      variant: 'student',
+      variant: 'student'
     });
   };
-
   const fetchHelpRequests = async () => {
     if (!user) return;
-    const { data, error } = await supabase
-      .from('help_requests')
-      .select('*')
-      .eq('student_id', user.id)
-      .order('created_at', { ascending: false });
-
+    const {
+      data,
+      error
+    } = await supabase.from('help_requests').select('*').eq('student_id', user.id).order('created_at', {
+      ascending: false
+    });
     if (!error) setHelpRequests(data || []);
   };
-
   useEffect(() => {
     fetchHelpRequests();
     fetchConnections();
@@ -219,24 +193,21 @@ export default function StudentDashboard() {
   // Listen for help request status updates from caregivers
   useEffect(() => {
     if (!user) return;
-
-    const statusChannel = supabase
-      .channel(`help-status-student-${user.id}`)
-      .on('broadcast', { event: 'status-update' }, (payload) => {
-        const data = payload.payload;
-        if (data?.status) {
-          const statusText = data.status === 'answered' ? 'respondido' : 'finalizado';
-          toast({
-            title: 'Pedido atualizado!',
-            description: `Seu pedido foi ${statusText} pelo professor/responsável.`,
-            variant: 'student',
-            duration: 4000,
-          });
-          fetchHelpRequests();
-        }
-      })
-      .subscribe();
-
+    const statusChannel = supabase.channel(`help-status-student-${user.id}`).on('broadcast', {
+      event: 'status-update'
+    }, payload => {
+      const data = payload.payload;
+      if (data?.status) {
+        const statusText = data.status === 'answered' ? 'respondido' : 'finalizado';
+        toast({
+          title: 'Pedido atualizado!',
+          description: `Seu pedido foi ${statusText} pelo professor/responsável.`,
+          variant: 'student',
+          duration: 4000
+        });
+        fetchHelpRequests();
+      }
+    }).subscribe();
     return () => {
       supabase.removeChannel(statusChannel);
     };
@@ -245,68 +216,53 @@ export default function StudentDashboard() {
   // Listen for real-time help request changes
   useEffect(() => {
     if (!user) return;
-
-    const helpRequestsChannel = supabase
-      .channel(`help-requests-student-${user.id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'help_requests',
-          filter: `student_id=eq.${user.id}`,
-        },
-        (payload) => {
-          fetchHelpRequests();
-        }
-      )
-      .subscribe();
-
+    const helpRequestsChannel = supabase.channel(`help-requests-student-${user.id}`).on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'help_requests',
+      filter: `student_id=eq.${user.id}`
+    }, payload => {
+      fetchHelpRequests();
+    }).subscribe();
     return () => {
       supabase.removeChannel(helpRequestsChannel);
     };
   }, [user?.id]);
-
   const handleEmojiClick = (selectedUrgency: 'ok' | 'attention' | 'urgent') => {
-  if (!user) return;
+    if (!user) return;
+    if (pendingUrgency === selectedUrgency && sendTimer) {
+      clearTimeout(sendTimer);
+      setSendTimer(null);
+      setPendingUrgency(null);
+      return;
+    }
+    if (sendTimer) clearTimeout(sendTimer);
+    setPendingUrgency(selectedUrgency);
 
-  if (pendingUrgency === selectedUrgency && sendTimer) {
-    clearTimeout(sendTimer);
-    setSendTimer(null);
-    setPendingUrgency(null);
-    return;
-  }
-
-  if (sendTimer) clearTimeout(sendTimer);
-
-  setPendingUrgency(selectedUrgency);
-
-  // 4 segundos
-  const timer = setTimeout(() => {
-    sendHelpRequest(selectedUrgency);
-  }, 4000);
-
-  setSendTimer(timer);
-};
-
+    // 4 segundos
+    const timer = setTimeout(() => {
+      sendHelpRequest(selectedUrgency);
+    }, 4000);
+    setSendTimer(timer);
+  };
   const sendHelpRequest = async (urgencyLevel: 'ok' | 'attention' | 'urgent') => {
     if (!user) return;
-    
     setLoading(true);
     try {
-      const { data, error } = await supabase.from('help_requests').insert({
+      const {
+        data,
+        error
+      } = await supabase.from('help_requests').insert({
         student_id: user.id,
         message: message || undefined,
-        urgency: urgencyLevel,
+        urgency: urgencyLevel
       }).select().single();
-
       if (error) throw error;
 
       // Send broadcast notification to caregivers
       try {
         const broadcastChannel = supabase.channel('help-requests-broadcast');
         await broadcastChannel.subscribe();
-        
         setTimeout(async () => {
           await broadcastChannel.send({
             type: 'broadcast',
@@ -315,10 +271,9 @@ export default function StudentDashboard() {
               student_id: user.id,
               urgency: urgencyLevel,
               message: message || undefined,
-              created_at: new Date().toISOString(),
-            },
+              created_at: new Date().toISOString()
+            }
           });
-          
           setTimeout(() => supabase.removeChannel(broadcastChannel), 1000);
         }, 100);
       } catch (broadcastError) {
@@ -330,14 +285,12 @@ export default function StudentDashboard() {
       setTimeout(() => {
         setUrgency(null);
       }, 1000);
-
       toast({
         title: 'Help request sent!',
         description: 'Your request has been sent to connected caregivers',
         duration: 3000,
-        variant: 'student',
+        variant: 'student'
       });
-
       fetchHelpRequests();
       setMessage('');
     } catch (error) {
@@ -345,7 +298,7 @@ export default function StudentDashboard() {
         title: 'Error',
         description: 'Failed to send help request. Please try again.',
         variant: 'destructive',
-        duration: 3000,
+        duration: 3000
       });
     } finally {
       setLoading(false);
@@ -363,32 +316,35 @@ export default function StudentDashboard() {
       }
     };
   }, [sendTimer]);
-
   const getStatusColor = (status: string): 'default' | 'destructive' | 'secondary' | 'outline' => {
     switch (status) {
-      case 'open': return 'destructive';
-      case 'answered': return 'secondary';
-      case 'closed': return 'outline';
-      default: return 'secondary';
+      case 'open':
+        return 'destructive';
+      case 'answered':
+        return 'secondary';
+      case 'closed':
+        return 'outline';
+      default:
+        return 'secondary';
     }
   };
-
   const getUrgencyEmoji = (urgency: string) => {
     switch (urgency) {
-      case 'attention': return '🟡';
-      case 'urgent': return '🔴';
-      default: return '🟢';
+      case 'attention':
+        return '🟡';
+      case 'urgent':
+        return '🔴';
+      default:
+        return '🟢';
     }
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
+  return <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
         
        {/* Header */}
-<div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-8">
   {/* Logo e título - visíveis apenas no desktop/tablet */}
-  <div className="hidden sm:flex flex-col items-center gap-2">
+  <div className="hidden sm:flex flex-col items-center gap-2 ">
     <BuddyLogo size="lg" />
     <h2 className="text-lg font-semibold text-muted-foreground">
       {profile?.role === 'student' ? 'Student Dashboard' : 'Dashboard'}
@@ -396,14 +352,14 @@ export default function StudentDashboard() {
   </div>
 
   {/* Saudação - sempre visível, mas no mobile ocupa o lugar do logo */}
-<div className="flex flex-col items-center text-center sm:hidden">
+        <div className="flex flex-col items-center text-center sm:hidden">
     <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
       Hello, {profile?.username || 'User'}!
     </h1>
     <p className="text-base sm:text-xl text-muted-foreground">
       How are you feeling today?
     </p>
-</div>
+        </div>
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
@@ -411,11 +367,9 @@ export default function StudentDashboard() {
               <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
                   <ClipboardList className="h-5 w-5" />
-                  {helpRequests.length > 0 && (
-                    <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
+                  {helpRequests.length > 0 && <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
                       {helpRequests.length}
-                    </span>
-                  )}
+                    </span>}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md max-h-[80vh]">
@@ -425,11 +379,7 @@ export default function StudentDashboard() {
                   </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {helpRequests.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">No requests yet</p>
-                  ) : (
-                    helpRequests.map((request) => (
-                      <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                  {helpRequests.length === 0 ? <p className="text-muted-foreground text-center py-4">No requests yet</p> : helpRequests.map(request => <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
@@ -444,80 +394,54 @@ export default function StudentDashboard() {
                           </span>
                         </div>
                         {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
-                      </div>
-                    ))
-                  )}
+                      </div>)}
                 </div>
               </DialogContent>
             </Dialog>
 
-            <SettingsModal
-              onConnectionAdded={handleConnectionAdded}
-              connections={connections}
-              trigger={
-                <Button variant="ghost" size="icon" className="transition-colors duration-200">
+            <SettingsModal onConnectionAdded={handleConnectionAdded} connections={connections} trigger={<Button variant="ghost" size="icon" className="transition-colors duration-200">
                   <Link className="h-5 w-5" />
-                </Button>
-              }
-            />
+                </Button>} />
 
             <ThemeToggle />
 
-            <Button
-              variant="ghost"
-              className="transition-colors duration-200 hover:bg-purple-600 hover:text-white"
-              onClick={async () => {
-                await signOut();
-                toast({
-                  title: 'Signed out successfully',
-                  description: 'See you next time!',
-                  variant: 'student',
-                });
-                navigate('/auth');
-              }}
-            >
+            <Button variant="ghost" className="transition-colors duration-200 hover:bg-purple-600 hover:text-white" onClick={async () => {
+            await signOut();
+            toast({
+              title: 'Signed out successfully',
+              description: 'See you next time!',
+              variant: 'student'
+            });
+            navigate('/auth');
+          }}>
               Logout
             </Button>
           </div>
 
           {/* Mobile menu */}
-          <MobileMenu
-            helpRequests={helpRequests}
-            historyModalOpen={historyModalOpen}
-            setHistoryModalOpen={setHistoryModalOpen}
-            handleConnectionAdded={handleConnectionAdded}
-            connections={connections}
-            signOut={signOut}
-            navigate={navigate}
-          />
+          <MobileMenu helpRequests={helpRequests} historyModalOpen={historyModalOpen} setHistoryModalOpen={setHistoryModalOpen} handleConnectionAdded={handleConnectionAdded} connections={connections} signOut={signOut} navigate={navigate} />
         </div>
 
         {/* Conteúdo principal */}
         <div className="max-w-2xl mx-auto">
       {/* Welcome Section */}
-<div className="hidden sm:block text-center mb-8">
+        <div className="hidden sm:block text-center mb-8">
   <div className="mb-4">
-    <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+    <h1 className="bg-gradient-hero bg-clip-text text-transparent font-extrabold text-4xl">
       Hello, {profile?.username || 'User'}!
     </h1>
     <p className="text-xl text-muted-foreground">
       How are you feeling today?
     </p>
   </div>
-</div>
+        </div>
 
 
           {/* Help Request Form */}
         <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mx-auto mb-4">
-                <StudentAvatar
-                  imageUrl={thriveSprite?.image_url}
-                  seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
-                  style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
-                  size={120}
-                  className="border-4 border-success rounded-full shadow-md shadow-green-500"
-                />
+                <StudentAvatar imageUrl={thriveSprite?.image_url} seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined} style={thriveSprite ? (thriveSprite.options as any)?.style : undefined} size={120} className="border-4 border-success rounded-full shadow-md shadow-green-500" />
               </div>
               <h2 className="text-2xl font-bold mb-2">Need Help?</h2>
               <p className="hidden sm:block text-muted-foreground mb-4">Your caregivers will be notified</p>
@@ -528,80 +452,53 @@ export default function StudentDashboard() {
               {/* EMOTIONAL BUTTONS */}
               <div>
                 <div className={`flex justify-center items-center gap-6 sm:gap-12 ${urgency ? 'has-selection' : ''}`}>
-                  <button
-                    type="button"
-                    onClick={() => handleEmojiClick('ok')}
-                    disabled={loading}
-                    className={`emotion-button emotion-happy relative
+                  <button type="button" onClick={() => handleEmojiClick('ok')} disabled={loading} className={`emotion-button emotion-happy relative
                       ${urgency === 'ok' ? 'selected animate-bounce shadow-lg shadow-green-500/50' : ''} 
                       ${pendingUrgency === 'ok' ? 'pending' : ''}
-                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
-                    aria-label={pendingUrgency === 'ok' ? 'Cancel request' : "I'm fine – click to ask for help"}
-                  >
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`} aria-label={pendingUrgency === 'ok' ? 'Cancel request' : "I'm fine – click to ask for help"}>
                     <span className="text-5xl sm:text-6xl">😊</span>
-                    {pendingUrgency === 'ok' && (
-                      <>
+                    {pendingUrgency === 'ok' && <>
                         <div className="absolute -top-1 -right-1">
                           <Loader2 className="h-4 w-4 animate-spin text-green-500" />
                         </div>
-                      </>
-                    )}
+                      </>}
                   </button>
                   
-                  <button
-                    type="button"
-                    onClick={() => handleEmojiClick('attention')}
-                    disabled={loading}
-                    className={`emotion-button emotion-need relative
+                  <button type="button" onClick={() => handleEmojiClick('attention')} disabled={loading} className={`emotion-button emotion-need relative
                       ${urgency === 'attention' ? 'selected animate-bounce shadow-lg shadow-yellow-500/50' : ''} 
                       ${pendingUrgency === 'attention' ? 'pending' : ''}
-                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
-                    aria-label={pendingUrgency === 'attention' ? 'Cancel request' : 'Need Attention - click to ask for help'}
-                  >
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`} aria-label={pendingUrgency === 'attention' ? 'Cancel request' : 'Need Attention - click to ask for help'}>
                     <span className="text-5xl sm:text-6xl">😟</span>
-                    {pendingUrgency === 'attention' && (
-                      <>
+                    {pendingUrgency === 'attention' && <>
                         <div className="absolute -top-1 -right-1">
                           <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />
                         </div>
-                      </>
-                    )}
+                      </>}
                   </button>
                   
-                  <button
-                    type="button"
-                    onClick={() => handleEmojiClick('urgent')}
-                    disabled={loading}
-                    className={`emotion-button emotion-urgent relative
+                  <button type="button" onClick={() => handleEmojiClick('urgent')} disabled={loading} className={`emotion-button emotion-urgent relative
                       ${urgency === 'urgent' ? 'selected animate-bounce shadow-lg shadow-red-500/50' : ''} 
                       ${pendingUrgency === 'urgent' ? 'pending' : ''}
-                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`}
-                    aria-label={pendingUrgency === 'urgent' ? 'Cancel request' : 'Urgent - click to ask for help'}
-                  >
+                      w-18 h-18 sm:w-24 sm:h-24 transition-all duration-200`} aria-label={pendingUrgency === 'urgent' ? 'Cancel request' : 'Urgent - click to ask for help'}>
                     <span className="text-5xl sm:text-6xl">😭</span>
-                    {pendingUrgency === 'urgent' && (
-                      <>
+                    {pendingUrgency === 'urgent' && <>
                         <div className="absolute -top-1 -right-1">
                           <Loader2 className="h-4 w-4 animate-spin text-red-500" />
                         </div>
-                      </>
-                    )}
+                      </>}
                   </button>
                 </div>
                 
                 {/* Feedback text */}
-                {pendingUrgency && (
-  <div className="text-center pt-6">
+                {pendingUrgency && <div className="text-center pt-6">
     <p className="text-base text-muted-foreground">
      Sending help request... Tap again to cancel!
     </p>
-  </div>
-)}
+  </div>}
               </div>
             </div>
           </Card>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
