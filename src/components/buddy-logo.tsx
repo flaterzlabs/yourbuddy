@@ -30,9 +30,9 @@ export function BuddyLogo({ size = 'md', showText = true }: BuddyLogoProps) {
       </div>
       {showText && (
         <span
-          className={`${textSizeClasses[size]} font-bold bg-gradient-primary bg-clip-text text-transparent`}
+          className={`${textSizeClasses[size]} font-cherry-bomb bg-gradient-primary bg-clip-text text-transparent`}
         >
-          BUDDY
+          ThriveSprite
         </span>
       )}
     </div>

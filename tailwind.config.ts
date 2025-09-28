@@ -77,6 +77,9 @@ export default {
         medium: 'var(--shadow-medium)',
         strong: 'var(--shadow-strong)',
       },
+      fontFamily: {
+        'cherry-bomb': ['Cherry Bomb One', 'cursive'],
+      },
       transitionTimingFunction: {
         smooth: 'var(--transition-smooth)',
         bounce: 'var(--transition-bounce)',
