@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2 } from "lucide-react";
+import { StudentStats } from '@/components/student-stats';
 import { Database } from '@/integrations/supabase/types';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -47,7 +48,8 @@ function MobileMenu({
   handleConnectionAdded,
   connections,
   signOut,
-  navigate
+  navigate,
+  userId
 }: {
   helpRequests: HelpRequest[];
   historyModalOpen: boolean;
@@ -56,6 +58,7 @@ function MobileMenu({
   connections: Connection[];
   signOut: () => Promise<void>;
   navigate: (path: string) => void;
+  userId: string;
 }) {
   const recipientsText = formatCaregiverRecipients(connections);
 
@@ -68,6 +71,9 @@ function MobileMenu({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="flex flex-col gap-2 p-2 min-w-[3rem]">
+          {/* Estatísticas */}
+          <StudentStats userId={userId} />
+          
           {/* Histórico de pedidos */}
           <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
             <DialogTrigger asChild>
@@ -392,6 +398,8 @@ export default function StudentDashboard() {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
+            <StudentStats userId={user?.id || ''} />
+            
             <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
               <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
@@ -457,7 +465,7 @@ export default function StudentDashboard() {
           </div>
 
           {/* Mobile menu */}
-          <MobileMenu helpRequests={helpRequests} historyModalOpen={historyModalOpen} setHistoryModalOpen={setHistoryModalOpen} handleConnectionAdded={handleConnectionAdded} connections={connections} signOut={signOut} navigate={navigate} />
+          <MobileMenu helpRequests={helpRequests} historyModalOpen={historyModalOpen} setHistoryModalOpen={setHistoryModalOpen} handleConnectionAdded={handleConnectionAdded} connections={connections} signOut={signOut} navigate={navigate} userId={user?.id || ''} />
         </div>
 
         {/* Conteúdo principal */}
