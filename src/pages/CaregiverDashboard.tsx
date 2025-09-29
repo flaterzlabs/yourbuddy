@@ -462,7 +462,7 @@ export default function CaregiverDashboard() {
   </SheetTrigger>
   <SheetContent 
     side="right" 
-    className="w-[60%] h-[50vh]"  // largura 60% e altura 50% da tela
+    className="w-[70vw] h-[60vh]"  // largura 60% e altura 50% da tela
   >
     <SheetHeader>
       <SheetTitle className="flex items-center gap-2 justify-center">
@@ -512,7 +512,7 @@ export default function CaregiverDashboard() {
           });
           navigate('/auth');
         }} 
-        className="justify-center gap-3 h-12 w-full text-destructive hover:text-destructive"
+        className="justify-center gap-3 h-12 w-full font-semibold text-destructive hover:text-destructive"
       >
         <LogOut className="h-5 w-5" />
         Logout
