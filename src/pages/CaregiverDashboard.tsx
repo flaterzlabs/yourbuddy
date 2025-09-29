@@ -430,15 +430,17 @@ export default function CaregiverDashboard() {
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2">
+            
             <Button variant="ghost" size="icon" className="rounded-full border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300">
               <ThemeToggle />
             </Button>
+            
             <Button variant="ghost" onClick={async () => {
             await signOut();
             toast({
               title: 'Signed out successfully',
               description: 'See you next time!',
-              variant: 'caregiver-success'
+              variant: 'student'
             });
             navigate('/auth');
           }} className="rounded-xl border border-border/50 bg-background/50 hover:bg-purple-600 hover:text-white transition-all duration-300 px-4">
@@ -472,20 +474,19 @@ export default function CaregiverDashboard() {
                   Meus Alunos
                 </Button>
                 
-                  <div className="border-t pt-4 mt-4 space-y-2">
-                  <div className="flex items-center gap-3 px-3 py-2">
-                    <ThemeToggle trigger={<div className="flex items-center gap-3 w-full">
-                        <div className="h-5 w-5 flex items-center justify-center">🌙</div>
-                        <span>Theme</span>
-                      </div>} />
-                  </div>
+                <div className="border-t pt-4 mt-4 space-y-2">
+  <div className="flex items-center gap-3 px-3 py-2">
+    <ThemeToggle />
+    <span>Theme</span>
+  </div>
+</div>
                   
                   <Button variant="ghost" onClick={async () => {
                   await signOut();
                   toast({
                     title: 'Signed out successfully',
                     description: 'See you next time!',
-                    variant: 'caregiver-success'
+                    variant: 'student'
                   });
                   navigate('/auth');
                 }} className="justify-start gap-3 h-12 w-full text-destructive hover:text-destructive">
@@ -839,14 +840,14 @@ export default function CaregiverDashboard() {
                         labelFormatter={(value) => value}
                         formatter={(value: any, name: string) => [
                           value,
-                          name === 'ok' ? `🟢 Low Priority` : 
-                          name === 'attention' ? `🟡 Medium Priority` : 
-                          `🔴 High Priority`
+                          name === 'ok' ? `🟢 Good` : 
+                          name === 'attention' ? `🟡 Attention` : 
+                          `🔴 Urgent`
                         ]}
                       />} />
-                      <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" radius={[2, 2, 0, 0]} />
-                      <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" radius={[0, 0, 0, 0]} />
-                      <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" radius={[0, 0, 2, 2]} />
+                      <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)"  />
+                      <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" />
+                      <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" />
                     </BarChart>
                   </ChartContainer>
                 </div>
