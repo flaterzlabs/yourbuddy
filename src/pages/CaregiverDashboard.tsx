@@ -526,10 +526,10 @@ export default function CaregiverDashboard() {
         <div className="max-w-6xl mx-auto">
           {/* Welcome Section - Centered */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl bg-gradient-hero bg-clip-text text-transparent font-extrabold">
+            <h1 className="text-xl sm:text-4xl bg-gradient-hero bg-clip-text text-transparent font-extrabold">
               Hello, {profile?.username || 'User'}!
             </h1>
-            <p className="text-xl text-muted-foreground">Manage your students and help requests</p>
+            <p className="text-base sm:text-xl text-muted-foreground">Manage your students and help requests</p>
           </div>
 
           {/* Desktop Layout */}
