@@ -417,7 +417,8 @@ export default function CaregiverDashboard() {
       color: 'hsl(0, 84%, 60%)'
     }
   }), []);
-  return <div className="min-h-screen bg-gradient-to-br from-background to-muted">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-6 md:px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -474,29 +475,28 @@ export default function CaregiverDashboard() {
                   Meus Alunos
                 </Button>
                 
-                <div className="border-t pt-4 mt-4 space-y-2">
-  <div className="flex items-center gap-3 px-3 py-2">
-    <ThemeToggle />
-    <span>Theme</span>
-  </div>
-</div>
-                  
-                  <Button variant="ghost" onClick={async () => {
-                  await signOut();
-                  toast({
-                    title: 'Signed out successfully',
-                    description: 'See you next time!',
-                    variant: 'student'
-                  });
-                  navigate('/auth');
-                }} className="justify-start gap-3 h-12 w-full text-destructive hover:text-destructive">
-                     <XCircle className="h-5 w-5" />
-                     Logout
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+                 <div className="border-t pt-4 mt-4 space-y-2">
+                   <div className="flex items-center gap-3 px-3 py-2">
+                     <ThemeToggle />
+                     <span>Theme</span>
+                   </div>
+                 </div>
+                   
+                 <Button variant="ghost" onClick={async () => {
+                   await signOut();
+                   toast({
+                     title: 'Signed out successfully',
+                     description: 'See you next time!',
+                     variant: 'student'
+                   });
+                   navigate('/auth');
+                 }} className="justify-start gap-3 h-12 w-full text-destructive hover:text-destructive">
+                   <XCircle className="h-5 w-5" />
+                   Logout
+                 </Button>
+               </div>
+             </SheetContent>
+           </Sheet>
         </div>
 
         <div className="max-w-6xl mx-auto">
@@ -896,5 +896,6 @@ export default function CaregiverDashboard() {
           </Dialog>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 }
