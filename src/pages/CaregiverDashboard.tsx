@@ -12,7 +12,7 @@ import { toast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { UserPlus, Users, Clock, CheckCircle, XCircle, AlertTriangle, MessageSquare, Activity, Copy, Check, Menu, BarChart3, GraduationCap, SunMoon } from 'lucide-react';
+import { UserPlus, Users, Clock, CheckCircle, LogOut, AlertTriangle, MessageSquare, Activity, Copy, Check, Menu, BarChart3, GraduationCap, SunMoon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -449,60 +449,78 @@ export default function CaregiverDashboard() {
             </Button>
           </div>
 
-          {/* Mobile Menu */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-80">
-              <SheetHeader>
-                <SheetTitle className="flex items-center gap-2">
-                  <BuddyLogo size="sm" />
-                  Menu
-                </SheetTitle>
-              </SheetHeader>
-              
-              <div className="flex flex-col gap-4 mt-8">
-                <Button variant="ghost" onClick={() => setOverviewModalOpen(true)} className="justify-start gap-3 h-12">
-                  <BarChart3 className="h-5 w-5" />
-                  Overview
-                </Button>
-                
-                <Button variant="ghost" onClick={() => setStudentsModalOpen(true)} className="justify-start gap-3 h-12">
-                  <GraduationCap className="h-5 w-5" />
-                  Meus Alunos
-                </Button>
-                
-               {/* theme */}
-<ThemeToggle 
-  trigger={
+         {/* Mobile Menu */}
+<Sheet>
+  <SheetTrigger asChild>
     <Button 
       variant="ghost" 
-      className="w-full justify-start gap-3 h-12"
+      size="icon" 
+      className="md:hidden rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
     >
-      <SunMoon className="h-5 w-5" />
-      Theme
+      <Menu className="h-5 w-5" />
     </Button>
-  }
-/>
+  </SheetTrigger>
+  <SheetContent 
+    side="right" 
+    className="w-[60%] h-[50vh]"  // largura 60% e altura 50% da tela
+  >
+    <SheetHeader>
+      <SheetTitle className="flex items-center gap-2 justify-center">
+        <BuddyLogo size="sm" />
+        Menu
+      </SheetTitle>
+    </SheetHeader>
+    
+    <div className="flex flex-col gap-4 mt-8">
+      <Button 
+        variant="ghost" 
+        onClick={() => setOverviewModalOpen(true)} 
+        className="justify-center gap-3 h-12"
+      >
+        <BarChart3 className="h-5 w-5" />
+        Overview
+      </Button>
+      
+      <Button 
+        variant="ghost" 
+        onClick={() => setStudentsModalOpen(true)} 
+        className="justify-center gap-3 h-12"
+      >
+        <GraduationCap className="h-5 w-5" />
+        Meus Alunos
+      </Button>
+      
+      {/* theme */}
+      <ThemeToggle asChild>
+        <Button 
+          variant="ghost" 
+          className="w-full justify-center gap-3 h-12"
+        >
+          <SunMoon className="h-5 w-5" />
+          Theme
+        </Button>
+      </ThemeToggle>
 
-                 <Button variant="ghost" onClick={async () => {
-                   await signOut();
-                   toast({
-                     title: 'Signed out successfully',
-                     description: 'See you next time!',
-                     variant: 'student'
-                   });
-                   navigate('/auth');
-                 }} className="justify-start gap-3 h-12 w-full text-destructive hover:text-destructive">
-                   <XCircle className="h-5 w-5" />
-                   Logout
-                 </Button>
-               </div>
-             </SheetContent>
-           </Sheet>
+      <Button 
+        variant="ghost" 
+        onClick={async () => {
+          await signOut();
+          toast({
+            title: 'Signed out successfully',
+            description: 'See you next time!',
+            variant: 'student'
+          });
+          navigate('/auth');
+        }} 
+        className="justify-center gap-3 h-12 w-full text-destructive hover:text-destructive"
+      >
+        <LogOut className="h-5 w-5" />
+        Logout
+      </Button>
+    </div>
+  </SheetContent>
+</Sheet>
+
         </div>
 
         <div className="max-w-6xl mx-auto">
