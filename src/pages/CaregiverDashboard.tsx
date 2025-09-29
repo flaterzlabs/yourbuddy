@@ -579,9 +579,9 @@ export default function CaregiverDashboard() {
                       `🔴 High Priority`
                     ]}
                   />} />
-                  <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" radius={[0, 0, 0, 0]} />
-                  <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" radius={[0, 0, 4, 4]} />
+                  <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" />
+                  <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" />
+                  <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" />
                 </BarChart>
               </ChartContainer>
             </div>
