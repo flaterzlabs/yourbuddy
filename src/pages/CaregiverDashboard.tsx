@@ -475,13 +475,20 @@ export default function CaregiverDashboard() {
                   Meus Alunos
                 </Button>
                 
-                 <Button 
+                {*/ theme */}
+              <Button 
   variant="ghost" 
   className="justify-start gap-3 h-12"
+  asChild
 >
-  <ThemeToggle />
-  Theme
+  <ThemeToggle>
+    <div className="flex items-center gap-3">
+      <SunMoon className="h-5 w-5" />
+      <span>Theme</span>
+    </div>
+  </ThemeToggle>
 </Button>
+
 
                    
                  <Button variant="ghost" onClick={async () => {
