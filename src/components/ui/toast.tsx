@@ -32,11 +32,11 @@ const toastVariants = cva(
 
         // Toasts do cuidador
         'caregiver-success':
-          'bg-card text-card-foreground border-2 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)] space-y-2 p-6 sm:min-w-[320px] max-w-[75vw] mx-auto',
+          'bg-card text-card-foreground border-2 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)] space-y-2 p-6 sm:min-w-[27vw] max-w-[75vw] mx-auto',
         'caregiver-warning':
-          'bg-card text-card-foreground border-2 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)] space-y-2 p-6 sm:min-w-[320px] max-w-[75vw] mx-auto',
+          'bg-card text-card-foreground border-2 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)] space-y-2 p-6 sm:min-w-[30vw] max-w-[75vw] mx-auto',
         'caregiver-urgent':
-          'bg-card text-card-foreground border-2 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)] space-y-2 p-6 sm:min-w-[320px] max-w-[75vw] mx-auto',
+          'bg-card text-card-foreground border-2 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)] space-y-2 p-6 sm:min-w-[33vw] max-w-[75vw] mx-auto',
 
         // Erros
         destructive: 'border bg-destructive text-destructive-foreground p-4 text-sm',
