@@ -464,7 +464,7 @@ export default function CaregiverDashboard() {
               <div className="flex flex-col gap-4 mt-8">
                 <Button variant="ghost" onClick={() => setOverviewModalOpen(true)} className="justify-start gap-3 h-12">
                   <BarChart3 className="h-5 w-5" />
-                  Visão Geral
+                  Overview
                 </Button>
                 
                 <Button variant="ghost" onClick={() => setStudentsModalOpen(true)} className="justify-start gap-3 h-12">
@@ -515,8 +515,8 @@ export default function CaregiverDashboard() {
                 <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Users className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="text-xl font-bold mb-2">Visão Geral</h2>
-                <p className="text-muted-foreground text-sm">Estatísticas dos seus alunos</p>
+                <h2 className="text-xl font-bold mb-2">Overview</h2>
+                <p className="text-muted-foreground text-sm">Your students' statistics</p>
               </div>
 
             {/* Stats Cards */}
@@ -780,7 +780,7 @@ export default function CaregiverDashboard() {
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
-                  Visão Geral
+                  Overview
                 </DialogTitle>
               </DialogHeader>
               
