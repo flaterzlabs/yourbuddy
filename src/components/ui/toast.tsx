@@ -27,16 +27,16 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        // Toast do aluno (já é pequeno)
+        // Toast do aluno
         student: 'border bg-background text-foreground p-4 text-sm',
 
-        // Toasts do cuidador (ajustados para mobile!)
+        // Toasts do cuidador
         'caregiver-success':
-          'bg-card text-card-foreground border-2 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)] space-y-2 p-6 sm:min-w-[380px] max-w-[75vw] mx-auto',
+          'bg-card text-card-foreground border-2 border-emotion-happy shadow-[0_0_30px_hsl(var(--emotion-happy)/0.6)] space-y-2 p-6 sm:min-w-[320px] max-w-[75vw] mx-auto',
         'caregiver-warning':
-          'bg-card text-card-foreground border-2 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)] space-y-2 p-6 sm:min-w-[380px] max-w-[75vw] mx-auto',
+          'bg-card text-card-foreground border-2 border-emotion-need shadow-[0_0_30px_hsl(var(--emotion-need)/0.6)] space-y-2 p-6 sm:min-w-[320px] max-w-[75vw] mx-auto',
         'caregiver-urgent':
-          'bg-card text-card-foreground border-2 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)] space-y-2 p-6 sm:min-w-[380px] max-w-[75vw] mx-auto',
+          'bg-card text-card-foreground border-2 border-emotion-urgent shadow-[0_0_30px_hsl(var(--emotion-urgent)/0.6)] space-y-2 p-6 sm:min-w-[320px] max-w-[75vw] mx-auto',
 
         // Erros
         destructive: 'border bg-destructive text-destructive-foreground p-4 text-sm',
