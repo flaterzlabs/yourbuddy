@@ -6,7 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
-import { subDays, subWeeks, subMonths, format, startOfDay, endOfDay } from 'date-fns';
+import { subDays, subWeeks, subMonths, format, startOfWeek, endOfWeek } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
@@ -53,38 +53,75 @@ export function StudentStats({ userId }: StudentStatsProps) {
   };
 
   const chartData = useMemo(() => {
-    if (!helpRequests.length) return [];
-
-    const groupedData: Record<string, { ok: number; attention: number; urgent: number }> = {};
-
+    const now = new Date();
+    let periods: { key: string; date: Date; label: string }[] = [];
+    
+    if (period === 'daily') {
+      for (let i = 6; i >= 0; i--) {
+        const date = subDays(now, i);
+        periods.push({
+          key: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+          date,
+          label: format(date, 'dd/MM')
+        });
+      }
+    } else if (period === 'weekly') {
+      for (let i = 3; i >= 0; i--) {
+        const date = subWeeks(now, i);
+        const weekStart = startOfWeek(date, { weekStartsOn: 0 });
+        periods.push({
+          key: `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`,
+          date: weekStart,
+          label: format(weekStart, 'dd/MM')
+        });
+      }
+    } else {
+      for (let i = 5; i >= 0; i--) {
+        const date = subMonths(now, i);
+        periods.push({
+          key: `${date.getFullYear()}-${date.getMonth()}`,
+          date,
+          label: date.toLocaleDateString('pt-BR', { month: 'short' })
+        });
+      }
+    }
+    
+    // Initialize counters for each urgency level
+    const counters = new Map<string, { ok: number; attention: number; urgent: number }>();
+    
     helpRequests.forEach((request) => {
-      let key: string;
-      const date = new Date(request.created_at);
-
-      switch (period) {
-        case 'daily':
-          key = format(date, 'MMM dd');
-          break;
-        case 'weekly':
-          key = `Week ${format(date, 'w')}`;
-          break;
-        case 'monthly':
-          key = format(date, 'MMM yyyy');
-          break;
+      if (!request.created_at) return;
+      const created = new Date(request.created_at);
+      let key = '';
+      
+      if (period === 'daily') {
+        key = `${created.getFullYear()}-${created.getMonth()}-${created.getDate()}`;
+      } else if (period === 'weekly') {
+        const weekStart = startOfWeek(created, { weekStartsOn: 0 });
+        key = `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`;
+      } else {
+        key = `${created.getFullYear()}-${created.getMonth()}`;
       }
-
-      if (!groupedData[key]) {
-        groupedData[key] = { ok: 0, attention: 0, urgent: 0 };
-      }
-
+      
       const urgency = request.urgency || 'ok';
-      groupedData[key][urgency as 'ok' | 'attention' | 'urgent']++;
+      const existing = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
+      if (urgency === 'ok') existing.ok += 1;
+      else if (urgency === 'attention') existing.attention += 1;
+      else if (urgency === 'urgent') existing.urgent += 1;
+      
+      counters.set(key, existing);
     });
-
-    return Object.entries(groupedData).map(([period, counts]) => ({
-      period,
-      ...counts,
-    }));
+    
+    return periods.map(({ key, label }) => {
+      const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
+      return {
+        period: label,
+        ok: counts.ok,
+        attention: counts.attention,
+        urgent: counts.urgent,
+        total: counts.ok + counts.attention + counts.urgent
+      };
+    });
   }, [helpRequests, period]);
 
   const totalRequests = helpRequests.length;
