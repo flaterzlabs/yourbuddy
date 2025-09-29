@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { StudentAvatar } from '@/components/student-avatar';
+import { StudentStats } from '@/components/student-stats';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -47,6 +48,7 @@ export default function CaregiverDashboard() {
   const [overviewModalOpen, setOverviewModalOpen] = useState(false);
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
   const [chartPeriod, setChartPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   useEffect(() => {
     if (copyStatus !== 'copied') return;
     const timeout = setTimeout(() => setCopyStatus('idle'), 2000);
@@ -745,10 +747,21 @@ export default function CaregiverDashboard() {
                             Connected on {new Date(connection.created_at).toLocaleDateString('en-US')}
                           </p>
                         </div>
-                        <Badge variant="secondary" className="text-xs">
-                          <Activity className="h-3 w-3 mr-1" />
-                          Active
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className="text-xs">
+                            <Activity className="h-3 w-3 mr-1" />
+                            Active
+                          </Badge>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setSelectedStudentId(connection.student_id)}
+                            className="h-8 w-8 rounded-lg hover:bg-primary/10 transition-colors"
+                            title="View Statistics"
+                          >
+                            <BarChart3 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>)}
                 </div>}
@@ -908,14 +921,42 @@ export default function CaregiverDashboard() {
                               Connected on {new Date(connection.created_at).toLocaleDateString('en-US')}
                             </p>
                           </div>
-                          <Badge variant="secondary" className="text-xs px-2 py-1">
-                            <Activity className="h-2 w-2 mr-1" />
-                            Active
-                          </Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary" className="text-xs px-2 py-1">
+                              <Activity className="h-2 w-2 mr-1" />
+                              Active
+                            </Badge>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setSelectedStudentId(connection.student_id)}
+                              className="h-7 w-7 rounded-lg hover:bg-primary/10 transition-colors"
+                              title="View Statistics"
+                            >
+                              <BarChart3 className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
                         </div>
                       </div>)}
                   </div>}
               </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Student Stats Dialog */}
+          <Dialog open={!!selectedStudentId} onOpenChange={(open) => !open && setSelectedStudentId(null)}>
+            <DialogContent className="max-w-[95vw] md:max-w-[600px] max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-primary" />
+                  Student Statistics
+                </DialogTitle>
+              </DialogHeader>
+              {selectedStudentId && (
+                <div className="mt-4">
+                  <StudentStats userId={selectedStudentId} />
+                </div>
+              )}
             </DialogContent>
           </Dialog>
         </div>

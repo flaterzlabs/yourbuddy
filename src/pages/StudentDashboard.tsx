@@ -11,7 +11,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2 } from "lucide-react";
-import { StudentStats } from '@/components/student-stats';
+import { StudentStatsPopover } from '@/components/student-stats-popover';
 import { Database } from '@/integrations/supabase/types';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -72,7 +72,7 @@ function MobileMenu({
 
         <DropdownMenuContent align="end" className="flex flex-col gap-2 p-2 min-w-[3rem]">
           {/* Estatísticas */}
-          <StudentStats userId={userId} />
+          <StudentStatsPopover userId={userId} />
           
           {/* Histórico de pedidos */}
           <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
@@ -398,7 +398,7 @@ export default function StudentDashboard() {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
-            <StudentStats userId={user?.id || ''} />
+            <StudentStatsPopover userId={user?.id || ''} />
             
             <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
               <DialogTrigger asChild>
