@@ -12,7 +12,7 @@ import { toast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { UserPlus, Users, Clock, CheckCircle, XCircle, AlertTriangle, MessageSquare, Activity, Copy, Check, Menu, BarChart3, GraduationCap, Sun } from 'lucide-react';
+import { UserPlus, Users, Clock, CheckCircle, XCircle, AlertTriangle, MessageSquare, Activity, Copy, Check, Menu, BarChart3, GraduationCap, Sun, Moon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -476,14 +476,16 @@ export default function CaregiverDashboard() {
                 </Button>
                 
                 {/* theme */}
-                <ThemeToggle
-                  trigger={
-                    <div className="flex items-center gap-3 justify-start h-12 px-4 py-2 hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors">
-                      <Sun className="h-5 w-5" />
-                      <span>Tema</span>
-                    </div>
-                  }
-                />
+               <ThemeToggle asChild>
+  <Button 
+    variant="ghost" 
+    className="justify-start gap-3 h-12"
+  >
+    <SunMoon className="h-5 w-5" />
+    Theme
+  </Button>
+</ThemeToggle>
+
 
 
                    
