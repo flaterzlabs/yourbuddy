@@ -512,7 +512,7 @@ export default function CaregiverDashboard() {
           });
           navigate('/auth');
         }} 
-        className="justify-center gap-3 h-12 w-full font-semibold text-destructive hover:text-destructive"
+        className="justify-center gap-3 h-12 w-full font-semibold text-destructive"
       >
         <LogOut className="h-5 w-5" />
         Logout
