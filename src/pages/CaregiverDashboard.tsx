@@ -475,12 +475,14 @@ export default function CaregiverDashboard() {
                   Meus Alunos
                 </Button>
                 
-                 <div className="border-t pt-4 mt-4 space-y-2">
-                   <div className="flex items-center gap-3 px-3 py-2">
-                     <ThemeToggle />
-                     <span>Theme</span>
-                   </div>
-                 </div>
+                 <Button 
+  variant="ghost" 
+  className="justify-start gap-3 h-12"
+>
+  <ThemeToggle />
+  Theme
+</Button>
+
                    
                  <Button variant="ghost" onClick={async () => {
                    await signOut();
