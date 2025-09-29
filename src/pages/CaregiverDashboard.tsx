@@ -574,9 +574,9 @@ export default function CaregiverDashboard() {
                     labelFormatter={(value) => value}
                     formatter={(value: any, name: string) => [
                       value,
-                      name === 'ok' ? `🟢 Low Priority` : 
-                      name === 'attention' ? `🟡 Medium Priority` : 
-                      `🔴 High Priority`
+                      name === 'ok' ? `🟢 Good` : 
+                      name === 'attention' ? `🟡 Attention` : 
+                      `🔴 Urgent`
                     ]}
                   />} />
                   <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" />
