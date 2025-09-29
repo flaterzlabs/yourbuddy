@@ -22,6 +22,23 @@ type Connection = Database['public']['Tables']['connections']['Row'] & {
   };
 };
 
+const formatCaregiverRecipients = (connections: Connection[]) => {
+  if (!connections || connections.length === 0) {
+    return 'No caregivers connected yet';
+  }
+
+  const names = connections
+    .map(connection => connection.caregiver_profile?.username)
+    .filter((name): name is string => Boolean(name?.trim()));
+
+  if (names.length === 0) {
+    return 'Your connected caregivers';
+  }
+
+  const uniqueNames = Array.from(new Set(names));
+  return uniqueNames.join(', ');
+};
+
 // --- Componente para menu mobile ---
 function MobileMenu({
   helpRequests,
@@ -40,6 +57,8 @@ function MobileMenu({
   signOut: () => Promise<void>;
   navigate: (path: string) => void;
 }) {
+  const recipientsText = formatCaregiverRecipients(connections);
+
   return <div className="md:hidden">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -59,16 +78,23 @@ function MobileMenu({
                   </span>}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[80vh]">
+            <DialogContent className="max-w-md max-h-[80vh] overflow-hidden flex flex-col">
               <DialogHeader>
                 <DialogTitle>
                   Request History ({helpRequests.length.toString().padStart(2, "0")})
                 </DialogTitle>
+                <p className="text-xs text-muted-foreground">
+                  Requests notify: {recipientsText}
+                </p>
               </DialogHeader>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
-                {helpRequests.length === 0 ? <p className="text-muted-foreground text-center py-4">
+              <div className="space-y-3 overflow-y-auto pr-1 flex-1">
+                {helpRequests.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-4">
                     No requests yet
-                  </p> : helpRequests.map(request => <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                  </p>
+                ) : (
+                  helpRequests.map(request => (
+                    <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <span>{request.urgency === "urgent" ? "🔴" : request.urgency === "attention" ? "🟡" : "🟢"}</span>
@@ -83,7 +109,9 @@ function MobileMenu({
                         </span>
                       </div>
                       {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
-                    </div>)}
+                    </div>
+                  ))
+                )}
               </div>
             </DialogContent>
           </Dialog>
@@ -133,6 +161,7 @@ export default function StudentDashboard() {
     status: string;
   } | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
+  const recipientsText = formatCaregiverRecipients(connections);
   const fetchConnections = async () => {
     if (!user) return;
     try {
@@ -372,29 +401,38 @@ export default function StudentDashboard() {
                     </span>}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-md max-h-[80vh]">
-                <DialogHeader>
-                  <DialogTitle>
-                    Request History ({helpRequests.length.toString().padStart(2, '0')})
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {helpRequests.length === 0 ? <p className="text-muted-foreground text-center py-4">No requests yet</p> : helpRequests.map(request => <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
-                            <Badge variant={getStatusColor(request.status || 'open')}>
-                              {request.status === 'open' && <><Clock className="h-3 w-3 mr-1" />Waiting</>}
-                              {request.status === 'answered' && <><CheckCircle className="h-3 w-3 mr-1" />Answered</>}
-                              {request.status === 'closed' && <><XCircle className="h-3 w-3 mr-1" />Closed</>}
-                            </Badge>
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            {new Date(request.created_at).toLocaleDateString('en-US')}
-                          </span>
-                        </div>
-                        {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
-                      </div>)}
+            <DialogContent className="max-w-md max-h-[80vh] overflow-hidden flex flex-col">
+              <DialogHeader>
+                <DialogTitle>
+                  Request History ({helpRequests.length.toString().padStart(2, '0')})
+                </DialogTitle>
+                <p className="text-xs text-muted-foreground">
+                  Requests notify: {recipientsText}
+                </p>
+              </DialogHeader>
+              <div className="space-y-3 overflow-y-auto pr-1 flex-1">
+                {helpRequests.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-4">No requests yet</p>
+                ) : (
+                  helpRequests.map(request => (
+                    <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span>{getUrgencyEmoji(request.urgency || 'ok')}</span>
+                        <Badge variant={getStatusColor(request.status || 'open')}>
+                          {request.status === 'open' && <><Clock className="h-3 w-3 mr-1" />Waiting</>}
+                          {request.status === 'answered' && <><CheckCircle className="h-3 w-3 mr-1" />Answered</>}
+                          {request.status === 'closed' && <><XCircle className="h-3 w-3 mr-1" />Closed</>}
+                        </Badge>
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(request.created_at).toLocaleDateString('en-US')}
+                      </span>
+                      </div>
+                      {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
+                    </div>
+                  ))
+                )}
                 </div>
               </DialogContent>
             </Dialog>
