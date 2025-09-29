@@ -475,16 +475,18 @@ export default function CaregiverDashboard() {
                   Meus Alunos
                 </Button>
                 
-              {/* theme */}
-<ThemeToggle asChild>
-  <Button 
-    variant="ghost" 
-    className="w-full justify-start gap-3 h-12"
-  >
-    <SunMoon className="h-5 w-5" />
-    Theme
-  </Button>
-</ThemeToggle>
+               {/* theme */}
+<ThemeToggle 
+  trigger={
+    <Button 
+      variant="ghost" 
+      className="w-full justify-start gap-3 h-12"
+    >
+      <SunMoon className="h-5 w-5" />
+      Theme
+    </Button>
+  }
+/>
 
                  <Button variant="ghost" onClick={async () => {
                    await signOut();
