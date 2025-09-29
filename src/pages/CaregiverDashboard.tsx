@@ -462,7 +462,7 @@ export default function CaregiverDashboard() {
   </SheetTrigger>
   <SheetContent 
     side="right" 
-    className="w-[70vw] h-[60vh]"  // largura 60% e altura 50% da tela
+    className="w-[70vw] h-[60vh] rounded-2xl shadow-lg border border-border"
   >
     <SheetHeader>
       <SheetTitle className="flex items-center gap-2 justify-center">
@@ -487,7 +487,7 @@ export default function CaregiverDashboard() {
         className="justify-center gap-3 h-12"
       >
         <GraduationCap className="h-5 w-5" />
-        Meus Alunos
+        My Students
       </Button>
       
       {/* theme */}
