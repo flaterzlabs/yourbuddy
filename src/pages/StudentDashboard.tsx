@@ -15,6 +15,7 @@ import { StudentStatsPopover } from '@/components/student-stats-popover';
 import { Database } from '@/integrations/supabase/types';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { motion, AnimatePresence } from "framer-motion";
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 type Connection = Database['public']['Tables']['connections']['Row'] & {
   caregiver_profile: {
@@ -167,6 +168,7 @@ export default function StudentDashboard() {
     status: string;
   } | null>(null);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const recipientsText = formatCaregiverRecipients(connections);
   const fetchConnections = async () => {
     if (!user) return;
@@ -269,15 +271,17 @@ export default function StudentDashboard() {
       clearTimeout(sendTimer);
       setSendTimer(null);
       setPendingUrgency(null);
+      setCountdown(0);
       return;
     }
     if (sendTimer) clearTimeout(sendTimer);
     setPendingUrgency(selectedUrgency);
+    setCountdown(5);
 
-    // 4 segundos
+    // 5 segundos
     const timer = setTimeout(() => {
       sendHelpRequest(selectedUrgency);
-    }, 4000);
+    }, 5000);
     setSendTimer(timer);
   };
   const sendHelpRequest = async (urgencyLevel: 'ok' | 'attention' | 'urgent') => {
@@ -317,9 +321,13 @@ export default function StudentDashboard() {
 
       // Success animation and notification
       setUrgency(urgencyLevel);
+      setShowSuccessAnimation(true);
+      
       setTimeout(() => {
         setUrgency(null);
-      }, 1000);
+        setShowSuccessAnimation(false);
+      }, 2000);
+      
       toast({
         title: 'Help request sent!',
         description: 'Your request has been sent to connected caregivers',
@@ -342,6 +350,16 @@ export default function StudentDashboard() {
       setCountdown(0);
     }
   };
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (countdown > 0 && pendingUrgency) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown, pendingUrgency]);
 
   // Cleanup timer on unmount
   useEffect(() => {
@@ -484,7 +502,37 @@ export default function StudentDashboard() {
 
 
           {/* Help Request Form */}
-        <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8">
+        <motion.div
+          animate={{
+            backgroundColor: urgency === 'ok' ? 'rgba(34, 197, 94, 0.2)' : 
+                           urgency === 'attention' ? 'rgba(234, 179, 8, 0.2)' : 
+                           urgency === 'urgent' ? 'rgba(239, 68, 68, 0.2)' : 
+                           'transparent'
+          }}
+          transition={{ duration: 0.3 }}
+          className="rounded-lg"
+        >
+        <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
+          <AnimatePresence>
+            {showSuccessAnimation && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: [0, 1.2, 1] }}
+                  transition={{ duration: 0.6 }}
+                  className="text-8xl"
+                >
+                  ✓
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mx-auto mb-4">
                 <StudentAvatar imageUrl={thriveSprite?.image_url} seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined} style={thriveSprite ? (thriveSprite.options as any)?.style : undefined} size={140} className="border-4 border-success rounded-full shadow-md shadow-green-500" />
@@ -536,14 +584,22 @@ export default function StudentDashboard() {
                 </div>
                 
                 {/* Feedback text */}
-                {pendingUrgency && <div className="text-center pt-6">
-    <p className="text-base text-muted-foreground">
-     Sending help request... Tap again to cancel!
-    </p>
-  </div>}
+                {pendingUrgency && countdown > 0 && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="text-center pt-6"
+                  >
+                    <p className="text-lg font-semibold text-muted-foreground">
+                      Sending in <span className="text-2xl font-bold text-primary">{countdown}s</span>... Tap again to cancel!
+                    </p>
+                  </motion.div>
+                )}
               </div>
             </div>
           </Card>
+        </motion.div>
         </div>
       </div>
     </div>;
