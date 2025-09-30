@@ -504,13 +504,14 @@ export default function StudentDashboard() {
           {/* Help Request Form */}
         <motion.div
           animate={{
-            backgroundColor: urgency === 'ok' ? 'rgba(34, 197, 94, 0.2)' : 
-                           urgency === 'attention' ? 'rgba(234, 179, 8, 0.2)' : 
-                           urgency === 'urgent' ? 'rgba(239, 68, 68, 0.2)' : 
-                           'transparent'
+            scale: urgency ? [1, 1.02, 1] : 1,
           }}
-          transition={{ duration: 0.3 }}
-          className="rounded-lg"
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          className={`rounded-lg ${
+            urgency === 'ok' ? 'animate-pulse-success' :
+            urgency === 'attention' ? 'animate-pulse-warning' :
+            urgency === 'urgent' ? 'animate-pulse-urgent' : ''
+          }`}
         >
         <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
           <AnimatePresence>

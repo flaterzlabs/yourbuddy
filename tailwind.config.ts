@@ -106,11 +106,38 @@ export default {
             height: '0',
           },
         },
+        'pulse-success': {
+          '0%, 100%': {
+            boxShadow: '0 0 0 0 rgba(34, 197, 94, 0)',
+          },
+          '50%': {
+            boxShadow: '0 0 40px 8px rgba(34, 197, 94, 0.6)',
+          },
+        },
+        'pulse-warning': {
+          '0%, 100%': {
+            boxShadow: '0 0 0 0 rgba(234, 179, 8, 0)',
+          },
+          '50%': {
+            boxShadow: '0 0 40px 8px rgba(234, 179, 8, 0.6)',
+          },
+        },
+        'pulse-urgent': {
+          '0%, 100%': {
+            boxShadow: '0 0 0 0 rgba(239, 68, 68, 0)',
+          },
+          '50%': {
+            boxShadow: '0 0 40px 8px rgba(239, 68, 68, 0.6)',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'toast-progress': 'toast-progress 4s ease-out forwards',
+        'pulse-success': 'pulse-success 2s ease-in-out',
+        'pulse-warning': 'pulse-warning 2s ease-in-out',
+        'pulse-urgent': 'pulse-urgent 2s ease-in-out',
       },
     },
   },
