@@ -72,8 +72,8 @@ function MobileMenu({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="flex flex-col gap-2 p-2 min-w-[3rem]">
-          {/* Estatísticas */}
-          <StudentStatsPopover userId={userId} />
+          
+        
           
           {/* Histórico de pedidos */}
           <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
@@ -127,6 +127,9 @@ function MobileMenu({
           <SettingsModal onConnectionAdded={handleConnectionAdded} connections={connections} trigger={<Button variant="ghost" size="icon" className="transition-colors duration-200">
                 <Link className="h-5 w-5" />
               </Button>} />
+
+            {/* Estatísticas */}
+          <StudentStatsPopover userId={userId} />
 
           {/* Tema */}
           <ThemeToggle />
@@ -416,7 +419,7 @@ export default function StudentDashboard() {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
-            <StudentStatsPopover userId={user?.id || ''} />
+            
             
             <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
               <DialogTrigger asChild>
@@ -466,6 +469,8 @@ export default function StudentDashboard() {
             <SettingsModal onConnectionAdded={handleConnectionAdded} connections={connections} trigger={<Button variant="ghost" size="icon" className="transition-colors duration-200">
                   <Link className="h-5 w-5" />
                 </Button>} />
+
+             <StudentStatsPopover userId={user?.id || ''} />
 
             <ThemeToggle />
 
@@ -610,7 +615,7 @@ export default function StudentDashboard() {
                     className="text-center pt-6"
                   >
                     <p className="text-lg font-semibold text-muted-foreground">
-                      Sending in <span className="text-2xl font-bold text-primary">{countdown}s</span>... Tap again to cancel!
+                      Sending in <span className="text-2xl font-bold bg-gradient-hero bg-clip-text">{countdown}s</span>... Tap again to cancel!
                     </p>
                   </motion.div>
                 )}
