@@ -519,42 +519,42 @@ export default function StudentDashboard() {
           }`}
         >
        <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
-  {/* Overlay de pulse */}
-  <AnimatePresence>
-    {showSuccessAnimation && (
-      <motion.div
-        key="pulse-overlay"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{
-          opacity: [0, 0.9, 0.5, 0],
-          scale: [1, 1.15, 1, 1.15, 1],
-          boxShadow: [
-            '0 0 0px rgba(0,0,0,0)',
-            urgency === 'ok'
-              ? '0 0 40px 20px rgba(34,197,94,0.8)'   // verde
-              : urgency === 'attention'
-              ? '0 0 40px 20px rgba(234,179,8,0.8)'   // amarelo
-              : '0 0 40px 20px rgba(239,68,68,0.8)',  // vermelho
-            '0 0 0px rgba(0,0,0,0)',
-          ],
-        }}
-        transition={{
-          duration: 1.6, // 2 pulsos em ~1.6s
-          times: [0, 0.25, 0.5, 1],
-          repeat: 1, // repete 1 vez → total 2x
-        }}
-        className="absolute inset-0 rounded-lg pointer-events-none z-20"
-        style={{
-          backgroundColor:
-            urgency === 'ok'
-              ? 'rgba(34,197,94,0.25)'
-              : urgency === 'attention'
-              ? 'rgba(234,179,8,0.25)'
-              : 'rgba(239,68,68,0.25)',
-        }}
-      />
-    )}
-  </AnimatePresence>
+ <AnimatePresence>
+  {showSuccessAnimation && (
+    <motion.div
+      key="pulse-overlay"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{
+        opacity: [0, 0.9, 0.5, 0],
+        scale: [1, 1.15, 1, 1.15, 1],
+        boxShadow: [
+          "0 0 0px rgba(0,0,0,0)",
+          urgency === "ok"
+            ? "0 0 40px 20px rgba(34,197,94,0.8)" // verde
+            : urgency === "attention"
+            ? "0 0 40px 20px rgba(234,179,8,0.8)" // amarelo
+            : "0 0 40px 20px rgba(239,68,68,0.8)", // vermelho
+          "0 0 0px rgba(0,0,0,0)",
+        ],
+      }}
+      transition={{
+        duration: 1.2, // tempo de 1 ciclo (pulse + shadow)
+        repeat: 2, // repete 2x → total de 3 piscadas
+        ease: "easeInOut",
+      }}
+      className="absolute inset-0 rounded-lg pointer-events-none z-20"
+      style={{
+        backgroundColor:
+          urgency === "ok"
+            ? "rgba(34,197,94,0.25)"
+            : urgency === "attention"
+            ? "rgba(234,179,8,0.25)"
+            : "rgba(239,68,68,0.25)",
+      }}
+    />
+  )}
+</AnimatePresence>
+
 
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mx-auto mb-4">
@@ -615,7 +615,7 @@ export default function StudentDashboard() {
                     className="text-center pt-6"
                   >
                     <p className="text-lg font-semibold text-muted-foreground">
-                      Sending in <span className="text-2xl font-bold bg-gradient-hero bg-clip-text">{countdown}s</span>... Tap again to cancel!
+                      Sending in <span className="text-2xl font-bold text-primary">{countdown}s</span>... Tap again to cancel!
                     </p>
                   </motion.div>
                 )}
