@@ -525,35 +525,36 @@ export default function StudentDashboard() {
       key="pulse-overlay"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{
-        opacity: [0, 0.9, 0.5, 0],
-        scale: [1, 1.15, 1, 1.15, 1],
+        opacity: [0, 1, 0.6, 0],
+        scale: [1, 1.2, 1, 1.2, 1], // mais expansão
         boxShadow: [
           "0 0 0px rgba(0,0,0,0)",
           urgency === "ok"
-            ? "0 0 40px 20px rgba(34,197,94,0.8)" // verde
+            ? "0 0 60px 30px rgba(34,197,94,1)" // verde forte
             : urgency === "attention"
-            ? "0 0 40px 20px rgba(234,179,8,0.8)" // amarelo
-            : "0 0 40px 20px rgba(239,68,68,0.8)", // vermelho
+            ? "0 0 60px 30px rgba(234,179,8,1)" // amarelo forte
+            : "0 0 60px 30px rgba(239,68,68,1)", // vermelho forte
           "0 0 0px rgba(0,0,0,0)",
         ],
       }}
       transition={{
-        duration: 1.2, // tempo de 1 ciclo (pulse + shadow)
-        repeat: 2, // repete 2x → total de 3 piscadas
+        duration: 1.2, // cada pulso dura 1.2s
+        repeat: 2, // total de 3 piscadas
         ease: "easeInOut",
       }}
       className="absolute inset-0 rounded-lg pointer-events-none z-20"
       style={{
         backgroundColor:
           urgency === "ok"
-            ? "rgba(34,197,94,0.25)"
+            ? "rgba(34,197,94,0.4)" // overlay mais visível
             : urgency === "attention"
-            ? "rgba(234,179,8,0.25)"
-            : "rgba(239,68,68,0.25)",
+            ? "rgba(234,179,8,0.4)"
+            : "rgba(239,68,68,0.4)",
       }}
     />
   )}
 </AnimatePresence>
+
 
 
             <div className="text-center mb-8">
