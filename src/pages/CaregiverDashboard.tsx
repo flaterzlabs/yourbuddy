@@ -292,6 +292,65 @@ export default function CaregiverDashboard() {
       });
     }
   };
+
+  const handleCloseAllRequests = async () => {
+    if (openHelpRequests.length === 0) return;
+    
+    try {
+      const openRequestIds = openHelpRequests.map(r => r.id);
+      const { error } = await supabase
+        .from('help_requests')
+        .update({
+          status: 'closed',
+          resolved_by: user?.id,
+          resolved_at: new Date().toISOString()
+        })
+        .in('id', openRequestIds);
+
+      if (error) throw error;
+
+      toast({
+        title: 'All requests closed',
+        description: `${openRequestIds.length} help request${openRequestIds.length > 1 ? 's' : ''} closed successfully.`,
+        variant: 'caregiver-success'
+      });
+
+      // Notify all students via broadcast
+      openHelpRequests.forEach(request => {
+        if (request.student_id) {
+          try {
+            const notificationChannel = supabase.channel(`help-status-student-${request.student_id}`);
+            notificationChannel.subscribe();
+            
+            setTimeout(async () => {
+              await notificationChannel.send({
+                type: 'broadcast',
+                event: 'status-update',
+                payload: {
+                  request_id: request.id,
+                  student_id: request.student_id,
+                  status: 'closed',
+                  updated_at: new Date().toISOString()
+                }
+              });
+              setTimeout(() => supabase.removeChannel(notificationChannel), 1000);
+            }, 100);
+          } catch (e) {
+            console.log('Broadcast notification failed:', e);
+          }
+        }
+      });
+
+      fetchHelpRequests();
+    } catch (error) {
+      console.error('Error closing all requests:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to close all requests.',
+        variant: 'destructive'
+      });
+    }
+  };
   const getStatusColor = (status: string): 'default' | 'destructive' | 'secondary' | 'outline' => {
     switch (status) {
       case 'open':
@@ -616,12 +675,25 @@ export default function CaregiverDashboard() {
 
             {/* Help Requests */}
             <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <AlertTriangle className="h-6 w-6 text-warning" />
-                <h2 className="text-xl font-bold">Help Requests</h2>
-                {openHelpRequests.length > 0 && <Badge variant="destructive">
-                    {openHelpRequests.length} open
-                  </Badge>}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="h-6 w-6 text-warning" />
+                  <h2 className="text-xl font-bold">Help Requests</h2>
+                  {openHelpRequests.length > 0 && <Badge variant="destructive">
+                      {openHelpRequests.length} open
+                    </Badge>}
+                </div>
+                {openHelpRequests.length > 0 && (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleCloseAllRequests}
+                    className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  >
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Close All
+                  </Button>
+                )}
               </div>
 
               <div className="space-y-4 max-h-[32rem] overflow-y-auto">
@@ -676,12 +748,25 @@ export default function CaregiverDashboard() {
 
           {/* Mobile Help Requests */}
           {isMobile && <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <AlertTriangle className="h-6 w-6 text-warning" />
-                <h2 className="text-lg font-bold">Help Requests</h2>
-                {openHelpRequests.length > 0 && <Badge variant="destructive">
-                    {openHelpRequests.length}
-                  </Badge>}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="h-6 w-6 text-warning" />
+                  <h2 className="text-lg font-bold">Help Requests</h2>
+                  {openHelpRequests.length > 0 && <Badge variant="destructive">
+                      {openHelpRequests.length}
+                    </Badge>}
+                </div>
+                {openHelpRequests.length > 0 && (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleCloseAllRequests}
+                    className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground h-8 px-3 text-xs"
+                  >
+                    <XCircle className="h-3 w-3 mr-1" />
+                    Close All
+                  </Button>
+                )}
               </div>
 
               <div className="space-y-3 max-h-[20rem] overflow-y-auto">
