@@ -513,27 +513,44 @@ export default function StudentDashboard() {
             urgency === 'urgent' ? 'animate-pulse-urgent' : ''
           }`}
         >
-        <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
-          <AnimatePresence>
-            {showSuccessAnimation && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
-              >
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: [0, 1.2, 1] }}
-                  transition={{ duration: 0.6 }}
-                  className="text-8xl"
-                >
-                  ✓
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+       <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
+  {/* Overlay de pulse */}
+  <AnimatePresence>
+    {showSuccessAnimation && (
+      <motion.div
+        key="pulse-overlay"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{
+          opacity: [0, 0.9, 0.5, 0],
+          scale: [1, 1.15, 1, 1.15, 1],
+          boxShadow: [
+            '0 0 0px rgba(0,0,0,0)',
+            urgency === 'ok'
+              ? '0 0 40px 20px rgba(34,197,94,0.8)'   // verde
+              : urgency === 'attention'
+              ? '0 0 40px 20px rgba(234,179,8,0.8)'   // amarelo
+              : '0 0 40px 20px rgba(239,68,68,0.8)',  // vermelho
+            '0 0 0px rgba(0,0,0,0)',
+          ],
+        }}
+        transition={{
+          duration: 1.6, // 2 pulsos em ~1.6s
+          times: [0, 0.25, 0.5, 1],
+          repeat: 1, // repete 1 vez → total 2x
+        }}
+        className="absolute inset-0 rounded-lg pointer-events-none z-20"
+        style={{
+          backgroundColor:
+            urgency === 'ok'
+              ? 'rgba(34,197,94,0.25)'
+              : urgency === 'attention'
+              ? 'rgba(234,179,8,0.25)'
+              : 'rgba(239,68,68,0.25)',
+        }}
+      />
+    )}
+  </AnimatePresence>
+
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mx-auto mb-4">
                 <StudentAvatar imageUrl={thriveSprite?.image_url} seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined} style={thriveSprite ? (thriveSprite.options as any)?.style : undefined} size={140} className="border-4 border-success rounded-full shadow-md shadow-green-500" />
