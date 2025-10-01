@@ -46,7 +46,7 @@ const DialogContent = React.forwardRef<
   // mobile
   'p-4 max-h-[90vh] overflow-y-auto',
   // desktop
-  'md:p-10 md:max-h-none md:overflow-visible'
+  'md:p-10 md:max-h-none md:overflow-visible',
         className,
       )}
       {...props}
