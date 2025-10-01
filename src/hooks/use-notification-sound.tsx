@@ -1,11 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 
-export type SoundOption = 'blip1' | 'blip2' | 'chime' | 'none';
+export type SoundOption = 'off' | 'blip1' | 'blip2' | 'chime' | 'ding' | 'softbell' | 'windchime' | 'pop' | 'ping' | 'twinkle' | 'spark' | 'woodtap';
 
-const SOUND_FILES: Record<Exclude<SoundOption, 'none'>, string> = {
+const SOUND_FILES: Record<Exclude<SoundOption, 'off'>, string> = {
   blip1: '/sounds/blip1.mp3',
   blip2: '/sounds/blip2.mp3',
   chime: '/sounds/chime.mp3',
+  ding: '/sounds/ding.mp3',
+  softbell: '/sounds/softbell.mp3',
+  windchime: '/sounds/windchime.mp3',
+  pop: '/sounds/pop.mp3',
+  ping: '/sounds/ping.mp3',
+  twinkle: '/sounds/twinkle.mp3',
+  spark: '/sounds/spark.mp3',
+  woodtap: '/sounds/woodtap.mp3',
 };
 
 const STORAGE_KEY = 'caregiver-notification-sound';
@@ -13,14 +21,14 @@ const STORAGE_KEY = 'caregiver-notification-sound';
 export function useNotificationSound() {
   const [selectedSound, setSelectedSound] = useState<SoundOption>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return (stored as SoundOption) || 'blip1';
+    return (stored as SoundOption) || 'off';
   });
 
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   // Update audio when sound selection changes
   useEffect(() => {
-    if (selectedSound === 'none') {
+    if (selectedSound === 'off') {
       setAudio(null);
       return;
     }
@@ -36,7 +44,7 @@ export function useNotificationSound() {
   }, [selectedSound]);
 
   const playNotificationSound = useCallback(() => {
-    if (!audio || selectedSound === 'none') return;
+    if (!audio || selectedSound === 'off') return;
 
     // Reset and play
     audio.currentTime = 0;
@@ -51,7 +59,7 @@ export function useNotificationSound() {
   }, []);
 
   const previewSound = useCallback((sound: SoundOption) => {
-    if (sound === 'none') return;
+    if (sound === 'off') return;
 
     const previewAudio = new Audio(SOUND_FILES[sound]);
     previewAudio.volume = 0.5;

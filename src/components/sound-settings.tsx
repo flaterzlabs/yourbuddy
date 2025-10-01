@@ -11,10 +11,18 @@ import {
 import { SoundOption, useNotificationSound } from '@/hooks/use-notification-sound';
 
 const SOUND_OPTIONS: { value: SoundOption; label: string; description: string }[] = [
+  { value: 'off', label: 'Off', description: 'No sound' },
   { value: 'blip1', label: 'Blip 1', description: 'Short soft beep' },
   { value: 'blip2', label: 'Blip 2', description: 'Gentle notification' },
   { value: 'chime', label: 'Chime', description: 'Subtle bell tone' },
-  { value: 'none', label: 'None', description: 'No sound' },
+  { value: 'ding', label: 'Ding', description: 'Clean bell tone' },
+  { value: 'softbell', label: 'Soft Bell', description: 'Velvety bell sound' },
+  { value: 'windchime', label: 'Wind Chime', description: 'Ethereal chime tones' },
+  { value: 'pop', label: 'Pop', description: 'Gentle bubble pop' },
+  { value: 'ping', label: 'Ping', description: 'Digital ping tone' },
+  { value: 'twinkle', label: 'Twinkle', description: 'Magical sparkle' },
+  { value: 'spark', label: 'Spark', description: 'Quick bright tone' },
+  { value: 'woodtap', label: 'Wood Tap', description: 'Warm percussion' },
 ];
 
 export function SoundSettings() {
@@ -22,7 +30,7 @@ export function SoundSettings() {
 
   const handleSoundSelect = (sound: SoundOption) => {
     updateSound(sound);
-    if (sound !== 'none') {
+    if (sound !== 'off') {
       previewSound(sound);
     }
   };
@@ -31,7 +39,7 @@ export function SoundSettings() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
-          {selectedSound === 'none' ? (
+          {selectedSound === 'off' ? (
             <VolumeX className="h-5 w-5" />
           ) : (
             <Volume2 className="h-5 w-5" />

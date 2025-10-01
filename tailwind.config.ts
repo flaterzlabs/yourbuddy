@@ -130,6 +130,14 @@ export default {
             boxShadow: '0 0 40px 8px rgba(239, 68, 68, 0.6)',
           },
         },
+        'toast-progress': {
+          '0%': {
+            width: '100%',
+          },
+          '100%': {
+            width: '0%',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
