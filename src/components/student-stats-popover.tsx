@@ -25,8 +25,9 @@ export function StudentStatsPopover({ userId }: StudentStatsPopoverProps) {
       </PopoverTrigger>
       <AnimatePresence>
         {open && (
+      
           <PopoverContent 
-            className="w-[90vw] md:w-[500px] p-4 md:p-6" 
+           className="w-[90vw] md:w-[500px] p-6 md:p-8" 
             align="end"
             asChild
           >
