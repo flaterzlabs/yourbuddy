@@ -911,7 +911,14 @@ export default function CaregiverDashboard() {
 
           {/* Overview Modal */}
           <Dialog open={overviewModalOpen} onOpenChange={setOverviewModalOpen}>
-            <DialogContent className="max-w-sm mx-auto max-h-[90vh] overflow-y-auto">
+           <DialogContent 
+  className="
+    max-w-sm mx-auto max-h-[90vh] overflow-y-auto p-4
+    md:max-w-3xl md:max-h-none md:overflow-visible md:p-8
+  "
+>
+  <StudentStats userId={student.id} />
+</DialogContent>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
