@@ -5,11 +5,9 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { SoundSettings } from '@/components/sound-settings';
 import { StudentAvatar } from '@/components/student-avatar';
 import { StudentStats } from '@/components/student-stats';
 import { useAuth } from '@/hooks/use-auth';
-import { useNotificationSound } from '@/hooks/use-notification-sound';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -34,7 +32,42 @@ type Connection = Database['public']['Tables']['connections']['Row'] & {
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'] & {
   student_profile?: Database['public']['Tables']['profiles']['Row'];
 };
+
+ export function useUnlockNotificationSound() {
+  useEffect(() => {
+    const audio = new Audio("/sounds/blip1.mp3"); // escolha seu som default
+
+    const unlockAudio = () => {
+      audio.play()
+        .then(() => {
+          audio.pause();
+          audio.currentTime = 0; // reseta
+        })
+        .catch(() => {
+          // ignorar erro, navegador pode bloquear se não for interação
+        });
+
+      document.removeEventListener("click", unlockAudio);
+      document.removeEventListener("touchstart", unlockAudio);
+    };
+
+    // precisa de uma interação do usuário (tap/click)
+    document.addEventListener("click", unlockAudio, { once: true });
+    document.addEventListener("touchstart", unlockAudio, { once: true });
+
+    return () => {
+      document.removeEventListener("click", unlockAudio);
+      document.removeEventListener("touchstart", unlockAudio);
+    };
+  }, []);
+}
+  
+
+
 export default function CaregiverDashboard() {
+
+  useUnlockNotificationSound()
+  
   const {
     user,
     profile,
@@ -42,7 +75,6 @@ export default function CaregiverDashboard() {
   } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const { playNotificationSound } = useNotificationSound();
   const [connections, setConnections] = useState<Connection[]>([]);
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [studentCode, setStudentCode] = useState('');
@@ -155,7 +187,6 @@ export default function CaregiverDashboard() {
         description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
         variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent'
       });
-      playNotificationSound();
       fetchHelpRequests();
     }).subscribe();
     return () => {
@@ -183,7 +214,6 @@ export default function CaregiverDashboard() {
           description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
           variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent'
         });
-        playNotificationSound();
       }
       fetchHelpRequests();
     }).subscribe();
@@ -483,6 +513,8 @@ export default function CaregiverDashboard() {
       color: 'hsl(0, 84%, 60%)'
     }
   }), []);
+
+ 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-6 md:px-4 py-8">
@@ -497,8 +529,6 @@ export default function CaregiverDashboard() {
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2">
-            
-            <SoundSettings />
             
             <Button variant="ghost" size="icon" className="rounded-full border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300">
               <ThemeToggle />
@@ -557,11 +587,6 @@ export default function CaregiverDashboard() {
         <GraduationCap className="h-5 w-5" />
         My Students
       </Button>
-      
-      {/* Sound Settings */}
-      <div className="flex justify-center">
-        <SoundSettings />
-      </div>
       
       {/* theme */}
       <ThemeToggle trigger={
