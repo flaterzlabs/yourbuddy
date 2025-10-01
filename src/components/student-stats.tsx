@@ -21,6 +21,41 @@ export function StudentStats({ userId }: StudentStatsProps) {
     fetchHelpRequests();
   }, [userId, period]);
 
+  // Realtime updates for help requests
+  useEffect(() => {
+    if (!userId) return;
+
+    // Listen to postgres_changes for this student's help requests
+    const helpRequestsChannel = supabase
+      .channel(`help-requests-student-${userId}`)
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'help_requests',
+        filter: `student_id=eq.${userId}`
+      }, () => {
+        // Refetch data when any change occurs
+        fetchHelpRequests();
+      })
+      .subscribe();
+
+    // Listen to broadcast for immediate feedback
+    const broadcastChannel = supabase
+      .channel(`help-status-student-${userId}`)
+      .on('broadcast', {
+        event: 'status-update'
+      }, () => {
+        // Refetch data when status update broadcast is received
+        fetchHelpRequests();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(helpRequestsChannel);
+      supabase.removeChannel(broadcastChannel);
+    };
+  }, [userId, period]);
+
   const fetchHelpRequests = async () => {
     let startDate: Date;
     
