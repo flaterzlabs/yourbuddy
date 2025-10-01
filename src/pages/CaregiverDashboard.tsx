@@ -5,9 +5,11 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BuddyLogo } from '@/components/buddy-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { SoundSettings } from '@/components/sound-settings';
 import { StudentAvatar } from '@/components/student-avatar';
 import { StudentStats } from '@/components/student-stats';
 import { useAuth } from '@/hooks/use-auth';
+import { useNotificationSound } from '@/hooks/use-notification-sound';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -32,37 +34,6 @@ type Connection = Database['public']['Tables']['connections']['Row'] & {
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'] & {
   student_profile?: Database['public']['Tables']['profiles']['Row'];
 };
-
-// 🔊 Hook para desbloquear áudio no mobile
-function useUnlockNotificationSound() {
-  useEffect(() => {
-    const audio = new Audio("/sounds/blip1.mp3"); // som default
-
-    const unlockAudio = () => {
-      audio.play()
-        .then(() => {
-          audio.pause();
-          audio.currentTime = 0;
-        })
-        .catch(() => {
-          // pode falhar silenciosamente, não tem problema
-        });
-
-      document.removeEventListener("click", unlockAudio);
-      document.removeEventListener("touchstart", unlockAudio);
-    };
-
-    document.addEventListener("click", unlockAudio, { once: true });
-    document.addEventListener("touchstart", unlockAudio, { once: true });
-
-    return () => {
-      document.removeEventListener("click", unlockAudio);
-      document.removeEventListener("touchstart", unlockAudio);
-    };
-  }, []);
-}
-
-
 export default function CaregiverDashboard() {
   const {
     user,
@@ -71,6 +42,7 @@ export default function CaregiverDashboard() {
   } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { playNotificationSound } = useNotificationSound();
   const [connections, setConnections] = useState<Connection[]>([]);
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [studentCode, setStudentCode] = useState('');
@@ -140,10 +112,6 @@ export default function CaregiverDashboard() {
     }
     console.timeEnd('caregiver:fetchHelpRequests');
   };
-
-   useUnlockNotificationSound();
-
-  
   useEffect(() => {
     fetchConnections();
   }, [user?.id]);
@@ -187,6 +155,7 @@ export default function CaregiverDashboard() {
         description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
         variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent'
       });
+      playNotificationSound();
       fetchHelpRequests();
     }).subscribe();
     return () => {
@@ -214,6 +183,7 @@ export default function CaregiverDashboard() {
           description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
           variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent'
         });
+        playNotificationSound();
       }
       fetchHelpRequests();
     }).subscribe();
@@ -528,6 +498,8 @@ export default function CaregiverDashboard() {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2">
             
+            <SoundSettings />
+            
             <Button variant="ghost" size="icon" className="rounded-full border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300">
               <ThemeToggle />
             </Button>
@@ -585,6 +557,11 @@ export default function CaregiverDashboard() {
         <GraduationCap className="h-5 w-5" />
         My Students
       </Button>
+      
+      {/* Sound Settings */}
+      <div className="flex justify-center">
+        <SoundSettings />
+      </div>
       
       {/* theme */}
       <ThemeToggle trigger={
