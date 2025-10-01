@@ -911,12 +911,7 @@ export default function CaregiverDashboard() {
 
           {/* Overview Modal */}
           <Dialog open={overviewModalOpen} onOpenChange={setOverviewModalOpen}>
-            <DialogContent 
-              className="
-                max-w-sm mx-auto max-h-[90vh] overflow-y-auto p-4
-                md:max-w-3xl md:max-h-none md:overflow-visible md:p-8
-              "
-            >
+            <DialogContent className="max-w-sm mx-auto max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
@@ -950,24 +945,25 @@ export default function CaregiverDashboard() {
 
                 <div>
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold">
-                      Requests Per Month
-                    </h3>
+  <h3 className="text-lg font-semibold">
+    Requests Per Month
+  </h3>
 
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
-                          {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => setChartPeriod('daily')}>Daily</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setChartPeriod('weekly')}>Weekly</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setChartPeriod('monthly')}>Monthly</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="outline">
+        {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+      <DropdownMenuItem onClick={() => setChartPeriod('daily')}>Daily</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => setChartPeriod('weekly')}>Weekly</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => setChartPeriod('monthly')}>Monthly</DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</div>
 
+                  
                   <ChartContainer config={monthlyChartConfig} className="w-full h-48">
                     <BarChart data={helpRequestsChartData}>
                       <CartesianGrid vertical={false} strokeDasharray="4 4" />

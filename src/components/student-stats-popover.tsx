@@ -26,7 +26,7 @@ export function StudentStatsPopover({ userId }: StudentStatsPopoverProps) {
       <AnimatePresence>
         {open && (
           <PopoverContent 
-            className="w-[90vw] md:w-[500px] p-4 md:p-6" 
+             className="w-[90vw] md:w-[650px] p-6 md:p-10 min-h-[500px] md:min-h-[600px]" 
             align="end"
             asChild
           >
