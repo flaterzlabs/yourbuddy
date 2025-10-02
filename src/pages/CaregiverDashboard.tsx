@@ -10,6 +10,7 @@ import { StudentAvatar } from '@/components/student-avatar';
 import { StudentStats } from '@/components/student-stats';
 import { useAuth } from '@/hooks/use-auth';
 import { useNotificationSound } from '@/hooks/use-notification-sound';
+import { useAudioUnlock } from '@/hooks/use-audio-unlock';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -43,6 +44,7 @@ export default function CaregiverDashboard() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { playNotificationSound } = useNotificationSound();
+  const { isUnlocked } = useAudioUnlock();
   const [connections, setConnections] = useState<Connection[]>([]);
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [studentCode, setStudentCode] = useState('');
@@ -149,11 +151,11 @@ export default function CaregiverDashboard() {
       const conn = connections.find(c => c.student_id === rec.student_id);
       const name = conn?.student_profile?.username || 'Unknown Student';
       const urgencyVariant = rec.urgency === 'urgent' ? 'caregiver-urgent' : rec.urgency === 'attention' ? 'caregiver-warning' : 'caregiver-success';
-      // === Alteração: Adicionado viewportId ===
       toast({
         title: 'New Help Request',
         description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
-        variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent'
+        variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
+        duration: 4000
       });
       playNotificationSound();
       fetchHelpRequests();
@@ -181,7 +183,8 @@ export default function CaregiverDashboard() {
         toast({
           title: 'New Help Request',
           description: `${getUrgencyEmoji(rec.urgency || 'ok')} Help request from ${name}`,
-          variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent'
+          variant: urgencyVariant as 'caregiver-success' | 'caregiver-warning' | 'caregiver-urgent',
+          duration: 4000
         });
         playNotificationSound();
       }
@@ -209,11 +212,11 @@ export default function CaregiverDashboard() {
         student?: any;
       };
       if (result.success && result.student) {
-        // === Alteração: Adicionado viewportId ===
         toast({
           title: 'Estudante conectado!',
           description: `Conectado com ${result.student.username} (${result.student.student_code})`,
-          variant: 'caregiver-success'
+          variant: 'caregiver-success',
+          duration: 4000
         });
         setStudentCode('');
         fetchConnections(); // This will refresh the "Meus Alunos" section
