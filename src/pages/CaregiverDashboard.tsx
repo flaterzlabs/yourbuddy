@@ -530,7 +530,7 @@ export default function CaregiverDashboard() {
   </SheetTrigger>
   <SheetContent 
     side="right" 
-    className="w-[70vw] h-[60vh] rounded-2xl shadow-lg border border-border"
+    className="w-[70vw] h-auto rounded-2xl shadow-lg border border-border"
   >
     <SheetHeader>
       <SheetTitle className="flex items-center gap-2 justify-center">
@@ -559,9 +559,19 @@ export default function CaregiverDashboard() {
       </Button>
       
       {/* Sound Settings */}
-      <div className="flex justify-center">
-        <SoundSettings />
-      </div>
+      <SoundSettings trigger={
+        <Button 
+          variant="ghost" 
+          className="w-full justify-center gap-3 h-12"
+        >
+          <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/>
+            <path d="M16 9a5 5 0 0 1 0 6"/>
+            <path d="M19.364 18.364a9 9 0 0 0 0-12.728"/>
+          </svg>
+          Sound
+        </Button>
+      } />
       
       {/* theme */}
       <ThemeToggle trigger={
@@ -1042,7 +1052,7 @@ export default function CaregiverDashboard() {
 
           {/* Student Stats Dialog */}
           <Dialog open={!!selectedStudentId} onOpenChange={(open) => !open && setSelectedStudentId(null)}>
-            <DialogContent className="max-w-[95vw] md:max-w-[600px] max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-[95vw] md:max-w-[600px] max-h-[90vh] overflow-y-auto overflow-x-hidden">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-primary" />
@@ -1050,7 +1060,7 @@ export default function CaregiverDashboard() {
                 </DialogTitle>
               </DialogHeader>
               {selectedStudentId && (
-                <div className="mt-4">
+                <div className="mt-4 overflow-x-hidden">
                   <StudentStats userId={selectedStudentId} />
                 </div>
               )}

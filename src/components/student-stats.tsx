@@ -208,7 +208,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
 
       {/* Chart */}
       {chartData.length > 0 ? (
-        <div className="h-[250px] w-full">
+        <div className="h-[200px] md:h-[250px] w-full overflow-hidden">
           <ChartContainer
             config={{
               ok: {
@@ -224,6 +224,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
                 color: 'hsl(var(--chart-3))',
               },
             }}
+            className="h-full w-full"
           >
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
@@ -262,7 +263,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           </ChartContainer>
         </div>
       ) : (
-        <div className="h-[250px] flex items-center justify-center border rounded-lg bg-muted/20">
+        <div className="h-[200px] md:h-[250px] flex items-center justify-center border rounded-lg bg-muted/20">
           <p className="text-sm text-muted-foreground">No data for this period</p>
         </div>
       )}

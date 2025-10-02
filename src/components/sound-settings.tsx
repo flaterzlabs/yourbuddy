@@ -25,7 +25,11 @@ const SOUND_OPTIONS: { value: SoundOption; label: string; description: string }[
   { value: 'woodtap', label: 'Wood Tap', description: 'Warm percussion' },
 ];
 
-export function SoundSettings() {
+interface SoundSettingsProps {
+  trigger?: React.ReactNode;
+}
+
+export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
   const { selectedSound, updateSound, previewSound } = useNotificationSound();
 
   const handleSoundSelect = (sound: SoundOption) => {
@@ -38,14 +42,16 @@ export function SoundSettings() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          {selectedSound === 'off' ? (
-            <VolumeX className="h-5 w-5" />
-          ) : (
-            <Volume2 className="h-5 w-5" />
-          )}
-          <span className="sr-only">Notification sound settings</span>
-        </Button>
+        {trigger || (
+          <Button variant="ghost" size="icon" className="rounded-full">
+            {selectedSound === 'off' ? (
+              <VolumeX className="h-5 w-5" />
+            ) : (
+              <Volume2 className="h-5 w-5" />
+            )}
+            <span className="sr-only">Notification sound settings</span>
+          </Button>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuLabel>Notification Sound</DropdownMenuLabel>
