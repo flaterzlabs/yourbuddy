@@ -6,62 +6,75 @@
 
 @layer base {
   :root {
-  /* Light theme - Cores vibrantes com gradientes suaves */
-  --background: 210 65% 92%;       /* Azul claro base */
-  --foreground: 220 40% 10%;       /* Texto com alto contraste */
+  /* ========================================
+     TEMA LIGHT - Cores Vibrantes e Acessíveis
+     ======================================== */
+  
+  /* Cores Base de Fundo */
+  --background: 210 65% 92%;       /* Azul claro - fundo principal da página */
+  --foreground: 220 40% 10%;       /* Azul escuro - texto principal (alto contraste) */
 
-  --card: 150 55% 88%;             /* Verde menta vibrante */
-  --card-foreground: 220 35% 12%;
+  /* Cards e Componentes */
+  --card: 210 60% 90%;             /* Azul suave - fundo dos cards */
+  --card-foreground: 220 35% 12%;  /* Texto dos cards */
 
-  --popover: 210 30% 95%;
-  --popover-foreground: 220 35% 10%;
+  /* Popovers e Tooltips */
+  --popover: 210 30% 95%;          /* Azul muito claro - fundo de popovers */
+  --popover-foreground: 220 35% 10%; /* Texto de popovers */
 
-  /* Primary - Azul vibrante */
-  --primary: 215 80% 52%;
-  --primary-foreground: 0 0% 100%;
-  --primary-light: 215 75% 75%;
+  /* Cor Primária (Botões principais, links importantes) */
+  --primary: 215 80% 52%;          /* Azul vibrante - ações principais */
+  --primary-foreground: 0 0% 100%; /* Branco - texto em botões primários */
+  --primary-light: 215 75% 75%;    /* Azul claro - variação da primária */
 
-  /* Secondary - Rosa/Pêssego vibrante */
-  --secondary: 340 70% 65%;
-  --secondary-foreground: 220 35% 10%;
+  /* Cor Secundária (Botões secundários, destaques alternativos) */
+  --secondary: 340 70% 65%;        /* Rosa/Pêssego - ações secundárias */
+  --secondary-foreground: 220 35% 10%; /* Texto escuro em botões secundários */
 
-  /* Success - Verde mais intenso */
-  --success: 145 70% 45%;
-  --success-foreground: 0 0% 100%;
-  --success-light: 145 65% 70%;
+  /* Cor de Sucesso (Feedback positivo, checkmarks) */
+  --success: 145 70% 45%;          /* Verde - indicadores de sucesso */
+  --success-foreground: 0 0% 100%; /* Branco - texto em elementos de sucesso */
+  --success-light: 145 65% 70%;    /* Verde claro - variação de sucesso */
 
-  /* Warning - Laranja vibrante */
-  --warning: 30 85% 50%;
-  --warning-foreground: 0 0% 100%;
-  --warning-light: 30 80% 70%;
+  /* Cor de Aviso (Alertas, atenção necessária) */
+  --warning: 30 85% 50%;           /* Laranja - avisos e alertas */
+  --warning-foreground: 0 0% 100%; /* Branco - texto em avisos */
+  --warning-light: 30 80% 70%;     /* Laranja claro - variação de aviso */
 
-  /* Muted - Tons neutros com mais contraste */
-  --muted: 210 20% 75%;
-  --muted-foreground: 220 25% 22%;
+  /* Tons Neutros (Elementos desabilitados, backgrounds sutis) */
+  --muted: 210 20% 75%;            /* Cinza azulado - elementos desabilitados */
+  --muted-foreground: 220 25% 22%; /* Texto em elementos desabilitados */
 
-  /* Accent - Roxo vibrante */
-  --accent: 280 65% 60%;
-  --accent-foreground: 220 35% 10%;
+  /* Cor de Destaque (Elementos especiais, badges) */
+  --accent: 280 65% 60%;           /* Roxo - destaques e badges */
+  --accent-foreground: 220 35% 10%; /* Texto em elementos de destaque */
 
-  --destructive: 0 75% 50%;
-  --destructive-foreground: 0 0% 100%;
+  /* Cor Destrutiva (Excluir, cancelar, erro) */
+  --destructive: 0 75% 50%;        /* Vermelho - ações destrutivas */
+  --destructive-foreground: 0 0% 100%; /* Branco - texto em botões destrutivos */
 
-  --border: 210 25% 68%;
-  --input: 210 25% 75%;
-  --ring: 215 80% 52%;
+  /* Elementos de Interface */
+  --border: 210 25% 68%;           /* Azul acinzentado - bordas de elementos */
+  --input: 210 25% 75%;            /* Azul claro - fundo de inputs */
+  --ring: 215 80% 52%;             /* Azul vibrante - foco em elementos */
 
-  --radius: 1.25rem;
+  /* Arredondamento de Bordas */
+  --radius: 1.25rem;               /* 20px - bordas arredondadas dos componentes */
 
-  /* Gradientes suaves e vibrantes */
-  --gradient-primary: linear-gradient(135deg, hsl(215 80% 60%), hsl(340 70% 70%));
-  --gradient-hero: linear-gradient(135deg, hsl(215 80% 58%), hsl(340 70% 68%));
-  --gradient-card: linear-gradient(145deg, hsl(150 55% 88%), hsl(150 50% 82%));
-  --gradient-background: linear-gradient(135deg, hsl(210 65% 92%), hsl(210 55% 85%));
+  /* ========================================
+     GRADIENTES SUAVES
+     ======================================== */
+  --gradient-primary: linear-gradient(135deg, hsl(215 80% 60%), hsl(340 70% 70%));    /* Azul → Rosa */
+  --gradient-hero: linear-gradient(135deg, hsl(215 80% 58%), hsl(340 70% 68%));       /* Azul → Rosa (Hero) */
+  --gradient-card: linear-gradient(145deg, hsl(210 60% 90%), hsl(210 55% 85%));       /* Azul suave → Azul médio */
+  --gradient-background: linear-gradient(135deg, hsl(210 65% 92%), hsl(210 55% 85%)); /* Azul claro → Azul médio */
 
-  /* Sombras com mais definição */
-  --shadow-soft: 0 6px 24px hsl(210 35% 25% / 0.3);
-  --shadow-medium: 0 10px 36px hsl(210 35% 20% / 0.4);
-  --shadow-strong: 0 14px 48px hsl(210 35% 15% / 0.5);
+  /* ========================================
+     SOMBRAS (Depth)
+     ======================================== */
+  --shadow-soft: 0 6px 24px hsl(210 35% 25% / 0.3);     /* Sombra suave - cards pequenos */
+  --shadow-medium: 0 10px 36px hsl(210 35% 20% / 0.4);  /* Sombra média - cards em destaque */
+  --shadow-strong: 0 14px 48px hsl(210 35% 15% / 0.5);  /* Sombra forte - modais e popovers */
 
   /* Emoções (mantém contraste vibrante) */
   --emotion-happy: 145 75% 43%;
