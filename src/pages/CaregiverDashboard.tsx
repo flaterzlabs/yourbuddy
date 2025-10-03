@@ -721,7 +721,7 @@ export default function CaregiverDashboard() {
                 )}
               </div>
 
-              <div className="space-y-4 max-h-[32rem] overflow-y-auto">
+              <div className="space-y-4 max-h-[32rem] overflow-y-auto pr-3">
                 {helpRequests.length === 0 ? <div className="text-center py-8">
                     <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground">No help requests yet</p>
@@ -794,7 +794,7 @@ export default function CaregiverDashboard() {
                 )}
               </div>
 
-              <div className="space-y-3 max-h-[20rem] overflow-y-auto">
+              <div className="space-y-3 max-h-[20rem] overflow-y-auto pr-3">
                 {helpRequests.length === 0 ? <div className="text-center py-6">
                     <MessageSquare className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
                     <p className="text-muted-foreground text-sm">No help requests yet</p>
