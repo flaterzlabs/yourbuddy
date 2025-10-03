@@ -34,7 +34,17 @@ export function useNotificationSound() {
     }
 
     const newAudio = new Audio(SOUND_FILES[selectedSound]);
-    newAudio.volume = 0.5; // Set volume to 50% for subtlety
+    newAudio.volume = 0.8; // Set volume to 80% for better audibility
+    
+    // Add error handling
+    newAudio.addEventListener('error', (e) => {
+      console.error(`Failed to load sound: ${selectedSound}`, e);
+    });
+    
+    newAudio.addEventListener('canplaythrough', () => {
+      console.log(`Sound loaded successfully: ${selectedSound}`);
+    });
+    
     setAudio(newAudio);
 
     return () => {
@@ -48,9 +58,14 @@ export function useNotificationSound() {
 
     // Reset and play
     audio.currentTime = 0;
-    audio.play().catch(err => {
-      console.warn('Failed to play notification sound:', err);
-    });
+    audio.play()
+      .then(() => {
+        console.log(`Notification sound played: ${selectedSound}`);
+      })
+      .catch(err => {
+        console.error('Failed to play notification sound:', err);
+        console.error('Sound file:', SOUND_FILES[selectedSound]);
+      });
   }, [audio, selectedSound]);
 
   const updateSound = useCallback((newSound: SoundOption) => {
@@ -62,10 +77,21 @@ export function useNotificationSound() {
     if (sound === 'off') return;
 
     const previewAudio = new Audio(SOUND_FILES[sound]);
-    previewAudio.volume = 0.5;
-    previewAudio.play().catch(err => {
-      console.warn('Failed to preview sound:', err);
+    previewAudio.volume = 0.8;
+    
+    // Add error handling for preview
+    previewAudio.addEventListener('error', (e) => {
+      console.error(`Failed to load preview sound: ${sound}`, e);
     });
+    
+    previewAudio.play()
+      .then(() => {
+        console.log(`Preview sound played: ${sound}`);
+      })
+      .catch(err => {
+        console.error('Failed to preview sound:', err);
+        console.error('Sound file:', SOUND_FILES[sound]);
+      });
   }, []);
 
   return {
