@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -62,6 +62,10 @@ function MobileMenu({
   userId: string;
 }) {
   const recipientsText = formatCaregiverRecipients(connections);
+  const openRequestsCount = useMemo(() => 
+    helpRequests.filter(r => r.status === 'open').length, 
+    [helpRequests]
+  );
 
   return <div className="md:hidden">
       <DropdownMenu>
@@ -87,15 +91,15 @@ function MobileMenu({
             <DialogTrigger asChild>
               <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
                 <ClipboardList className="h-5 w-5" />
-                {helpRequests.length > 0 && <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
-                    {helpRequests.length}
+                {openRequestsCount > 0 && <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
+                    {openRequestsCount}
                   </span>}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md max-h-[80vh] overflow-hidden flex flex-col">
               <DialogHeader>
                 <DialogTitle>
-                  Request History ({helpRequests.length.toString().padStart(2, "0")})
+                  Open Requests ({openRequestsCount.toString().padStart(2, "0")})
                 </DialogTitle>
                 <p className="text-xs text-muted-foreground">
                   Requests notify: {recipientsText}
@@ -180,6 +184,10 @@ export default function StudentDashboard() {
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const recipientsText = formatCaregiverRecipients(connections);
+  const openRequestsCount = useMemo(() => 
+    helpRequests.filter(r => r.status === 'open').length, 
+    [helpRequests]
+  );
   const fetchConnections = async () => {
     if (!user) return;
     try {
@@ -440,15 +448,15 @@ export default function StudentDashboard() {
               <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
                   <ClipboardList className="h-5 w-5" />
-                  {helpRequests.length > 0 && <span className="absolute -top-1 -right-1 h-6 w-6 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
-                      {helpRequests.length}
+                  {openRequestsCount > 0 && <span className="absolute -top-1 -right-1 h-6 w-6 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
+                      {openRequestsCount}
                     </span>}
                 </Button>
               </DialogTrigger>
             <DialogContent className="max-w-md max-h-[80vh] overflow-hidden flex flex-col">
               <DialogHeader>
                 <DialogTitle>
-                  Request History ({helpRequests.length.toString().padStart(2, '0')})
+                  Open Requests ({openRequestsCount.toString().padStart(2, '0')})
                 </DialogTitle>
                 <p className="text-xs text-muted-foreground">
                   Requests notify: {recipientsText}
