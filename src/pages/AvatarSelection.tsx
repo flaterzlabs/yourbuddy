@@ -52,6 +52,8 @@ export default function AvatarSelection() {
         student_id: user.id,
         image_url: getAvatarUrl(selectedSeed, selectedStyle),
         options: { seed: selectedSeed, style: selectedStyle },
+      }, {
+        onConflict: 'student_id'
       });
 
       if (error) throw error;
@@ -94,6 +96,8 @@ export default function AvatarSelection() {
         student_id: user.id,
         image_url: getAvatarUrl(randomSeed, randomStyle),
         options: { seed: randomSeed, style: randomStyle },
+      }, {
+        onConflict: 'student_id'
       });
 
       if (error) throw error;
