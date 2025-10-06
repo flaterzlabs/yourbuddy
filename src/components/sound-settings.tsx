@@ -1,5 +1,5 @@
-import { Volume2, VolumeX } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Volume2, VolumeX } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,22 +7,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { SoundOption, useNotificationSound } from '@/hooks/use-notification-sound';
+} from "@/components/ui/dropdown-menu";
+import { SoundOption, useNotificationSound } from "@/hooks/use-notification-sound";
 
 const SOUND_OPTIONS: { value: SoundOption; label: string; description: string }[] = [
-  { value: 'off', label: 'Off', description: 'No sound' },
-  { value: 'blip1', label: 'Blip 1', description: 'Short soft beep' },
-  { value: 'blip2', label: 'Blip 2', description: 'Gentle notification' },
-  { value: 'chime', label: 'Chime', description: 'Subtle bell tone' },
-  { value: 'ding', label: 'Ding', description: 'Clean bell tone' },
-  { value: 'softbell', label: 'Soft Bell', description: 'Velvety bell sound' },
-  { value: 'windchime', label: 'Wind Chime', description: 'Ethereal chime tones' },
-  { value: 'pop', label: 'Pop', description: 'Gentle bubble pop' },
-  { value: 'ping', label: 'Ping', description: 'Digital ping tone' },
-  { value: 'twinkle', label: 'Twinkle', description: 'Magical sparkle' },
-  { value: 'spark', label: 'Spark', description: 'Quick bright tone' },
-  { value: 'woodtap', label: 'Wood Tap', description: 'Warm percussion' },
+  { value: "off", label: "Off", description: "No sound" },
+  { value: "blip1", label: "Blip 1", description: "Short soft beep" },
+  { value: "blip2", label: "Blip 2", description: "Gentle notification" },
+  { value: "chime", label: "Chime", description: "Subtle bell tone" },
 ];
 
 interface SoundSettingsProps {
@@ -34,7 +26,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
 
   const handleSoundSelect = (sound: SoundOption) => {
     updateSound(sound);
-    if (sound !== 'off') {
+    if (sound !== "off") {
       previewSound(sound);
     }
   };
@@ -44,11 +36,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
       <DropdownMenuTrigger asChild>
         {trigger || (
           <Button variant="ghost" size="icon" className="rounded-full">
-            {selectedSound === 'off' ? (
-              <VolumeX className="h-5 w-5" />
-            ) : (
-              <Volume2 className="h-5 w-5" />
-            )}
+            {selectedSound === "off" ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
             <span className="sr-only">Notification sound settings</span>
           </Button>
         )}
@@ -64,17 +52,13 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
           >
             <div className="flex items-center justify-between w-full">
               <span className="font-medium">{option.label}</span>
-              {selectedSound === option.value && (
-                <span className="text-xs text-primary">✓</span>
-              )}
+              {selectedSound === option.value && <span className="text-xs text-primary">✓</span>}
             </div>
             <span className="text-xs text-muted-foreground">{option.description}</span>
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
-        <div className="px-2 py-1.5 text-xs text-muted-foreground">
-          Click to select and preview
-        </div>
+        <div className="px-2 py-1.5 text-xs text-muted-foreground">Click to select and preview</div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
