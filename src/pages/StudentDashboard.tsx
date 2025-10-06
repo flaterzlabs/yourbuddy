@@ -10,7 +10,7 @@ import { SettingsModal } from '@/components/settings-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2 } from "lucide-react";
+import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2, UserCircle } from "lucide-react";
 import { StudentStatsPopover } from '@/components/student-stats-popover';
 import { Database } from '@/integrations/supabase/types';
 import { useNavigate } from 'react-router-dom';
@@ -72,8 +72,15 @@ function MobileMenu({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="flex flex-col gap-2 p-2 min-w-[3rem]">
-          
-        
+          {/* Change Avatar */}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="transition-colors duration-200"
+            onClick={() => navigate('/avatar-selection')}
+          >
+            <UserCircle className="h-5 w-5" />
+          </Button>
           
           {/* Histórico de pedidos */}
           <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
@@ -419,7 +426,15 @@ export default function StudentDashboard() {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4">
-            
+            {/* Change Avatar */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="transition-colors duration-200"
+              onClick={() => navigate('/avatar-selection')}
+            >
+              <UserCircle className="h-5 w-5" />
+            </Button>
             
             <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
               <DialogTrigger asChild>
