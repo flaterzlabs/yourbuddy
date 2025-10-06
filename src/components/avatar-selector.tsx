@@ -23,7 +23,6 @@ export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: Avatar
     'croodles',
     'croodles-neutral',
     'fun-emoji',
-    'identicon',
     'lorelei',
     'lorelei-neutral',
     'micah',
@@ -32,8 +31,6 @@ export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: Avatar
     'personas',
     'pixel-art',
     'pixel-art-neutral',
-    'rings',
-    'shapes',
     'thumbs',
   ];
 
