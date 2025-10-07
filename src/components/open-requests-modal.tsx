@@ -213,7 +213,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           onClick={() => handleFilterChange("all")}
           className="flex-1 sm:flex-none"
         >
-          Todos
+          Todos ({helpRequests.filter(r => r.status === "open").length})
         </Button>
       </div>
 
