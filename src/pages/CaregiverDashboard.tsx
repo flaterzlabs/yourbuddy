@@ -388,6 +388,10 @@ export default function CaregiverDashboard() {
   const activeConnections = connections.filter(c => c.status === 'active');
   const openHelpRequests = helpRequests.filter(r => r.status === 'open');
   const closedHelpRequests = helpRequests.filter(r => r.status === 'answered' || r.status === 'closed');
+  
+  // Dynamic text based on role
+  const studentLabel = profile?.role === 'caregiver' ? 'children' : 'students';
+  const StudentLabel = profile?.role === 'caregiver' ? 'Children' : 'Students';
   const helpRequestsChartData = useMemo(() => {
     const now = new Date();
     let periods: { key: string; date: Date; }[] = [];
@@ -558,7 +562,7 @@ export default function CaregiverDashboard() {
         className="justify-center gap-3 h-12"
       >
         <GraduationCap className="h-5 w-5" />
-        My Students
+        My {StudentLabel}
       </Button>
       
       {/* Sound Settings */}
@@ -615,7 +619,7 @@ export default function CaregiverDashboard() {
             <h1 className="text-xl sm:text-4xl bg-gradient-hero bg-clip-text text-transparent font-extrabold">
               Hello, {profile?.username || 'User'}!
             </h1>
-            <p className="text-base sm:text-xl text-muted-foreground">Manage your students and help requests</p>
+            <p className="text-base sm:text-xl text-muted-foreground">Manage your {studentLabel} and help requests</p>
           </div>
 
           {/* Desktop Layout */}
@@ -627,7 +631,7 @@ export default function CaregiverDashboard() {
                   <Users className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="text-xl font-bold mb-2">Overview</h2>
-                <p className="text-muted-foreground text-sm">Your students' statistics</p>
+                <p className="text-muted-foreground text-sm">Your {studentLabel}' statistics</p>
               </div>
 
             {/* Stats Cards */}
@@ -635,7 +639,7 @@ export default function CaregiverDashboard() {
               <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
                 <div className="text-3xl font-bold text-primary">{activeConnections.length}</div>
                 <div className="text-sm text-muted-foreground">
-                  Connected Students
+                  Connected {StudentLabel}
                 </div>
               </div>
               <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
@@ -836,14 +840,14 @@ export default function CaregiverDashboard() {
           {!isMobile && <Card className="mt-8 p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
                 <Users className="h-6 w-6 text-primary" />
-                <h2 className="text-xl font-bold">My Students</h2>
+                <h2 className="text-xl font-bold">My {StudentLabel}</h2>
               </div>
 
               {activeConnections.length === 0 ? <div className="text-center py-8">
                   <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">No students connected yet</p>
+                  <p className="text-muted-foreground">No {studentLabel} connected yet</p>
                   <p className="text-sm text-muted-foreground mt-2">
-                    Share your connection code with students
+                    Share your connection code with {studentLabel}
                   </p>
                 </div> : <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {activeConnections.map(connection => <div key={connection.id} className="p-4 bg-background/50 rounded-lg border border-border hover:shadow-soft transition-all">
@@ -889,7 +893,7 @@ export default function CaregiverDashboard() {
                       Connection Code
                     </h3>
                     <p className={`text-muted-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                      Compartilhe com alunos para conectar
+                      Share with {studentLabel} to connect
                     </p>
                   </div>
                 </div>
@@ -1008,16 +1012,16 @@ export default function CaregiverDashboard() {
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <GraduationCap className="h-5 w-5" />
-                  Meus Alunos
+                  My {StudentLabel}
                 </DialogTitle>
               </DialogHeader>
               
               <div className="py-4">
                 {activeConnections.length === 0 ? <div className="text-center py-6">
                     <Users className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-                    <p className="text-muted-foreground text-sm">No students connected yet</p>
+                    <p className="text-muted-foreground text-sm">No {studentLabel} connected yet</p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Share your connection code with students
+                      Share your connection code with {studentLabel}
                     </p>
                   </div> : <div className="space-y-3">
                     {activeConnections.map(connection => <div key={connection.id} className="p-3 bg-background/50 rounded-lg border border-border">
@@ -1059,7 +1063,7 @@ export default function CaregiverDashboard() {
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-primary" />
-                  Student Statistics
+                  {profile?.role === 'caregiver' ? 'Child' : 'Student'} Statistics
                 </DialogTitle>
               </DialogHeader>
               {selectedStudentId && (
