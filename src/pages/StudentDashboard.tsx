@@ -1,16 +1,16 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { BuddyLogo } from "@/components/buddy-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { StudentAvatar } from "@/components/student-avatar";
 import { SettingsModal } from "@/components/settings-modal";
+import { OpenRequestsModalContent } from "@/components/open-requests-modal";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Menu, ClipboardList, Clock, CheckCircle, XCircle, Link, LogOut, Loader2, UserCircle } from "lucide-react";
+import { Menu, ClipboardList, Link, LogOut, Loader2, UserCircle } from "lucide-react";
 import { StudentStatsPopover } from "@/components/student-stats-popover";
 import { Database } from "@/integrations/supabase/types";
 import { useNavigate } from "react-router-dom";
@@ -86,60 +86,8 @@ function MobileMenu({
                 )}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[80vh] overflow-hidden flex flex-col">
-              <DialogHeader>
-                <DialogTitle>Open Requests ({openRequestsCount.toString().padStart(2, "0")})</DialogTitle>
-                <p className="text-xs text-muted-foreground">Requests notify: {recipientsText}</p>
-              </DialogHeader>
-              <div className="space-y-3 overflow-y-auto pr-1 flex-1">
-                {helpRequests.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-4">No requests yet</p>
-                ) : (
-                  helpRequests.map((request) => (
-                    <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <span>
-                            {request.urgency === "urgent" ? "🔴" : request.urgency === "attention" ? "🟡" : "🟢"}
-                          </span>
-                          <Badge
-                            variant={
-                              request.status === "open"
-                                ? "destructive"
-                                : request.status === "answered"
-                                  ? "secondary"
-                                  : "outline"
-                            }
-                          >
-                            {request.status === "open" && (
-                              <>
-                                <Clock className="h-3 w-3 mr-1" />
-                                Waiting
-                              </>
-                            )}
-                            {request.status === "answered" && (
-                              <>
-                                <CheckCircle className="h-3 w-3 mr-1" />
-                                Answered
-                              </>
-                            )}
-                            {request.status === "closed" && (
-                              <>
-                                <XCircle className="h-3 w-3 mr-1" />
-                                Closed
-                              </>
-                            )}
-                          </Badge>
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(request.created_at).toLocaleDateString("en-US")}
-                        </span>
-                      </div>
-                      {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
-                    </div>
-                  ))
-                )}
-              </div>
+            <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+              <OpenRequestsModalContent helpRequests={helpRequests} recipientsText={recipientsText} />
             </DialogContent>
           </Dialog>
 
@@ -427,28 +375,6 @@ export default function StudentDashboard() {
       }
     };
   }, [sendTimer]);
-  const getStatusColor = (status: string): "default" | "destructive" | "secondary" | "outline" => {
-    switch (status) {
-      case "open":
-        return "destructive";
-      case "answered":
-        return "secondary";
-      case "closed":
-        return "outline";
-      default:
-        return "secondary";
-    }
-  };
-  const getUrgencyEmoji = (urgency: string) => {
-    switch (urgency) {
-      case "attention":
-        return "🟡";
-      case "urgent":
-        return "🔴";
-      default:
-        return "🟢";
-    }
-  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <div className="container mx-auto px-4 py-8">
@@ -483,50 +409,8 @@ export default function StudentDashboard() {
                   )}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-md max-h-[80vh] overflow-hidden flex flex-col">
-                <DialogHeader>
-                  <DialogTitle>Open Requests ({openRequestsCount.toString().padStart(2, "0")})</DialogTitle>
-                  <p className="text-xs text-muted-foreground">Requests notify: {recipientsText}</p>
-                </DialogHeader>
-                <div className="space-y-3 overflow-y-auto pr-1 flex-1">
-                  {helpRequests.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">No requests yet</p>
-                  ) : (
-                    helpRequests.map((request) => (
-                      <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span>{getUrgencyEmoji(request.urgency || "ok")}</span>
-                            <Badge variant={getStatusColor(request.status || "open")}>
-                              {request.status === "open" && (
-                                <>
-                                  <Clock className="h-3 w-3 mr-1" />
-                                  Waiting
-                                </>
-                              )}
-                              {request.status === "answered" && (
-                                <>
-                                  <CheckCircle className="h-3 w-3 mr-1" />
-                                  Answered
-                                </>
-                              )}
-                              {request.status === "closed" && (
-                                <>
-                                  <XCircle className="h-3 w-3 mr-1" />
-                                  Closed
-                                </>
-                              )}
-                            </Badge>
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            {new Date(request.created_at).toLocaleDateString("en-US")}
-                          </span>
-                        </div>
-                        {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
-                      </div>
-                    ))
-                  )}
-                </div>
+              <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+                <OpenRequestsModalContent helpRequests={helpRequests} recipientsText={recipientsText} />
               </DialogContent>
             </Dialog>
 
