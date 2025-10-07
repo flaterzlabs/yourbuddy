@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { BuddyLogo } from '@/components/buddy-logo';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { Button } from "@/components/ui/button";
+import { BuddyLogo } from "@/components/buddy-logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Index = () => {
   return (
@@ -15,7 +15,7 @@ const Index = () => {
 
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">
-            BUDDY Dashboard
+            ThriveSprite Dashboard
           </h1>
           <p className="text-xl text-muted-foreground mb-8">Your digital companion for well-being</p>
 

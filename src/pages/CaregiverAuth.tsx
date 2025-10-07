@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { BuddyLogo } from '@/components/buddy-logo';
-import { ThemeToggle } from '@/components/theme-toggle';
-import { RoleCard } from '@/components/role-card';
-import { useAuth } from '@/hooks/use-auth';
-import { toast } from '@/hooks/use-toast';
-import { Users, GraduationCap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { BuddyLogo } from "@/components/buddy-logo";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { RoleCard } from "@/components/role-card";
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "@/hooks/use-toast";
+import { Users, GraduationCap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function CaregiverAuth() {
   const [isSignUp, setIsSignUp] = useState(true);
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [identifier, setIdentifier] = useState('');
-  const [selectedRole, setSelectedRole] = useState<string>('caregiver');
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [identifier, setIdentifier] = useState("");
+  const [selectedRole, setSelectedRole] = useState<string>("caregiver");
   const [loading, setLoading] = useState(false);
   const [resetting, setResetting] = useState(false);
 
@@ -27,21 +27,21 @@ export default function CaregiverAuth() {
   // Redirect if already authenticated
   useEffect(() => {
     if (user) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     }
   }, [user, navigate]);
 
   const roles = [
     {
-      id: 'caregiver',
-      title: 'Caregiver',
+      id: "caregiver",
+      title: "Caregiver",
       description: "Support and monitor your child's well-being",
       icon: Users,
     },
     {
-      id: 'educator',
-      title: 'Educator',
-      description: 'Teaching and educational support',
+      id: "educator",
+      title: "Educator",
+      description: "Teaching and educational support",
       icon: GraduationCap,
     },
   ];
@@ -55,26 +55,26 @@ export default function CaregiverAuth() {
         const { error } = await signUp(identifier, password, selectedRole, username);
         if (error) throw error;
 
-        toast({ title: 'Account created!', description: 'Please check your email to verify your account.' });
+        toast({ title: "Account created!", description: "Please check your email to verify your account." });
       } else {
         const { error } = await signIn(identifier, password);
         if (error) throw error;
 
-        toast({ title: 'Signed in successfully!', description: 'Welcome back to BUDDY!' });
-        navigate('/dashboard');
+        toast({ title: "Signed in successfully!", description: "Welcome back to ThriveSprite!" });
+        navigate("/dashboard");
       }
     } catch (error: any) {
-      let message = 'An unexpected error occurred. Please try again.';
+      let message = "An unexpected error occurred. Please try again.";
 
-      if (error.message?.includes('Invalid login credentials')) {
-        message = 'Invalid email or password. Please try again.';
-      } else if (error.message?.includes('User already registered')) {
-        message = 'Email already registered. Try signing in instead.';
-      } else if (error.message?.includes('Password should be at least')) {
-        message = 'Password must be at least 6 characters long.';
+      if (error.message?.includes("Invalid login credentials")) {
+        message = "Invalid email or password. Please try again.";
+      } else if (error.message?.includes("User already registered")) {
+        message = "Email already registered. Try signing in instead.";
+      } else if (error.message?.includes("Password should be at least")) {
+        message = "Password must be at least 6 characters long.";
       }
 
-      toast({ title: 'Error', description: message, variant: 'destructive' });
+      toast({ title: "Error", description: message, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -83,9 +83,9 @@ export default function CaregiverAuth() {
   const handleResetPassword = async () => {
     if (!identifier) {
       toast({
-        title: 'Error',
-        description: 'Please enter your email or username.',
-        variant: 'destructive',
+        title: "Error",
+        description: "Please enter your email or username.",
+        variant: "destructive",
       });
       return;
     }
@@ -96,14 +96,14 @@ export default function CaregiverAuth() {
       if (error) throw error;
 
       toast({
-        title: 'Reset link sent',
-        description: 'Check your email for a password reset link.',
+        title: "Reset link sent",
+        description: "Check your email for a password reset link.",
       });
     } catch (error: any) {
       toast({
-        title: 'Error',
-        description: error.message || 'An unexpected error occurred. Please try again.',
-        variant: 'destructive',
+        title: "Error",
+        description: error.message || "An unexpected error occurred. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setResetting(false);
@@ -126,10 +126,12 @@ export default function CaregiverAuth() {
           <Card className="p-8 bg-gradient-card shadow-medium">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2 bg-gradient-hero bg-clip-text text-transparent">
-                {isSignUp ? 'Caregiver or Educator Sign Up' : 'Caregiver or Educator Sign In'}
+                {isSignUp ? "Caregiver or Educator Sign Up" : "Caregiver or Educator Sign In"}
               </h1>
               <p className="text-muted-foreground">
-                {isSignUp ? 'Join ThriveSprite as a Caregiver or Educator' : 'Access your Caregiver or Educator Dashboard'}
+                {isSignUp
+                  ? "Join ThriveSprite as a Caregiver or Educator"
+                  : "Access your Caregiver or Educator Dashboard"}
               </p>
             </div>
 
@@ -210,7 +212,7 @@ export default function CaregiverAuth() {
               </div>
 
               <Button type="submit" variant="hero" size="lg" disabled={loading} className="w-full">
-                {loading ? 'Processing...' : isSignUp ? 'Sign Up as Caregiver or Educator' : 'Sign In'}
+                {loading ? "Processing..." : isSignUp ? "Sign Up as Caregiver or Educator" : "Sign In"}
               </Button>
             </form>
 
@@ -222,7 +224,7 @@ export default function CaregiverAuth() {
                   className="text-sm text-primary hover:underline"
                   disabled={resetting}
                 >
-                  {resetting ? 'Sending...' : 'Forgot password?'}
+                  {resetting ? "Sending..." : "Forgot password?"}
                 </button>
               </div>
             )}
@@ -232,21 +234,21 @@ export default function CaregiverAuth() {
                 type="button"
                 onClick={() => {
                   setIsSignUp(!isSignUp);
-                  setIdentifier('');
-                  setUsername('');
-                  setPassword('');
+                  setIdentifier("");
+                  setUsername("");
+                  setPassword("");
                   setResetting(false);
                 }}
                 className="text-primary hover:underline"
               >
-                {isSignUp ? 'Already have an account? Sign in' : 'Need an account? Sign up'}
+                {isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up"}
               </button>
             </div>
 
             <div className="mt-4 text-center">
               <button
                 type="button"
-                onClick={() => navigate('/')}
+                onClick={() => navigate("/")}
                 className="text-muted-foreground hover:underline text-sm"
               >
                 Back to Student View
