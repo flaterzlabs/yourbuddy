@@ -8,7 +8,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { SoundSettings } from '@/components/sound-settings';
 import { StudentAvatar } from '@/components/student-avatar';
 import { StudentStats } from '@/components/student-stats';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+
 import { useAuth } from '@/hooks/use-auth';
 import { useNotificationSound } from '@/hooks/use-notification-sound';
 import { useAudioUnlock } from '@/hooks/use-audio-unlock';
@@ -26,7 +26,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { UserPlus, Users, Clock, CheckCircle, LogOut, AlertTriangle, MessageSquare, Activity, Copy, Check, Menu, BarChart3, GraduationCap, SunMoon, XCircle } from 'lucide-react';
+import { UserPlus, Users, Clock, CheckCircle, LogOut, AlertTriangle, Activity, Copy, Check, Menu, BarChart3, GraduationCap, SunMoon, XCircle } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +62,6 @@ export default function CaregiverDashboard() {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied'>('idle');
   const [overviewModalOpen, setOverviewModalOpen] = useState(false);
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
-  const [helpRequestsExpanded, setHelpRequestsExpanded] = useState(false);
   const [chartPeriod, setChartPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [requestsPage, setRequestsPage] = useState(1);
@@ -846,164 +845,144 @@ export default function CaregiverDashboard() {
                 <p className="text-muted-foreground text-sm">Manage student requests</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
-                  <div className="text-3xl font-bold text-warning">{openHelpRequests.length}</div>
-                  <div className="text-sm text-muted-foreground">Open Requests</div>
-                </div>
-                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
-                  <div className="text-3xl font-bold text-emerald-500">{closedHelpRequests.length}</div>
-                  <div className="text-sm text-muted-foreground">Closed Requests</div>
-                </div>
-              </div>
+              <div className="space-y-4">
+                {/* Header with Close All */}
+                {openHelpRequests.length > 0 && (
+                  <div className="flex justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCloseAllRequests}
+                      className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                    >
+                      <XCircle className="h-4 w-4 mr-2" />
+                      Close All
+                    </Button>
+                  </div>
+                )}
 
-              <Collapsible open={helpRequestsExpanded} onOpenChange={setHelpRequestsExpanded}>
-                <CollapsibleTrigger asChild>
-                  <Button className="w-full" variant="default">
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    {helpRequestsExpanded ? 'Hide' : 'View'} All Requests ({helpRequests.length})
+                {/* Period Filters */}
+                <div className="flex gap-2 flex-wrap">
+                  <Button
+                    variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleRequestsFilterChange("7days")}
+                    className="flex-1 sm:flex-none"
+                  >
+                    Last 7 days
                   </Button>
-                </CollapsibleTrigger>
-                
-                <CollapsibleContent className="mt-6 space-y-4">
-                  {/* Header with Close All */}
-                  {openHelpRequests.length > 0 && (
-                    <div className="flex justify-end">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleCloseAllRequests}
-                        className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                      >
-                        <XCircle className="h-4 w-4 mr-2" />
-                        Close All
-                      </Button>
-                    </div>
-                  )}
+                  <Button
+                    variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleRequestsFilterChange("30days")}
+                    className="flex-1 sm:flex-none"
+                  >
+                    Last 30 days
+                  </Button>
+                  <Button
+                    variant={requestsPeriodFilter === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleRequestsFilterChange("all")}
+                    className="flex-1 sm:flex-none"
+                  >
+                    All Requests ({helpRequests.length})
+                  </Button>
+                </div>
 
-                  {/* Period Filters */}
-                  <div className="flex gap-2 flex-wrap">
-                    <Button
-                      variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => handleRequestsFilterChange("7days")}
-                      className="flex-1 sm:flex-none"
-                    >
-                      Last 7 days
-                    </Button>
-                    <Button
-                      variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => handleRequestsFilterChange("30days")}
-                      className="flex-1 sm:flex-none"
-                    >
-                      Last 30 days
-                    </Button>
-                    <Button
-                      variant={requestsPeriodFilter === "all" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => handleRequestsFilterChange("all")}
-                      className="flex-1 sm:flex-none"
-                    >
-                      All Requests ({helpRequests.length})
-                    </Button>
-                  </div>
-
-                  {/* Requests List */}
-                  <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
-                    {paginatedHelpRequests.length === 0 ? (
-                      <p className="text-muted-foreground text-center py-8">
-                        {requestsPeriodFilter === "all"
-                          ? "No requests found"
-                          : `No requests in the last ${requestsPeriodFilter === "7days" ? "7" : "30"} days`}
-                      </p>
-                    ) : (
-                      paginatedHelpRequests.map((request) => (
-                        <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <span>{getUrgencyEmoji(request.urgency || "ok")}</span>
-                              <div>
-                                <h4 className="font-semibold text-sm">
-                                  {request.student_profile?.username || "Unknown Student"}
-                                </h4>
-                                <p className="text-xs text-muted-foreground">
-                                  {new Date(request.created_at).toLocaleString("en-US")}
-                                </p>
-                              </div>
+                {/* Requests List */}
+                <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+                  {paginatedHelpRequests.length === 0 ? (
+                    <p className="text-muted-foreground text-center py-8">
+                      {requestsPeriodFilter === "all"
+                        ? "No requests found"
+                        : `No requests in the last ${requestsPeriodFilter === "7days" ? "7" : "30"} days`}
+                    </p>
+                  ) : (
+                    paginatedHelpRequests.map((request) => (
+                      <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <span>{getUrgencyEmoji(request.urgency || "ok")}</span>
+                            <div>
+                              <h4 className="font-semibold text-sm">
+                                {request.student_profile?.username || "Unknown Student"}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(request.created_at).toLocaleString("en-US")}
+                              </p>
                             </div>
-                            <Badge variant={getStatusColor(request.status || "open")}>
-                              {request.status === "open" && (
-                                <>
-                                  <Clock className="h-3 w-3 mr-1" />
-                                  Waiting
-                                </>
-                              )}
-                              {request.status === "answered" && (
-                                <>
-                                  <CheckCircle className="h-3 w-3 mr-1" />
-                                  Answered
-                                </>
-                              )}
-                              {request.status === "closed" && (
-                                <>
-                                  <XCircle className="h-3 w-3 mr-1" />
-                                  Closed
-                                </>
-                              )}
-                            </Badge>
                           </div>
-                          {request.message && (
-                            <p className="text-sm mb-3 p-3 bg-background rounded border border-border">
-                              "{request.message}"
-                            </p>
-                          )}
-                          {request.status === "open" && (
-                            <Button
-                              size="sm"
-                              variant="success"
-                              onClick={() => handleHelpRequestAction(request.id, 'closed')}
-                              className="w-full"
-                            >
-                              <CheckCircle className="h-4 w-4 mr-1" />
-                              Mark as Complete
-                            </Button>
-                          )}
+                          <Badge variant={getStatusColor(request.status || "open")}>
+                            {request.status === "open" && (
+                              <>
+                                <Clock className="h-3 w-3 mr-1" />
+                                Waiting
+                              </>
+                            )}
+                            {request.status === "answered" && (
+                              <>
+                                <CheckCircle className="h-3 w-3 mr-1" />
+                                Answered
+                              </>
+                            )}
+                            {request.status === "closed" && (
+                              <>
+                                <XCircle className="h-3 w-3 mr-1" />
+                                Closed
+                              </>
+                            )}
+                          </Badge>
                         </div>
-                      ))
-                    )}
-                  </div>
-
-                  {/* Pagination */}
-                  {totalRequestsPages > 1 && (
-                    <Pagination className="mt-4">
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (requestsPage > 1) setRequestsPage(requestsPage - 1);
-                            }}
-                            className={requestsPage === 1 ? "pointer-events-none opacity-50" : ""}
-                          />
-                        </PaginationItem>
-                        {renderRequestsPagination()}
-                        <PaginationItem>
-                          <PaginationNext
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
-                            }}
-                            className={requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                        {request.message && (
+                          <p className="text-sm mb-3 p-3 bg-background rounded border border-border">
+                            "{request.message}"
+                          </p>
+                        )}
+                        {request.status === "open" && (
+                          <Button
+                            size="sm"
+                            variant="success"
+                            onClick={() => handleHelpRequestAction(request.id, 'closed')}
+                            className="w-full"
+                          >
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            Mark as Complete
+                          </Button>
+                        )}
+                      </div>
+                    ))
                   )}
-                </CollapsibleContent>
-              </Collapsible>
+                </div>
+
+                {/* Pagination */}
+                {totalRequestsPages > 1 && (
+                  <Pagination className="mt-4">
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (requestsPage > 1) setRequestsPage(requestsPage - 1);
+                          }}
+                          className={requestsPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                      {renderRequestsPagination()}
+                      <PaginationItem>
+                        <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
+                          }}
+                          className={requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                )}
+              </div>
             </Card>
           </div>
 
@@ -1017,149 +996,129 @@ export default function CaregiverDashboard() {
                 <p className="text-muted-foreground text-xs">Manage student requests</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
-                  <div className="text-2xl font-bold text-warning">{openHelpRequests.length}</div>
-                  <div className="text-xs text-muted-foreground">Open</div>
-                </div>
-                <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
-                  <div className="text-2xl font-bold text-emerald-500">{closedHelpRequests.length}</div>
-                  <div className="text-xs text-muted-foreground">Closed</div>
-                </div>
-              </div>
+              <div className="space-y-3">
+                {/* Header with Close All */}
+                {openHelpRequests.length > 0 && (
+                  <div className="flex justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCloseAllRequests}
+                      className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8 px-3"
+                    >
+                      <XCircle className="h-3 w-3 mr-1" />
+                      Close All
+                    </Button>
+                  </div>
+                )}
 
-              <Collapsible open={helpRequestsExpanded} onOpenChange={setHelpRequestsExpanded}>
-                <CollapsibleTrigger asChild>
-                  <Button className="w-full text-sm" variant="default">
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    {helpRequestsExpanded ? 'Hide' : 'View'} All ({helpRequests.length})
+                {/* Period Filters */}
+                <div className="flex gap-2">
+                  <Button
+                    variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleRequestsFilterChange("7days")}
+                    className="flex-1 text-xs h-8"
+                  >
+                    7d
                   </Button>
-                </CollapsibleTrigger>
-                
-                <CollapsibleContent className="mt-4 space-y-3">
-                  {/* Header with Close All */}
-                  {openHelpRequests.length > 0 && (
-                    <div className="flex justify-end">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleCloseAllRequests}
-                        className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8 px-3"
-                      >
-                        <XCircle className="h-3 w-3 mr-1" />
-                        Close All
-                      </Button>
-                    </div>
-                  )}
+                  <Button
+                    variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleRequestsFilterChange("30days")}
+                    className="flex-1 text-xs h-8"
+                  >
+                    30d
+                  </Button>
+                  <Button
+                    variant={requestsPeriodFilter === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleRequestsFilterChange("all")}
+                    className="flex-1 text-xs h-8"
+                  >
+                    All ({helpRequests.length})
+                  </Button>
+                </div>
 
-                  {/* Period Filters */}
-                  <div className="flex gap-2">
-                    <Button
-                      variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => handleRequestsFilterChange("7days")}
-                      className="flex-1 text-xs h-8"
-                    >
-                      7d
-                    </Button>
-                    <Button
-                      variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => handleRequestsFilterChange("30days")}
-                      className="flex-1 text-xs h-8"
-                    >
-                      30d
-                    </Button>
-                    <Button
-                      variant={requestsPeriodFilter === "all" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => handleRequestsFilterChange("all")}
-                      className="flex-1 text-xs h-8"
-                    >
-                      All ({helpRequests.length})
-                    </Button>
-                  </div>
-
-                  {/* Requests List */}
-                  <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
-                    {paginatedHelpRequests.length === 0 ? (
-                      <p className="text-muted-foreground text-center py-6 text-sm">
-                        {requestsPeriodFilter === "all"
-                          ? "No requests found"
-                          : `No requests in the last ${requestsPeriodFilter === "7days" ? "7" : "30"} days`}
-                      </p>
-                    ) : (
-                      paginatedHelpRequests.map((request) => (
-                        <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm">{getUrgencyEmoji(request.urgency || "ok")}</span>
-                              <div className="min-w-0 flex-1">
-                                <h4 className="font-medium text-sm truncate">
-                                  {request.student_profile?.username || "Unknown Student"}
-                                </h4>
-                                <p className="text-xs text-muted-foreground">
-                                  {new Date(request.created_at).toLocaleString("en-US")}
-                                </p>
-                              </div>
+                {/* Requests List */}
+                <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                  {paginatedHelpRequests.length === 0 ? (
+                    <p className="text-muted-foreground text-center py-6 text-sm">
+                      {requestsPeriodFilter === "all"
+                        ? "No requests found"
+                        : `No requests in the last ${requestsPeriodFilter === "7days" ? "7" : "30"} days`}
+                    </p>
+                  ) : (
+                    paginatedHelpRequests.map((request) => (
+                      <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm">{getUrgencyEmoji(request.urgency || "ok")}</span>
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-medium text-sm truncate">
+                                {request.student_profile?.username || "Unknown Student"}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(request.created_at).toLocaleString("en-US")}
+                              </p>
                             </div>
-                            <Badge variant={getStatusColor(request.status || "open")} className="text-xs">
-                              {request.status === "open" && "Waiting"}
-                              {request.status === "answered" && "Answered"}
-                              {request.status === "closed" && "Closed"}
-                            </Badge>
                           </div>
-                          {request.message && (
-                            <p className="text-xs mb-2 p-2 bg-background rounded border border-border line-clamp-2">
-                              "{request.message}"
-                            </p>
-                          )}
-                          {request.status === "open" && (
-                            <Button
-                              size="sm"
-                              variant="success"
-                              onClick={() => handleHelpRequestAction(request.id, 'closed')}
-                              className="w-full text-xs h-8"
-                            >
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              Mark as Complete
-                            </Button>
-                          )}
+                          <Badge variant={getStatusColor(request.status || "open")} className="text-xs">
+                            {request.status === "open" && "Waiting"}
+                            {request.status === "answered" && "Answered"}
+                            {request.status === "closed" && "Closed"}
+                          </Badge>
                         </div>
-                      ))
-                    )}
-                  </div>
-
-                  {/* Pagination */}
-                  {totalRequestsPages > 1 && (
-                    <Pagination className="mt-4">
-                      <PaginationContent className="gap-1">
-                        <PaginationItem>
-                          <PaginationPrevious
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (requestsPage > 1) setRequestsPage(requestsPage - 1);
-                            }}
-                            className={`text-xs h-8 ${requestsPage === 1 ? "pointer-events-none opacity-50" : ""}`}
-                          />
-                        </PaginationItem>
-                        {renderRequestsPagination()}
-                        <PaginationItem>
-                          <PaginationNext
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
-                            }}
-                            className={`text-xs h-8 ${requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}`}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                        {request.message && (
+                          <p className="text-xs mb-2 p-2 bg-background rounded border border-border line-clamp-2">
+                            "{request.message}"
+                          </p>
+                        )}
+                        {request.status === "open" && (
+                          <Button
+                            size="sm"
+                            variant="success"
+                            onClick={() => handleHelpRequestAction(request.id, 'closed')}
+                            className="w-full text-xs h-8"
+                          >
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                            Mark as Complete
+                          </Button>
+                        )}
+                      </div>
+                    ))
                   )}
-                </CollapsibleContent>
-              </Collapsible>
+                </div>
+
+                {/* Pagination */}
+                {totalRequestsPages > 1 && (
+                  <Pagination className="mt-4">
+                    <PaginationContent className="gap-1">
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (requestsPage > 1) setRequestsPage(requestsPage - 1);
+                          }}
+                          className={`text-xs h-8 ${requestsPage === 1 ? "pointer-events-none opacity-50" : ""}`}
+                        />
+                      </PaginationItem>
+                      {renderRequestsPagination()}
+                      <PaginationItem>
+                        <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
+                          }}
+                          className={`text-xs h-8 ${requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}`}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                )}
+              </div>
             </Card>}
 
           {/* Meus Alunos - Desktop Only */}
