@@ -8,6 +8,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { SoundSettings } from '@/components/sound-settings';
 import { StudentAvatar } from '@/components/student-avatar';
 import { StudentStats } from '@/components/student-stats';
+import { HelpRequestsModalContent } from '@/components/help-requests-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { useNotificationSound } from '@/hooks/use-notification-sound';
 import { useAudioUnlock } from '@/hooks/use-audio-unlock';
@@ -52,6 +53,7 @@ export default function CaregiverDashboard() {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied'>('idle');
   const [overviewModalOpen, setOverviewModalOpen] = useState(false);
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
+  const [helpRequestsModalOpen, setHelpRequestsModalOpen] = useState(false);
   const [chartPeriod, setChartPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   useEffect(() => {
@@ -704,136 +706,65 @@ export default function CaregiverDashboard() {
 
             {/* Help Requests */}
             <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <AlertTriangle className="h-6 w-6 text-warning" />
-                  <h2 className="text-xl font-bold">Help Requests</h2>
-                  {openHelpRequests.length > 0 && <Badge variant="destructive">
-                      {openHelpRequests.length} open
-                    </Badge>}
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-warning/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <AlertTriangle className="h-8 w-8 text-warning" />
                 </div>
-                {openHelpRequests.length > 0 && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={handleCloseAllRequests}
-                    className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                  >
-                    <XCircle className="h-4 w-4 mr-2" />
-                    Close All
-                  </Button>
-                )}
+                <h2 className="text-xl font-bold mb-2">Help Requests</h2>
+                <p className="text-muted-foreground text-sm">Manage student requests</p>
               </div>
 
-              <div className="space-y-4 max-h-[32rem] overflow-y-auto pr-3">
-                {helpRequests.length === 0 ? <div className="text-center py-8">
-                    <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">No help requests yet</p>
-                  </div> : helpRequests.map(request => <div key={request.id} className="p-4 bg-background/50 rounded-lg border border-border">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <span className="text-lg">
-                            {getUrgencyEmoji(request.urgency || 'ok')}
-                          </span>
-                          <div>
-                            <h4 className="font-semibold">
-                              {request.student_profile?.username || 'Unknown Student'}
-                            </h4>
-                            <p className="text-sm text-muted-foreground">
-                              {new Date(request.created_at).toLocaleString('en-US')}
-                            </p>
-                          </div>
-                        </div>
-                        <Badge variant={getStatusColor(request.status || 'open')}>
-                          {request.status === 'open' && <>
-                              <Clock className="h-3 w-3 mr-1" />
-                              Waiting
-                            </>}
-                          {request.status === 'answered' && <>
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              Answered
-                            </>}
-                          {request.status === 'closed' && <>
-                              <XCircle className="h-3 w-3 mr-1" />
-                              Closed
-                            </>}
-                        </Badge>
-                      </div>
-
-                      {request.message && <p className="text-sm mb-3 p-3 bg-background rounded border border-border">
-                          "{request.message}"
-                        </p>}
-
-                      {request.status === 'open' && <div className="flex gap-2">
-                          <Button size="sm" variant="success" onClick={() => handleHelpRequestAction(request.id, 'closed')}>
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Mark as Complete
-                          </Button>
-                        </div>}
-                    </div>)}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                  <div className="text-3xl font-bold text-warning">{openHelpRequests.length}</div>
+                  <div className="text-sm text-muted-foreground">Open Requests</div>
+                </div>
+                <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                  <div className="text-3xl font-bold text-emerald-500">{closedHelpRequests.length}</div>
+                  <div className="text-sm text-muted-foreground">Closed Requests</div>
+                </div>
               </div>
+
+              <Button
+                onClick={() => setHelpRequestsModalOpen(true)}
+                className="w-full"
+                variant="default"
+              >
+                <MessageSquare className="h-4 w-4 mr-2" />
+                View All Requests ({helpRequests.length})
+              </Button>
             </Card>
           </div>
 
           {/* Mobile Help Requests */}
           {isMobile && <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
+              <div className="text-center mb-4">
+                <div className="w-12 h-12 bg-warning/20 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <AlertTriangle className="h-6 w-6 text-warning" />
-                  <h2 className="text-lg font-bold">Help Requests</h2>
-                  {openHelpRequests.length > 0 && <Badge variant="destructive">
-                      {openHelpRequests.length}
-                    </Badge>}
                 </div>
-                {openHelpRequests.length > 0 && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={handleCloseAllRequests}
-                    className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground h-8 px-3 text-xs"
-                  >
-                    <XCircle className="h-3 w-3 mr-1" />
-                    Close All
-                  </Button>
-                )}
+                <h2 className="text-lg font-bold mb-1">Help Requests</h2>
+                <p className="text-muted-foreground text-xs">Manage student requests</p>
               </div>
 
-              <div className="space-y-3 max-h-[20rem] overflow-y-auto pr-3">
-                {helpRequests.length === 0 ? <div className="text-center py-6">
-                    <MessageSquare className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-                    <p className="text-muted-foreground text-sm">No help requests yet</p>
-                  </div> : helpRequests.map(request => <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm">
-                            {getUrgencyEmoji(request.urgency || 'ok')}
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <h4 className="font-medium text-sm truncate">
-                              {request.student_profile?.username || 'Unknown Student'}
-                            </h4>
-                            <p className="text-xs text-muted-foreground">
-                              {new Date(request.created_at).toLocaleString('en-US')}
-                            </p>
-                          </div>
-                        </div>
-                        <Badge variant={getStatusColor(request.status || 'open')} className="text-xs">
-                          {request.status === 'open' && 'Waiting'}
-                          {request.status === 'answered' && 'Answered'}
-                          {request.status === 'closed' && 'Closed'}
-                        </Badge>
-                      </div>
-
-                      {request.message && <p className="text-xs mb-2 p-2 bg-background rounded border border-border line-clamp-2">
-                          "{request.message}"
-                        </p>}
-
-                      {request.status === 'open' && <Button size="sm" variant="success" onClick={() => handleHelpRequestAction(request.id, 'closed')} className="w-full text-xs h-8">
-                          <CheckCircle className="h-3 w-3 mr-1" />
-                          Mark as Complete
-                        </Button>}
-                    </div>)}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
+                  <div className="text-2xl font-bold text-warning">{openHelpRequests.length}</div>
+                  <div className="text-xs text-muted-foreground">Open</div>
+                </div>
+                <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
+                  <div className="text-2xl font-bold text-emerald-500">{closedHelpRequests.length}</div>
+                  <div className="text-xs text-muted-foreground">Closed</div>
+                </div>
               </div>
+
+              <Button
+                onClick={() => setHelpRequestsModalOpen(true)}
+                className="w-full text-sm"
+                variant="default"
+              >
+                <MessageSquare className="h-4 w-4 mr-2" />
+                View All ({helpRequests.length})
+              </Button>
             </Card>}
 
           {/* Meus Alunos - Desktop Only */}
@@ -1054,6 +985,18 @@ export default function CaregiverDashboard() {
                       </div>)}
                   </div>}
               </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Help Requests Modal */}
+          <Dialog open={helpRequestsModalOpen} onOpenChange={setHelpRequestsModalOpen}>
+            <DialogContent className="max-w-[95vw] md:max-w-[700px] max-h-[90vh]">
+              <HelpRequestsModalContent
+                helpRequests={helpRequests}
+                openRequestsCount={openHelpRequests.length}
+                onMarkComplete={(requestId) => handleHelpRequestAction(requestId, 'closed')}
+                onCloseAll={handleCloseAllRequests}
+              />
             </DialogContent>
           </Dialog>
 
