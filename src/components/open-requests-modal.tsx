@@ -21,7 +21,7 @@ interface OpenRequestsModalContentProps {
   recipientsText: string;
 }
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 20;
 
 type PeriodFilter = "7days" | "30days" | "all";
 
@@ -55,25 +55,25 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
   // Count open requests for header
   const openRequestsCount = useMemo(() => {
-    return helpRequests.filter(r => r.status === "open").length;
+    return helpRequests.filter((r) => r.status === "open").length;
   }, [helpRequests]);
 
   // Filter requests by period (show all statuses)
   const filteredRequests = useMemo(() => {
     const now = new Date();
-    
+
     // Sort by most recent first
-    const sortedRequests = [...helpRequests].sort((a, b) => 
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    const sortedRequests = [...helpRequests].sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
     );
-    
+
     return sortedRequests.filter((request) => {
       if (periodFilter === "all") return true;
-      
+
       const requestDate = new Date(request.created_at);
       const daysAgo = periodFilter === "7days" ? 7 : 30;
       const cutoffDate = subDays(now, daysAgo);
-      
+
       return requestDate >= cutoffDate;
     });
   }, [helpRequests, periodFilter]);
@@ -108,7 +108,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             >
               {i}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     } else {
@@ -125,7 +125,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           >
             1
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
 
       // Show ellipsis if needed
@@ -133,14 +133,14 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         pages.push(
           <PaginationItem key="ellipsis-1">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
       // Show current page and surrounding pages
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(
           <PaginationItem key={i}>
@@ -154,7 +154,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             >
               {i}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -163,7 +163,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         pages.push(
           <PaginationItem key="ellipsis-2">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -180,7 +180,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           >
             {totalPages}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 
@@ -191,9 +191,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
     <div className="flex flex-col gap-4">
       {/* Header with count */}
       <div>
-        <h2 className="text-lg font-semibold mb-1">
-          Open Requests ({openRequestsCount.toString().padStart(2, "0")})
-        </h2>
+        <h2 className="text-lg font-semibold mb-1">Open Requests ({openRequestsCount.toString().padStart(2, "0")})</h2>
         <p className="text-xs text-muted-foreground">Requests notify: {recipientsText}</p>
       </div>
 
@@ -229,8 +227,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       <div className="space-y-3 overflow-y-auto pr-1 flex-1 min-h-[300px] max-h-[400px]">
         {paginatedRequests.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">
-            {periodFilter === "all" 
-              ? "No requests found" 
+            {periodFilter === "all"
+              ? "No requests found"
               : `No requests in the last ${periodFilter === "7days" ? "7" : "30"} days`}
           </p>
         ) : (
