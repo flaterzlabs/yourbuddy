@@ -8,7 +8,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { SoundSettings } from '@/components/sound-settings';
 import { StudentAvatar } from '@/components/student-avatar';
 import { StudentStats } from '@/components/student-stats';
-import { HelpRequestsModalContent } from '@/components/help-requests-modal';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useAuth } from '@/hooks/use-auth';
 import { useNotificationSound } from '@/hooks/use-notification-sound';
 import { useAudioUnlock } from '@/hooks/use-audio-unlock';
@@ -17,6 +17,15 @@ import { toast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import { UserPlus, Users, Clock, CheckCircle, LogOut, AlertTriangle, MessageSquare, Activity, Copy, Check, Menu, BarChart3, GraduationCap, SunMoon, XCircle } from 'lucide-react';
 import {
   DropdownMenu,
@@ -53,9 +62,11 @@ export default function CaregiverDashboard() {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied'>('idle');
   const [overviewModalOpen, setOverviewModalOpen] = useState(false);
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
-  const [helpRequestsModalOpen, setHelpRequestsModalOpen] = useState(false);
+  const [helpRequestsExpanded, setHelpRequestsExpanded] = useState(false);
   const [chartPeriod, setChartPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [requestsPage, setRequestsPage] = useState(1);
+  const [requestsPeriodFilter, setRequestsPeriodFilter] = useState<'7days' | '30days' | 'all'>('all');
   useEffect(() => {
     if (copyStatus !== 'copied') return;
     const timeout = setTimeout(() => setCopyStatus('idle'), 2000);
@@ -394,6 +405,127 @@ export default function CaregiverDashboard() {
   // Dynamic text based on role
   const studentLabel = profile?.role === 'caregiver' ? 'children' : 'students';
   const StudentLabel = profile?.role === 'caregiver' ? 'Children' : 'Students';
+
+  // Filter and paginate help requests
+  const REQUESTS_PER_PAGE = 20;
+  
+  const filteredHelpRequests = useMemo(() => {
+    const now = new Date();
+    const sortedRequests = [...helpRequests].sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    );
+
+    return sortedRequests.filter((request) => {
+      if (requestsPeriodFilter === "all") return true;
+      const requestDate = new Date(request.created_at);
+      const daysAgo = requestsPeriodFilter === "7days" ? 7 : 30;
+      const cutoffDate = subDays(now, daysAgo);
+      return requestDate >= cutoffDate;
+    });
+  }, [helpRequests, requestsPeriodFilter]);
+
+  const totalRequestsPages = Math.ceil(filteredHelpRequests.length / REQUESTS_PER_PAGE);
+  const paginatedHelpRequests = filteredHelpRequests.slice(
+    (requestsPage - 1) * REQUESTS_PER_PAGE,
+    requestsPage * REQUESTS_PER_PAGE
+  );
+
+  const handleRequestsFilterChange = (filter: '7days' | '30days' | 'all') => {
+    setRequestsPeriodFilter(filter);
+    setRequestsPage(1);
+  };
+
+  const renderRequestsPagination = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+
+    if (totalRequestsPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalRequestsPages; i++) {
+        pages.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setRequestsPage(i);
+              }}
+              isActive={requestsPage === i}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      }
+    } else {
+      pages.push(
+        <PaginationItem key={1}>
+          <PaginationLink
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setRequestsPage(1);
+            }}
+            isActive={requestsPage === 1}
+          >
+            1
+          </PaginationLink>
+        </PaginationItem>,
+      );
+
+      if (requestsPage > 3) {
+        pages.push(
+          <PaginationItem key="ellipsis-1">
+            <PaginationEllipsis />
+          </PaginationItem>,
+        );
+      }
+
+      const start = Math.max(2, requestsPage - 1);
+      const end = Math.min(totalRequestsPages - 1, requestsPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setRequestsPage(i);
+              }}
+              isActive={requestsPage === i}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      }
+
+      if (requestsPage < totalRequestsPages - 2) {
+        pages.push(
+          <PaginationItem key="ellipsis-2">
+            <PaginationEllipsis />
+          </PaginationItem>,
+        );
+      }
+
+      pages.push(
+        <PaginationItem key={totalRequestsPages}>
+          <PaginationLink
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setRequestsPage(totalRequestsPages);
+            }}
+            isActive={requestsPage === totalRequestsPages}
+          >
+            {totalRequestsPages}
+          </PaginationLink>
+        </PaginationItem>,
+      );
+    }
+
+    return pages;
+  };
   const helpRequestsChartData = useMemo(() => {
     const now = new Date();
     let periods: { key: string; date: Date; }[] = [];
@@ -725,14 +857,153 @@ export default function CaregiverDashboard() {
                 </div>
               </div>
 
-              <Button
-                onClick={() => setHelpRequestsModalOpen(true)}
-                className="w-full"
-                variant="default"
-              >
-                <MessageSquare className="h-4 w-4 mr-2" />
-                View All Requests ({helpRequests.length})
-              </Button>
+              <Collapsible open={helpRequestsExpanded} onOpenChange={setHelpRequestsExpanded}>
+                <CollapsibleTrigger asChild>
+                  <Button className="w-full" variant="default">
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    {helpRequestsExpanded ? 'Hide' : 'View'} All Requests ({helpRequests.length})
+                  </Button>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent className="mt-6 space-y-4">
+                  {/* Header with Close All */}
+                  {openHelpRequests.length > 0 && (
+                    <div className="flex justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleCloseAllRequests}
+                        className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                      >
+                        <XCircle className="h-4 w-4 mr-2" />
+                        Close All
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Period Filters */}
+                  <div className="flex gap-2 flex-wrap">
+                    <Button
+                      variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handleRequestsFilterChange("7days")}
+                      className="flex-1 sm:flex-none"
+                    >
+                      Last 7 days
+                    </Button>
+                    <Button
+                      variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handleRequestsFilterChange("30days")}
+                      className="flex-1 sm:flex-none"
+                    >
+                      Last 30 days
+                    </Button>
+                    <Button
+                      variant={requestsPeriodFilter === "all" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handleRequestsFilterChange("all")}
+                      className="flex-1 sm:flex-none"
+                    >
+                      All Requests ({helpRequests.length})
+                    </Button>
+                  </div>
+
+                  {/* Requests List */}
+                  <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+                    {paginatedHelpRequests.length === 0 ? (
+                      <p className="text-muted-foreground text-center py-8">
+                        {requestsPeriodFilter === "all"
+                          ? "No requests found"
+                          : `No requests in the last ${requestsPeriodFilter === "7days" ? "7" : "30"} days`}
+                      </p>
+                    ) : (
+                      paginatedHelpRequests.map((request) => (
+                        <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span>{getUrgencyEmoji(request.urgency || "ok")}</span>
+                              <div>
+                                <h4 className="font-semibold text-sm">
+                                  {request.student_profile?.username || "Unknown Student"}
+                                </h4>
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(request.created_at).toLocaleString("en-US")}
+                                </p>
+                              </div>
+                            </div>
+                            <Badge variant={getStatusColor(request.status || "open")}>
+                              {request.status === "open" && (
+                                <>
+                                  <Clock className="h-3 w-3 mr-1" />
+                                  Waiting
+                                </>
+                              )}
+                              {request.status === "answered" && (
+                                <>
+                                  <CheckCircle className="h-3 w-3 mr-1" />
+                                  Answered
+                                </>
+                              )}
+                              {request.status === "closed" && (
+                                <>
+                                  <XCircle className="h-3 w-3 mr-1" />
+                                  Closed
+                                </>
+                              )}
+                            </Badge>
+                          </div>
+                          {request.message && (
+                            <p className="text-sm mb-3 p-3 bg-background rounded border border-border">
+                              "{request.message}"
+                            </p>
+                          )}
+                          {request.status === "open" && (
+                            <Button
+                              size="sm"
+                              variant="success"
+                              onClick={() => handleHelpRequestAction(request.id, 'closed')}
+                              className="w-full"
+                            >
+                              <CheckCircle className="h-4 w-4 mr-1" />
+                              Mark as Complete
+                            </Button>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {/* Pagination */}
+                  {totalRequestsPages > 1 && (
+                    <Pagination className="mt-4">
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (requestsPage > 1) setRequestsPage(requestsPage - 1);
+                            }}
+                            className={requestsPage === 1 ? "pointer-events-none opacity-50" : ""}
+                          />
+                        </PaginationItem>
+                        {renderRequestsPagination()}
+                        <PaginationItem>
+                          <PaginationNext
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
+                            }}
+                            className={requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  )}
+                </CollapsibleContent>
+              </Collapsible>
             </Card>
           </div>
 
@@ -757,14 +1028,138 @@ export default function CaregiverDashboard() {
                 </div>
               </div>
 
-              <Button
-                onClick={() => setHelpRequestsModalOpen(true)}
-                className="w-full text-sm"
-                variant="default"
-              >
-                <MessageSquare className="h-4 w-4 mr-2" />
-                View All ({helpRequests.length})
-              </Button>
+              <Collapsible open={helpRequestsExpanded} onOpenChange={setHelpRequestsExpanded}>
+                <CollapsibleTrigger asChild>
+                  <Button className="w-full text-sm" variant="default">
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    {helpRequestsExpanded ? 'Hide' : 'View'} All ({helpRequests.length})
+                  </Button>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent className="mt-4 space-y-3">
+                  {/* Header with Close All */}
+                  {openHelpRequests.length > 0 && (
+                    <div className="flex justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleCloseAllRequests}
+                        className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8 px-3"
+                      >
+                        <XCircle className="h-3 w-3 mr-1" />
+                        Close All
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Period Filters */}
+                  <div className="flex gap-2">
+                    <Button
+                      variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handleRequestsFilterChange("7days")}
+                      className="flex-1 text-xs h-8"
+                    >
+                      7d
+                    </Button>
+                    <Button
+                      variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handleRequestsFilterChange("30days")}
+                      className="flex-1 text-xs h-8"
+                    >
+                      30d
+                    </Button>
+                    <Button
+                      variant={requestsPeriodFilter === "all" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handleRequestsFilterChange("all")}
+                      className="flex-1 text-xs h-8"
+                    >
+                      All ({helpRequests.length})
+                    </Button>
+                  </div>
+
+                  {/* Requests List */}
+                  <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                    {paginatedHelpRequests.length === 0 ? (
+                      <p className="text-muted-foreground text-center py-6 text-sm">
+                        {requestsPeriodFilter === "all"
+                          ? "No requests found"
+                          : `No requests in the last ${requestsPeriodFilter === "7days" ? "7" : "30"} days`}
+                      </p>
+                    ) : (
+                      paginatedHelpRequests.map((request) => (
+                        <div key={request.id} className="p-3 bg-background/50 rounded-lg border border-border">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm">{getUrgencyEmoji(request.urgency || "ok")}</span>
+                              <div className="min-w-0 flex-1">
+                                <h4 className="font-medium text-sm truncate">
+                                  {request.student_profile?.username || "Unknown Student"}
+                                </h4>
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(request.created_at).toLocaleString("en-US")}
+                                </p>
+                              </div>
+                            </div>
+                            <Badge variant={getStatusColor(request.status || "open")} className="text-xs">
+                              {request.status === "open" && "Waiting"}
+                              {request.status === "answered" && "Answered"}
+                              {request.status === "closed" && "Closed"}
+                            </Badge>
+                          </div>
+                          {request.message && (
+                            <p className="text-xs mb-2 p-2 bg-background rounded border border-border line-clamp-2">
+                              "{request.message}"
+                            </p>
+                          )}
+                          {request.status === "open" && (
+                            <Button
+                              size="sm"
+                              variant="success"
+                              onClick={() => handleHelpRequestAction(request.id, 'closed')}
+                              className="w-full text-xs h-8"
+                            >
+                              <CheckCircle className="h-3 w-3 mr-1" />
+                              Mark as Complete
+                            </Button>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {/* Pagination */}
+                  {totalRequestsPages > 1 && (
+                    <Pagination className="mt-4">
+                      <PaginationContent className="gap-1">
+                        <PaginationItem>
+                          <PaginationPrevious
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (requestsPage > 1) setRequestsPage(requestsPage - 1);
+                            }}
+                            className={`text-xs h-8 ${requestsPage === 1 ? "pointer-events-none opacity-50" : ""}`}
+                          />
+                        </PaginationItem>
+                        {renderRequestsPagination()}
+                        <PaginationItem>
+                          <PaginationNext
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
+                            }}
+                            className={`text-xs h-8 ${requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}`}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  )}
+                </CollapsibleContent>
+              </Collapsible>
             </Card>}
 
           {/* Meus Alunos - Desktop Only */}
@@ -985,18 +1380,6 @@ export default function CaregiverDashboard() {
                       </div>)}
                   </div>}
               </div>
-            </DialogContent>
-          </Dialog>
-
-          {/* Help Requests Modal */}
-          <Dialog open={helpRequestsModalOpen} onOpenChange={setHelpRequestsModalOpen}>
-            <DialogContent className="max-w-[95vw] md:max-w-[700px] max-h-[90vh]">
-              <HelpRequestsModalContent
-                helpRequests={helpRequests}
-                openRequestsCount={openHelpRequests.length}
-                onMarkComplete={(requestId) => handleHelpRequestAction(requestId, 'closed')}
-                onCloseAll={handleCloseAllRequests}
-              />
             </DialogContent>
           </Dialog>
 
