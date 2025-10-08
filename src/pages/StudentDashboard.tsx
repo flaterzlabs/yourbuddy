@@ -539,7 +539,7 @@ export default function StudentDashboard() {
                     imageUrl={thriveSprite?.image_url}
                     seed={thriveSprite ? (thriveSprite.options as any)?.seed : undefined}
                     style={thriveSprite ? (thriveSprite.options as any)?.style : undefined}
-                    size={140}
+                    size={160}
                     className="border-4 border-success rounded-full shadow-md shadow-green-500"
                   />
                 </div>
