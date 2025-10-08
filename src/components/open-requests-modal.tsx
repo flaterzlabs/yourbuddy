@@ -53,13 +53,21 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
     }
   };
 
-  // Filter requests by period
+  // Count open requests for header
+  const openRequestsCount = useMemo(() => {
+    return helpRequests.filter(r => r.status === "open").length;
+  }, [helpRequests]);
+
+  // Filter requests by period (show all statuses)
   const filteredRequests = useMemo(() => {
     const now = new Date();
     
-    return helpRequests.filter((request) => {
-      if (request.status !== "open") return false;
-
+    // Sort by most recent first
+    const sortedRequests = [...helpRequests].sort((a, b) => 
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+    
+    return sortedRequests.filter((request) => {
       if (periodFilter === "all") return true;
       
       const requestDate = new Date(request.created_at);
@@ -184,7 +192,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       {/* Header with count */}
       <div>
         <h2 className="text-lg font-semibold mb-1">
-          Open Requests ({filteredRequests.length.toString().padStart(2, "0")})
+          Open Requests ({openRequestsCount.toString().padStart(2, "0")})
         </h2>
         <p className="text-xs text-muted-foreground">Requests notify: {recipientsText}</p>
       </div>
@@ -197,7 +205,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           onClick={() => handleFilterChange("7days")}
           className="flex-1 sm:flex-none"
         >
-          Últimos 7 dias
+          Last 7 days
         </Button>
         <Button
           variant={periodFilter === "30days" ? "default" : "outline"}
@@ -205,7 +213,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           onClick={() => handleFilterChange("30days")}
           className="flex-1 sm:flex-none"
         >
-          Últimos 30 dias
+          Last 30 days
         </Button>
         <Button
           variant={periodFilter === "all" ? "default" : "outline"}
@@ -213,7 +221,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           onClick={() => handleFilterChange("all")}
           className="flex-1 sm:flex-none"
         >
-          Todos ({helpRequests.filter(r => r.status === "open").length})
+          All Requests ({helpRequests.length})
         </Button>
       </div>
 
@@ -222,8 +230,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         {paginatedRequests.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">
             {periodFilter === "all" 
-              ? "No open requests" 
-              : `No open requests in the last ${periodFilter === "7days" ? "7" : "30"} days`}
+              ? "No requests found" 
+              : `No requests in the last ${periodFilter === "7days" ? "7" : "30"} days`}
           </p>
         ) : (
           paginatedRequests.map((request) => (
