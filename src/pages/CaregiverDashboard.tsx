@@ -901,11 +901,11 @@ export default function CaregiverDashboard() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" size="sm">
-                        {requestsPeriodFilter === "7days" 
-                          ? "Last 7 days" 
-                          : requestsPeriodFilter === "30days" 
-                          ? "Last 30 days" 
-                          : `All Requests (${helpRequests.length})`}
+                        {requestsPeriodFilter === "7days"
+                          ? "Last 7 days"
+                          : requestsPeriodFilter === "30days"
+                            ? "Last 30 days"
+                            : `All Requests (${helpRequests.length})`}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent side="top" align="start">
@@ -989,7 +989,7 @@ export default function CaregiverDashboard() {
                             size="sm"
                             variant="success"
                             onClick={() => handleHelpRequestAction(request.id, "closed")}
-                            className="w-full"
+                            className="w-[50%]"
                           >
                             <CheckCircle className="h-4 w-4 mr-1" />
                             Mark as Complete
