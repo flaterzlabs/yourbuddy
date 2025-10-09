@@ -11,6 +11,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Clock, CheckCircle, XCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 import { subDays } from "date-fns";
 
@@ -145,19 +146,19 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
       for (let i = start; i <= end; i++) {
         pages.push(
-        <PaginationItem key={i}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage(i);
-            }}
-            isActive={currentPage === i}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-          >
-            {i}
-          </PaginationLink>
-        </PaginationItem>,
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(i);
+              }}
+              isActive={currentPage === i}
+              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
         );
       }
 
@@ -228,7 +229,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </div>
 
       {/* Requests List */}
-     <div className="space-y-3 overflow-y-auto pr-1 max-h-[340px]">
+      <div className="space-y-3 overflow-y-auto pr-1 max-h-[340px]">
         {paginatedRequests.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">
             {periodFilter === "all"
@@ -273,9 +274,11 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </div>
 
       {/* Pagination */}
+
       {totalPages > 1 && (
         <Pagination className="mt-4">
-          <PaginationContent className="flex-wrap gap-1">
+          <PaginationContent className="flex flex-wrap justify-center gap-1">
+            {/* --- PREVIOUS --- */}
             <PaginationItem>
               <PaginationPrevious
                 href="#"
@@ -283,10 +286,23 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
-              />
+                className={`h-8 sm:h-10 text-xs sm:text-sm flex items-center justify-center ${
+                  currentPage === 1 ? "pointer-events-none opacity-50" : "hover:bg-muted transition-colors"
+                }`}
+              >
+                {/* Ícone no mobile */}
+                <span className="flex sm:hidden">
+                  <ChevronLeft className="h-4 w-4" />
+                </span>
+                {/* Texto no desktop */}
+                <span className="hidden sm:inline">Previous</span>
+              </PaginationPrevious>
             </PaginationItem>
+
+            {/* --- NÚMEROS DE PÁGINA --- */}
             {renderPageNumbers()}
+
+            {/* --- NEXT --- */}
             <PaginationItem>
               <PaginationNext
                 href="#"
@@ -294,8 +310,17 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
-              />
+                className={`h-8 sm:h-10 text-xs sm:text-sm flex items-center justify-center ${
+                  currentPage === totalPages ? "pointer-events-none opacity-50" : "hover:bg-muted transition-colors"
+                }`}
+              >
+                {/* Ícone no mobile */}
+                <span className="flex sm:hidden">
+                  <ChevronRight className="h-4 w-4" />
+                </span>
+                {/* Texto no desktop */}
+                <span className="hidden sm:inline">Next</span>
+              </PaginationNext>
             </PaginationItem>
           </PaginationContent>
         </Pagination>
