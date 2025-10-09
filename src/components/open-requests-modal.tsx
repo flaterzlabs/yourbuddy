@@ -92,100 +92,120 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
   const renderPageNumbers = () => {
     const pages = [];
-    const maxVisiblePages = 3; // Reduced for better mobile experience
+    const isMobile = window.innerWidth < 640;
+    
+    // Show only current page on mobile, more on desktop
+    if (isMobile) {
+      // Mobile: only show current page
+      pages.push(
+        <PaginationItem key={currentPage}>
+          <PaginationLink
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            isActive={true}
+            className="h-8 w-8 text-xs pointer-events-none"
+          >
+            {currentPage}
+          </PaginationLink>
+        </PaginationItem>,
+      );
+    } else {
+      // Desktop: show more pages
+      const maxVisiblePages = 5;
 
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
+      if (totalPages <= maxVisiblePages) {
+        for (let i = 1; i <= totalPages; i++) {
+          pages.push(
+            <PaginationItem key={i}>
+              <PaginationLink
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(i);
+                }}
+                isActive={currentPage === i}
+                className="h-10 w-10"
+              >
+                {i}
+              </PaginationLink>
+            </PaginationItem>,
+          );
+        }
+      } else {
+        // Show first page
         pages.push(
-          <PaginationItem key={i}>
+          <PaginationItem key={1}>
             <PaginationLink
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                setCurrentPage(i);
+                setCurrentPage(1);
               }}
-              isActive={currentPage === i}
-              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+              isActive={currentPage === 1}
+              className="h-10 w-10"
             >
-              {i}
+              1
+            </PaginationLink>
+          </PaginationItem>,
+        );
+
+        // Show ellipsis if needed
+        if (currentPage > 3) {
+          pages.push(
+            <PaginationItem key="ellipsis-1">
+              <PaginationEllipsis />
+            </PaginationItem>,
+          );
+        }
+
+        // Show current page and surrounding pages
+        const start = Math.max(2, currentPage - 1);
+        const end = Math.min(totalPages - 1, currentPage + 1);
+
+        for (let i = start; i <= end; i++) {
+          pages.push(
+            <PaginationItem key={i}>
+              <PaginationLink
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(i);
+                }}
+                isActive={currentPage === i}
+                className="h-10 w-10"
+              >
+                {i}
+              </PaginationLink>
+            </PaginationItem>,
+          );
+        }
+
+        // Show ellipsis if needed
+        if (currentPage < totalPages - 2) {
+          pages.push(
+            <PaginationItem key="ellipsis-2">
+              <PaginationEllipsis />
+            </PaginationItem>,
+          );
+        }
+
+        // Show last page
+        pages.push(
+          <PaginationItem key={totalPages}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(totalPages);
+              }}
+              isActive={currentPage === totalPages}
+              className="h-10 w-10"
+            >
+              {totalPages}
             </PaginationLink>
           </PaginationItem>,
         );
       }
-    } else {
-      // Show first page
-      pages.push(
-        <PaginationItem key={1}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage(1);
-            }}
-            isActive={currentPage === 1}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-          >
-            1
-          </PaginationLink>
-        </PaginationItem>,
-      );
-
-      // Show ellipsis if needed
-      if (currentPage > 3) {
-        pages.push(
-          <PaginationItem key="ellipsis-1">
-            <PaginationEllipsis />
-          </PaginationItem>,
-        );
-      }
-
-      // Show current page and surrounding pages
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = start; i <= end; i++) {
-        pages.push(
-        <PaginationItem key={i}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage(i);
-            }}
-            isActive={currentPage === i}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-          >
-            {i}
-          </PaginationLink>
-        </PaginationItem>,
-        );
-      }
-
-      // Show ellipsis if needed
-      if (currentPage < totalPages - 2) {
-        pages.push(
-          <PaginationItem key="ellipsis-2">
-            <PaginationEllipsis />
-          </PaginationItem>,
-        );
-      }
-
-      // Show last page
-      pages.push(
-        <PaginationItem key={totalPages}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage(totalPages);
-            }}
-            isActive={currentPage === totalPages}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-          >
-            {totalPages}
-          </PaginationLink>
-        </PaginationItem>,
-      );
     }
 
     return pages;
@@ -275,7 +295,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       {/* Pagination */}
       {totalPages > 1 && (
         <Pagination className="mt-4">
-          <PaginationContent className="overflow-x-auto gap-1 justify-start">
+          <PaginationContent className="gap-1">
             <PaginationItem>
               <PaginationPrevious
                 href="#"
