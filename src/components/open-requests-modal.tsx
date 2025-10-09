@@ -92,85 +92,54 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
   const renderPageNumbers = () => {
     const pages = [];
-    const maxVisiblePages = 3; // Reduced for better mobile experience
 
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <PaginationItem key={i}>
-            <PaginationLink
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentPage(i);
-              }}
-              isActive={currentPage === i}
-              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-            >
-              {i}
-            </PaginationLink>
-          </PaginationItem>,
-        );
-      }
-    } else {
-      // Show first page
+    // Always show page 1
+    pages.push(
+      <PaginationItem key={1}>
+        <PaginationLink
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setCurrentPage(1);
+          }}
+          isActive={currentPage === 1}
+          className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+        >
+          1
+        </PaginationLink>
+      </PaginationItem>,
+    );
+
+    // Show page 2 if exists
+    if (totalPages >= 2) {
       pages.push(
-        <PaginationItem key={1}>
+        <PaginationItem key={2}>
           <PaginationLink
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              setCurrentPage(1);
+              setCurrentPage(2);
             }}
-            isActive={currentPage === 1}
+            isActive={currentPage === 2}
             className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
           >
-            1
+            2
           </PaginationLink>
         </PaginationItem>,
       );
+    }
 
-      // Show ellipsis if needed
-      if (currentPage > 3) {
-        pages.push(
-          <PaginationItem key="ellipsis-1">
-            <PaginationEllipsis />
-          </PaginationItem>,
-        );
-      }
-
-      // Show current page and surrounding pages
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = start; i <= end; i++) {
-        pages.push(
-        <PaginationItem key={i}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage(i);
-            }}
-            isActive={currentPage === i}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-          >
-            {i}
-          </PaginationLink>
+    // Show ellipsis if there are more than 3 pages
+    if (totalPages > 3) {
+      pages.push(
+        <PaginationItem key="ellipsis">
+          <PaginationEllipsis className="h-8 w-8 sm:h-10 sm:w-10" />
         </PaginationItem>,
-        );
-      }
+      );
+    }
 
-      // Show ellipsis if needed
-      if (currentPage < totalPages - 2) {
-        pages.push(
-          <PaginationItem key="ellipsis-2">
-            <PaginationEllipsis />
-          </PaginationItem>,
-        );
-      }
-
-      // Show last page
+    // Show last page if there are more than 2 pages
+    if (totalPages > 2) {
       pages.push(
         <PaginationItem key={totalPages}>
           <PaginationLink
@@ -274,31 +243,37 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <Pagination className="mt-4">
-          <PaginationContent className="flex-wrap gap-1">
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage > 1) setCurrentPage(currentPage - 1);
-                }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
-              />
-            </PaginationItem>
-            {renderPageNumbers()}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-                }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <div className="overflow-x-auto mt-4">
+          <Pagination>
+            <PaginationContent className="flex-nowrap gap-1 justify-center">
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) setCurrentPage(currentPage - 1);
+                  }}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 sm:h-10" : "h-8 sm:h-10"}
+                >
+                  <span className="hidden sm:inline">Previous</span>
+                </PaginationPrevious>
+              </PaginationItem>
+              {renderPageNumbers()}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                  }}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 sm:h-10" : "h-8 sm:h-10"}
+                >
+                  <span className="hidden sm:inline">Next</span>
+                </PaginationNext>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       )}
     </div>
   );
