@@ -224,7 +224,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </div>
 
       {/* Requests List */}
-      <div className="space-y-3 overflow-y-auto pr-1 flex-1 min-h-[300px] max-h-[400px]">
+      <div className="space-y-3 overflow-y-auto pr-1 flex-1 min-h-[300px] max-h-[480px]">
         {paginatedRequests.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">
             {periodFilter === "all"
