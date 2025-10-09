@@ -275,7 +275,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       {/* Pagination */}
       {totalPages > 1 && (
         <Pagination className="mt-4">
-          <PaginationContent className="overflow-x-auto gap-1 justify-start">
+          <PaginationContent className="flex-wrap gap-1">
             <PaginationItem>
               <PaginationPrevious
                 href="#"
