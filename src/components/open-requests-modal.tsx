@@ -200,7 +200,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </div>
 
       {/* Period Filter */}
-      <div className="flex gap-2 flex-wrap sm:justify-between">
+      <div className="flex gap-2 flex-wrap sm:justify-evenly">
         <Button
           variant={periodFilter === "7days" ? "default" : "outline"}
           size="sm"
