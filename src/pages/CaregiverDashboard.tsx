@@ -915,6 +915,9 @@ export default function CaregiverDashboard() {
                       <DropdownMenuItem onClick={() => handleRequestsFilterChange("30days")}>
                         Last 30 days
                       </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("all")}>
+                        All Requests ({helpRequests.length})
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
 
