@@ -482,52 +482,77 @@ export default function CaregiverDashboard() {
 
   const renderRequestsPagination = () => {
     const pages = [];
+    const maxVisiblePages = 5;
 
-    // Always show page 1
-    pages.push(
-      <PaginationItem key={1}>
-        <PaginationLink
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setRequestsPage(1);
-          }}
-          isActive={requestsPage === 1}
-        >
-          1
-        </PaginationLink>
-      </PaginationItem>,
-    );
-
-    // Show page 2 if exists
-    if (totalRequestsPages >= 2) {
+    if (totalRequestsPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalRequestsPages; i++) {
+        pages.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setRequestsPage(i);
+              }}
+              isActive={requestsPage === i}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      }
+    } else {
       pages.push(
-        <PaginationItem key={2}>
+        <PaginationItem key={1}>
           <PaginationLink
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              setRequestsPage(2);
+              setRequestsPage(1);
             }}
-            isActive={requestsPage === 2}
+            isActive={requestsPage === 1}
           >
-            2
+            1
           </PaginationLink>
         </PaginationItem>,
       );
-    }
 
-    // Show ellipsis if there are more than 3 pages
-    if (totalRequestsPages > 3) {
-      pages.push(
-        <PaginationItem key="ellipsis">
-          <PaginationEllipsis />
-        </PaginationItem>,
-      );
-    }
+      if (requestsPage > 3) {
+        pages.push(
+          <PaginationItem key="ellipsis-1">
+            <PaginationEllipsis />
+          </PaginationItem>,
+        );
+      }
 
-    // Show last page if there are more than 2 pages
-    if (totalRequestsPages > 2) {
+      const start = Math.max(2, requestsPage - 1);
+      const end = Math.min(totalRequestsPages - 1, requestsPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setRequestsPage(i);
+              }}
+              isActive={requestsPage === i}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      }
+
+      if (requestsPage < totalRequestsPages - 2) {
+        pages.push(
+          <PaginationItem key="ellipsis-2">
+            <PaginationEllipsis />
+          </PaginationItem>,
+        );
+      }
+
       pages.push(
         <PaginationItem key={totalRequestsPages}>
           <PaginationLink
@@ -977,33 +1002,31 @@ export default function CaregiverDashboard() {
 
                 {/* Pagination */}
                 {totalRequestsPages > 1 && (
-                  <div className="overflow-x-auto mt-4">
-                    <Pagination>
-                      <PaginationContent className="flex-nowrap gap-1 justify-center">
-                        <PaginationItem>
-                          <PaginationPrevious
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (requestsPage > 1) setRequestsPage(requestsPage - 1);
-                            }}
-                            className={requestsPage === 1 ? "pointer-events-none opacity-50" : ""}
-                          />
-                        </PaginationItem>
-                        {renderRequestsPagination()}
-                        <PaginationItem>
-                          <PaginationNext
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
-                            }}
-                            className={requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
-                  </div>
+                  <Pagination className="mt-4">
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (requestsPage > 1) setRequestsPage(requestsPage - 1);
+                          }}
+                          className={requestsPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                      {renderRequestsPagination()}
+                      <PaginationItem>
+                        <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
+                          }}
+                          className={requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
                 )}
               </div>
             </Card>
@@ -1116,37 +1139,31 @@ export default function CaregiverDashboard() {
 
                 {/* Pagination */}
                 {totalRequestsPages > 1 && (
-                  <div className="overflow-x-auto mt-4">
-                    <Pagination>
-                      <PaginationContent className="flex-nowrap gap-1 justify-center">
-                        <PaginationItem>
-                          <PaginationPrevious
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (requestsPage > 1) setRequestsPage(requestsPage - 1);
-                            }}
-                            className={`h-8 ${requestsPage === 1 ? "pointer-events-none opacity-50" : ""}`}
-                          >
-                            <span className="sr-only">Previous</span>
-                          </PaginationPrevious>
-                        </PaginationItem>
-                        {renderRequestsPagination()}
-                        <PaginationItem>
-                          <PaginationNext
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
-                            }}
-                            className={`h-8 ${requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}`}
-                          >
-                            <span className="sr-only">Next</span>
-                          </PaginationNext>
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
-                  </div>
+                  <Pagination className="mt-4">
+                    <PaginationContent className="gap-1">
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (requestsPage > 1) setRequestsPage(requestsPage - 1);
+                          }}
+                          className={`text-xs h-8 ${requestsPage === 1 ? "pointer-events-none opacity-50" : ""}`}
+                        />
+                      </PaginationItem>
+                      {renderRequestsPagination()}
+                      <PaginationItem>
+                        <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
+                          }}
+                          className={`text-xs h-8 ${requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}`}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
                 )}
               </div>
             </Card>
