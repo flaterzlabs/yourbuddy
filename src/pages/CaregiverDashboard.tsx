@@ -41,6 +41,7 @@ import {
   GraduationCap,
   SunMoon,
   XCircle,
+  Download,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -628,10 +629,10 @@ export default function CaregiverDashboard() {
       counters.set(key, existing);
     });
 
-    return periods.map(({ key, date }) => {
-      const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
-      let label = "";
-      let fullLabel = "";
+  return periods.map(({ key, date }) => {
+    const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
+    let label = "";
+    let fullLabel = "";
 
       if (chartPeriod === "daily") {
         label = format(date, "dd/MM");
@@ -655,6 +656,57 @@ export default function CaregiverDashboard() {
       };
     });
   }, [helpRequests, chartPeriod]);
+  const hasHelpRequestStats = useMemo(
+    () => helpRequestsChartData.some((item) => item.total > 0),
+    [helpRequestsChartData],
+  );
+  const handleExportHelpRequestStats = () => {
+    if (!hasHelpRequestStats) {
+      toast({
+        title: "No data to export",
+        description: "There is no help request activity for the selected period.",
+        variant: "caregiver-warning",
+      });
+      return;
+    }
+
+    const rows = [
+      ["Period", "Low Priority", "Medium Priority", "High Priority", "Total"],
+      ...helpRequestsChartData.map((item) => [
+        item.fullLabel,
+        item.ok.toString(),
+        item.attention.toString(),
+        item.urgent.toString(),
+        item.total.toString(),
+      ]),
+    ];
+
+    const escapeCell = (value: string) => {
+      const cell = value ?? "";
+      if (cell.includes('"') || cell.includes(",") || cell.includes("\n")) {
+        return `"${cell.replace(/"/g, '""')}"`;
+      }
+      return cell;
+    };
+
+    const csvContent = rows.map((row) => row.map(escapeCell).join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const timestamp = new Date().toISOString().split("T")[0];
+    link.href = url;
+    link.download = `help-request-stats-${chartPeriod}-${timestamp}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Export started",
+      description: "Help request statistics exported as CSV.",
+      variant: "caregiver-success",
+    });
+  };
   const monthlyChartConfig = useMemo(
     () => ({
       ok: {
@@ -845,19 +897,32 @@ export default function CaregiverDashboard() {
               </div>
 
               <div className="mt-8">
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                   <h3 className="text-lg font-semibold">Requests Per Month</h3>
 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline">{chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}</Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setChartPeriod("weekly")}>Weekly</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div className="flex items-center gap-2">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                          {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setChartPeriod("weekly")}>Weekly</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button
+                      variant="outline"
+                      className="flex items-center gap-2"
+                      onClick={handleExportHelpRequestStats}
+                      disabled={!hasHelpRequestStats}
+                    >
+                      <Download className="h-4 w-4" />
+                      Export CSV
+                    </Button>
+                  </div>
                 </div>
 
                 <ChartContainer config={monthlyChartConfig} className="w-full h-64">
@@ -1317,19 +1382,32 @@ export default function CaregiverDashboard() {
                 </div>
 
                 <div>
-                  <div className="flex justify-between items-center mb-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <h3 className="text-lg font-semibold">Requests Per Month</h3>
 
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline">{chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}</Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setChartPeriod("weekly")}>Weekly</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <div className="flex items-center gap-2">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline">
+                            {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setChartPeriod("weekly")}>Weekly</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
+                        onClick={handleExportHelpRequestStats}
+                        disabled={!hasHelpRequestStats}
+                      >
+                        <Download className="h-4 w-4" />
+                        Export CSV
+                      </Button>
+                    </div>
                   </div>
 
                   <ChartContainer config={monthlyChartConfig} className="w-full h-48">

@@ -10,9 +10,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Clock, CheckCircle, XCircle } from "lucide-react";
+import { Clock, CheckCircle, XCircle, Download } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 import { subDays } from "date-fns";
+import { toast } from "@/hooks/use-toast";
 
 type HelpRequest = Database["public"]["Tables"]["help_requests"]["Row"];
 
@@ -50,6 +51,29 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         return "outline";
       default:
         return "secondary";
+    }
+  };
+  const getStatusLabel = (status: string | null | undefined) => {
+    switch (status) {
+      case "answered":
+        return "Answered";
+      case "closed":
+        return "Closed";
+      case "pending":
+        return "Waiting";
+      case "open":
+      default:
+        return "Waiting";
+    }
+  };
+  const getUrgencyLabel = (urgency: string | null | undefined) => {
+    switch (urgency) {
+      case "attention":
+        return "Attention";
+      case "urgent":
+        return "Urgent";
+      default:
+        return "OK";
     }
   };
 
@@ -145,19 +169,19 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
       for (let i = start; i <= end; i++) {
         pages.push(
-        <PaginationItem key={i}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage(i);
-            }}
-            isActive={currentPage === i}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-          >
-            {i}
-          </PaginationLink>
-        </PaginationItem>,
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(i);
+              }}
+              isActive={currentPage === i}
+              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
         );
       }
 
@@ -190,6 +214,52 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
     return pages;
   };
+  const handleExportRequests = () => {
+    if (filteredRequests.length === 0) {
+      toast({
+        title: "Nothing to export",
+        description: "No help requests available for the selected period.",
+        variant: "student",
+      });
+      return;
+    }
+
+    const rows = [
+      ["Created At", "Urgency", "Status", "Message"],
+      ...filteredRequests.map((request) => [
+        request.created_at ? new Date(request.created_at).toLocaleString("en-US") : "-",
+        `${getUrgencyEmoji(request.urgency || "ok")} ${getUrgencyLabel(request.urgency)}`,
+        getStatusLabel(request.status),
+        request.message || "",
+      ]),
+    ];
+
+    const escapeCell = (value: string) => {
+      const cell = value ?? "";
+      if (cell.includes('"') || cell.includes(",") || cell.includes("\n")) {
+        return `"${cell.replace(/"/g, '""')}"`;
+      }
+      return cell;
+    };
+
+    const csvContent = rows.map((row) => row.map(escapeCell).join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const timestamp = new Date().toISOString().split("T")[0];
+    link.href = url;
+    link.download = `help-requests-${periodFilter}-${timestamp}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Export started",
+      description: "Help requests exported as CSV.",
+      variant: "student",
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -200,35 +270,47 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </div>
 
       {/* Period Filter */}
-      <div className="flex gap-2 flex-wrap sm:justify-evenly">
+      <div className="flex flex-wrap items-center gap-2 sm:justify-between">
+        <div className="flex gap-2 flex-1 sm:flex-none">
+          <Button
+            variant={periodFilter === "7days" ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange("7days")}
+            className="flex-1 sm:flex-none"
+          >
+            Last 7 days
+          </Button>
+          <Button
+            variant={periodFilter === "30days" ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange("30days")}
+            className="flex-1 sm:flex-none"
+          >
+            Last 30 days
+          </Button>
+          <Button
+            variant={periodFilter === "all" ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange("all")}
+            className="flex-1 sm:flex-none"
+          >
+            All Requests ({helpRequests.length})
+          </Button>
+        </div>
         <Button
-          variant={periodFilter === "7days" ? "default" : "outline"}
+          variant="outline"
           size="sm"
-          onClick={() => handleFilterChange("7days")}
-          className="flex-1 sm:flex-none"
+          className="flex items-center gap-2"
+          onClick={handleExportRequests}
+          disabled={filteredRequests.length === 0}
         >
-          Last 7 days
-        </Button>
-        <Button
-          variant={periodFilter === "30days" ? "default" : "outline"}
-          size="sm"
-          onClick={() => handleFilterChange("30days")}
-          className="flex-1 sm:flex-none"
-        >
-          Last 30 days
-        </Button>
-        <Button
-          variant={periodFilter === "all" ? "default" : "outline"}
-          size="sm"
-          onClick={() => handleFilterChange("all")}
-          className="flex-1 sm:flex-none"
-        >
-          All Requests ({helpRequests.length})
+          <Download className="h-4 w-4" />
+          Export CSV
         </Button>
       </div>
 
       {/* Requests List */}
-     <div className="space-y-3 overflow-y-auto pr-1 max-h-[340px]">
+      <div className="space-y-3 overflow-y-auto pr-1 max-h-[340px]">
         {paginatedRequests.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">
             {periodFilter === "all"
