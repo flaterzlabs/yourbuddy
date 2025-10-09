@@ -10,7 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Clock, CheckCircle, XCircle } from "lucide-react";
+import { Clock, CheckCircle, XCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 import { subDays } from "date-fns";
 
@@ -93,28 +93,33 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
   const renderPageNumbers = () => {
     const pages = [];
     const isMobile = window.innerWidth < 640;
+    const maxVisiblePages = isMobile ? 3 : 5;
     
-    // Show only current page on mobile, more on desktop
-    if (isMobile) {
-      // Mobile: only show current page
-      pages.push(
-        <PaginationItem key={currentPage}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            isActive={true}
-            className="h-8 w-8 text-xs pointer-events-none"
-          >
-            {currentPage}
-          </PaginationLink>
-        </PaginationItem>,
-      );
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(i);
+              }}
+              isActive={currentPage === i}
+              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      }
     } else {
-      // Desktop: show more pages
-      const maxVisiblePages = 5;
-
-      if (totalPages <= maxVisiblePages) {
-        for (let i = 1; i <= totalPages; i++) {
+      if (isMobile) {
+        // Mobile: show current page and 1 page on each side
+        const start = Math.max(1, currentPage - 1);
+        const end = Math.min(totalPages, currentPage + 1);
+        
+        for (let i = start; i <= end; i++) {
           pages.push(
             <PaginationItem key={i}>
               <PaginationLink
@@ -124,7 +129,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   setCurrentPage(i);
                 }}
                 isActive={currentPage === i}
-                className="h-10 w-10"
+                className="h-8 w-8 text-xs"
               >
                 {i}
               </PaginationLink>
@@ -132,7 +137,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           );
         }
       } else {
-        // Show first page
+        // Desktop: show more pages with ellipsis
         pages.push(
           <PaginationItem key={1}>
             <PaginationLink
@@ -149,7 +154,6 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           </PaginationItem>,
         );
 
-        // Show ellipsis if needed
         if (currentPage > 3) {
           pages.push(
             <PaginationItem key="ellipsis-1">
@@ -158,7 +162,6 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           );
         }
 
-        // Show current page and surrounding pages
         const start = Math.max(2, currentPage - 1);
         const end = Math.min(totalPages - 1, currentPage + 1);
 
@@ -180,7 +183,6 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           );
         }
 
-        // Show ellipsis if needed
         if (currentPage < totalPages - 2) {
           pages.push(
             <PaginationItem key="ellipsis-2">
@@ -189,7 +191,6 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           );
         }
 
-        // Show last page
         pages.push(
           <PaginationItem key={totalPages}>
             <PaginationLink
@@ -297,25 +298,31 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         <Pagination className="mt-4">
           <PaginationContent className="gap-1">
             <PaginationItem>
-              <PaginationPrevious
+              <PaginationLink
                 href="#"
+                size="icon"
                 onClick={(e) => {
                   e.preventDefault();
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
-              />
+                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 w-8 sm:h-10 sm:w-10" : "h-8 w-8 sm:h-10 sm:w-10"}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </PaginationLink>
             </PaginationItem>
             {renderPageNumbers()}
             <PaginationItem>
-              <PaginationNext
+              <PaginationLink
                 href="#"
+                size="icon"
                 onClick={(e) => {
                   e.preventDefault();
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
-              />
+                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 w-8 sm:h-10 sm:w-10" : "h-8 w-8 sm:h-10 sm:w-10"}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </PaginationLink>
             </PaginationItem>
           </PaginationContent>
         </Pagination>
