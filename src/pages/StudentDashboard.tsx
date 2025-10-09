@@ -409,7 +409,7 @@ export default function StudentDashboard() {
                   )}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden flex flex-col px-4 sm:px-0">
+              <DialogContent className="max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
                 <OpenRequestsModalContent helpRequests={helpRequests} recipientsText={recipientsText} />
               </DialogContent>
             </Dialog>
