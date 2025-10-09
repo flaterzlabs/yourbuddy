@@ -896,46 +896,39 @@ export default function CaregiverDashboard() {
               </div>
 
               <div className="space-y-4">
-                {/* Period Filters */}
-                <div className="flex gap-2 flex-wrap">
-                  <Button
-                    variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleRequestsFilterChange("7days")}
-                    className="flex-1 sm:flex-none"
-                  >
-                    Last 7 days
-                  </Button>
-                  <Button
-                    variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleRequestsFilterChange("30days")}
-                    className="flex-1 sm:flex-none"
-                  >
-                    Last 30 days
-                  </Button>
-                  <Button
-                    variant={requestsPeriodFilter === "all" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleRequestsFilterChange("all")}
-                    className="flex-1 sm:flex-none"
-                  >
-                    All Requests ({helpRequests.length})
-                  </Button>
+                {/* Period Filter Dropdown */}
+                <div className="flex gap-2 items-center justify-between">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        {requestsPeriodFilter === "7days" 
+                          ? "Last 7 days" 
+                          : requestsPeriodFilter === "30days" 
+                          ? "Last 30 days" 
+                          : `All Requests (${helpRequests.length})`}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side="top" align="start">
+                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("7days")}>
+                        Last 7 days
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("30days")}>
+                        Last 30 days
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
                   {/* Header with Close All */}
                   {openHelpRequests.length > 0 && (
-                    <div className="flex justify-end">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleCloseAllRequests}
-                        className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                      >
-                        <XCircle className="h-4 w-4 mr-2" />
-                        Close All
-                      </Button>
-                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCloseAllRequests}
+                      className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                    >
+                      <XCircle className="h-4 w-4 mr-2" />
+                      Close All
+                    </Button>
                   )}
                 </div>
 
