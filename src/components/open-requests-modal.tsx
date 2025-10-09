@@ -92,7 +92,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
   const renderPageNumbers = () => {
     const pages = [];
-    const maxVisiblePages = 5;
+    const maxVisiblePages = 3; // Reduced for better mobile experience
 
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
@@ -105,6 +105,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 setCurrentPage(i);
               }}
               isActive={currentPage === i}
+              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
             >
               {i}
             </PaginationLink>
@@ -122,6 +123,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
               setCurrentPage(1);
             }}
             isActive={currentPage === 1}
+            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
           >
             1
           </PaginationLink>
@@ -143,18 +145,19 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
       for (let i = start; i <= end; i++) {
         pages.push(
-          <PaginationItem key={i}>
-            <PaginationLink
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentPage(i);
-              }}
-              isActive={currentPage === i}
-            >
-              {i}
-            </PaginationLink>
-          </PaginationItem>,
+        <PaginationItem key={i}>
+          <PaginationLink
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setCurrentPage(i);
+            }}
+            isActive={currentPage === i}
+            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>,
         );
       }
 
@@ -177,6 +180,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
               setCurrentPage(totalPages);
             }}
             isActive={currentPage === totalPages}
+            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
           >
             {totalPages}
           </PaginationLink>
@@ -196,7 +200,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </div>
 
       {/* Period Filter */}
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap sm:justify-between">
         <Button
           variant={periodFilter === "7days" ? "default" : "outline"}
           size="sm"
@@ -271,7 +275,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       {/* Pagination */}
       {totalPages > 1 && (
         <Pagination className="mt-4">
-          <PaginationContent>
+          <PaginationContent className="flex-wrap gap-1">
             <PaginationItem>
               <PaginationPrevious
                 href="#"
@@ -279,7 +283,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
               />
             </PaginationItem>
             {renderPageNumbers()}
@@ -290,7 +294,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
               />
             </PaginationItem>
           </PaginationContent>
