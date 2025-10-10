@@ -1,10 +1,13 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { subDays, subWeeks, subMonths, format, startOfWeek, endOfWeek } from 'date-fns';
+import { Download, ImageDown } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
+import { exportChartAsPng } from '@/lib/export-chart';
 
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 
@@ -15,6 +18,7 @@ interface StudentStatsProps {
 export function StudentStats({ userId }: StudentStatsProps) {
   const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('weekly');
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
+  const chartContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -85,7 +89,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
 
   const chartData = useMemo(() => {
     const now = new Date();
-    let periods: { key: string; date: Date; label: string }[] = [];
+    let periods: { key: string; date: Date; label: string; fullLabel: string }[] = [];
     
     if (period === 'daily') {
       for (let i = 6; i >= 0; i--) {
@@ -93,17 +97,20 @@ export function StudentStats({ userId }: StudentStatsProps) {
         periods.push({
           key: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
           date,
-          label: format(date, 'dd/MM')
+          label: format(date, 'dd/MM'),
+          fullLabel: format(date, 'dd/MM/yyyy')
         });
       }
     } else if (period === 'weekly') {
       for (let i = 3; i >= 0; i--) {
         const date = subWeeks(now, i);
         const weekStart = startOfWeek(date, { weekStartsOn: 0 });
+        const weekEnd = endOfWeek(weekStart, { weekStartsOn: 0 });
         periods.push({
           key: `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`,
           date: weekStart,
-          label: format(weekStart, 'dd/MM')
+          label: format(weekStart, 'dd/MM'),
+          fullLabel: `${format(weekStart, 'dd/MM')} - ${format(weekEnd, 'dd/MM/yyyy')}`
         });
       }
     } else {
@@ -112,7 +119,8 @@ export function StudentStats({ userId }: StudentStatsProps) {
         periods.push({
           key: `${date.getFullYear()}-${date.getMonth()}`,
           date,
-          label: date.toLocaleDateString('pt-BR', { month: 'short' })
+          label: date.toLocaleDateString('pt-BR', { month: 'short' }),
+          fullLabel: date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
         });
       }
     }
@@ -143,10 +151,11 @@ export function StudentStats({ userId }: StudentStatsProps) {
       counters.set(key, existing);
     });
     
-    return periods.map(({ key, label }) => {
+    return periods.map(({ key, label, fullLabel }) => {
       const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
       return {
         period: label,
+        fullLabel,
         ok: counts.ok,
         attention: counts.attention,
         urgent: counts.urgent,
@@ -159,6 +168,88 @@ export function StudentStats({ userId }: StudentStatsProps) {
   const urgentCount = helpRequests.filter(r => r.urgency === 'urgent').length;
   const attentionCount = helpRequests.filter(r => r.urgency === 'attention').length;
   const okCount = helpRequests.filter(r => r.urgency === 'ok').length;
+  const handleExportCsv = () => {
+    if (chartData.length === 0) {
+      toast({
+        title: 'No data to export',
+        description: 'There are no help requests for the selected period.',
+      });
+      return;
+    }
+
+    const rows = [
+      ['Period', 'OK', 'Attention', 'Urgent', 'Total'],
+      ...chartData.map((item) => [
+        item.fullLabel,
+        item.ok.toString(),
+        item.attention.toString(),
+        item.urgent.toString(),
+        item.total.toString(),
+      ]),
+    ];
+
+    const escapeCell = (value: string) => {
+      const cell = value ?? '';
+      if (cell.includes('"') || cell.includes(',') || cell.includes('\n')) {
+        return `"${cell.replace(/"/g, '""')}"`;
+      }
+      return cell;
+    };
+
+    const csvContent = rows.map((row) => row.map(escapeCell).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const timestamp = new Date().toISOString().split('T')[0];
+    link.href = url;
+    link.download = `student-help-requests-${period}-${timestamp}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: 'Export started',
+      description: 'Help request statistics exported as CSV.',
+    });
+  };
+  const handleExportChart = async () => {
+    if (chartData.length === 0) {
+      toast({
+        title: 'No data to export',
+        description: 'There are no help requests for the selected period.',
+      });
+      return;
+    }
+
+    if (!chartContainerRef.current) {
+      toast({
+        title: 'Export unavailable',
+        description: 'Chart area not found. Try reopening the statistics.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      const timestamp = new Date().toISOString().split('T')[0];
+      await exportChartAsPng(
+        chartContainerRef.current,
+        `student-help-requests-${period}-${timestamp}`,
+      );
+      toast({
+        title: 'Export started',
+        description: 'Help request chart exported as PNG.',
+      });
+    } catch (error) {
+      console.error('Error exporting student chart image:', error);
+      toast({
+        title: 'Export failed',
+        description: 'Unable to export the chart right now. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -189,6 +280,28 @@ export function StudentStats({ userId }: StudentStatsProps) {
           Monthly
         </Button>
       </div>
+      <div className="flex flex-col sm:flex-row gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full sm:w-auto gap-2"
+          onClick={handleExportCsv}
+          disabled={chartData.length === 0}
+        >
+          <Download className="h-4 w-4" />
+          Export CSV
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full sm:w-auto gap-2"
+          onClick={handleExportChart}
+          disabled={chartData.length === 0}
+        >
+          <ImageDown className="h-4 w-4" />
+          Export PNG
+        </Button>
+      </div>
 
       {/* Stats Summary */}
       <div className="grid grid-cols-2 gap-3">
@@ -208,7 +321,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
 
       {/* Chart */}
       {chartData.length > 0 ? (
-        <div className="h-[200px] md:h-[250px] w-full overflow-hidden">
+        <div ref={chartContainerRef} className="h-[200px] md:h-[250px] w-full overflow-hidden">
           <ChartContainer
             config={{
               ok: {

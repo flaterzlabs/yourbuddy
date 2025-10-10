@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -42,6 +42,7 @@ import {
   SunMoon,
   XCircle,
   Download,
+  ImageDown,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -54,6 +55,7 @@ import { useNavigate } from "react-router-dom";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { subMonths, subWeeks, subDays, startOfWeek, endOfWeek, format } from "date-fns";
+import { exportChartAsPng } from "@/lib/export-chart";
 type Connection = Database["public"]["Tables"]["connections"]["Row"] & {
   student_profile?: Database["public"]["Tables"]["profiles"]["Row"];
   thrive_sprite?: Database["public"]["Tables"]["thrive_sprites"]["Row"];
@@ -78,6 +80,8 @@ export default function CaregiverDashboard() {
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [requestsPage, setRequestsPage] = useState(1);
   const [requestsPeriodFilter, setRequestsPeriodFilter] = useState<"7days" | "30days" | "all">("all");
+  const desktopChartRef = useRef<HTMLDivElement | null>(null);
+  const mobileChartRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (copyStatus !== "copied") return;
     const timeout = setTimeout(() => setCopyStatus("idle"), 2000);
@@ -707,6 +711,48 @@ export default function CaregiverDashboard() {
       variant: "caregiver-success",
     });
   };
+  const handleExportHelpRequestChart = async () => {
+    if (!hasHelpRequestStats) {
+      toast({
+        title: "No data to export",
+        description: "There is no help request activity for the selected period.",
+        variant: "caregiver-warning",
+      });
+      return;
+    }
+
+    const containers = [desktopChartRef.current, mobileChartRef.current].filter(
+      (element): element is HTMLDivElement => Boolean(element),
+    );
+    const visibleContainer =
+      containers.find((element) => element.offsetWidth > 0 && element.offsetHeight > 0) ?? containers[0];
+
+    if (!visibleContainer) {
+      toast({
+        title: "Export unavailable",
+        description: "Chart area was not found on screen.",
+        variant: "caregiver-warning",
+      });
+      return;
+    }
+
+    try {
+      const timestamp = new Date().toISOString().split("T")[0];
+      await exportChartAsPng(visibleContainer, `help-request-chart-${chartPeriod}-${timestamp}`);
+      toast({
+        title: "Export started",
+        description: "Help request chart exported as PNG.",
+        variant: "caregiver-success",
+      });
+    } catch (error) {
+      console.error("Error exporting chart image:", error);
+      toast({
+        title: "Export failed",
+        description: "Unable to export the chart right now. Please try again.",
+        variant: "caregiver-warning",
+      });
+    }
+  };
   const monthlyChartConfig = useMemo(
     () => ({
       ok: {
@@ -916,6 +962,15 @@ export default function CaregiverDashboard() {
                     <Button
                       variant="outline"
                       className="flex items-center gap-2"
+                      onClick={handleExportHelpRequestChart}
+                      disabled={!hasHelpRequestStats}
+                    >
+                      <ImageDown className="h-4 w-4" />
+                      Export PNG
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex items-center gap-2"
                       onClick={handleExportHelpRequestStats}
                       disabled={!hasHelpRequestStats}
                     >
@@ -925,28 +980,30 @@ export default function CaregiverDashboard() {
                   </div>
                 </div>
 
-                <ChartContainer config={monthlyChartConfig} className="w-full h-64">
-                  <BarChart data={helpRequestsChartData}>
-                    <CartesianGrid vertical={false} strokeDasharray="4 4" />
-                    <XAxis dataKey="period" axisLine={false} tickLine={false} />
-                    <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
-                    <ChartTooltip
-                      content={
-                        <ChartTooltipContent
-                          labelKey="fullLabel"
-                          labelFormatter={(value) => value}
-                          formatter={(value: any, name: string) => [
-                            value,
-                            name === "ok" ? `🟢 Good` : name === "attention" ? `🟡 Attention` : `🔴 Urgent`,
-                          ]}
-                        />
-                      }
-                    />
-                    <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" />
-                    <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" />
-                    <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" />
-                  </BarChart>
-                </ChartContainer>
+                <div ref={desktopChartRef}>
+                  <ChartContainer config={monthlyChartConfig} className="w-full h-64">
+                    <BarChart data={helpRequestsChartData}>
+                      <CartesianGrid vertical={false} strokeDasharray="4 4" />
+                      <XAxis dataKey="period" axisLine={false} tickLine={false} />
+                      <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                      <ChartTooltip
+                        content={
+                          <ChartTooltipContent
+                            labelKey="fullLabel"
+                            labelFormatter={(value) => value}
+                            formatter={(value: any, name: string) => [
+                              value,
+                              name === "ok" ? `🟢 Good` : name === "attention" ? `🟡 Attention` : `🔴 Urgent`,
+                            ]}
+                          />
+                        }
+                      />
+                      <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" />
+                      <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" />
+                      <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" />
+                    </BarChart>
+                  </ChartContainer>
+                </div>
               </div>
             </Card>
 
@@ -1401,6 +1458,15 @@ export default function CaregiverDashboard() {
                       <Button
                         variant="outline"
                         className="flex items-center gap-2"
+                        onClick={handleExportHelpRequestChart}
+                        disabled={!hasHelpRequestStats}
+                      >
+                        <ImageDown className="h-4 w-4" />
+                        Export PNG
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
                         onClick={handleExportHelpRequestStats}
                         disabled={!hasHelpRequestStats}
                       >
@@ -1410,28 +1476,30 @@ export default function CaregiverDashboard() {
                     </div>
                   </div>
 
-                  <ChartContainer config={monthlyChartConfig} className="w-full h-48">
-                    <BarChart data={helpRequestsChartData}>
-                      <CartesianGrid vertical={false} strokeDasharray="4 4" />
-                      <XAxis dataKey="period" axisLine={false} tickLine={false} />
-                      <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
-                      <ChartTooltip
-                        content={
-                          <ChartTooltipContent
-                            labelKey="fullLabel"
-                            labelFormatter={(value) => value}
-                            formatter={(value: any, name: string) => [
-                              value,
-                              name === "ok" ? `🟢 Good` : name === "attention" ? `🟡 Attention` : `🔴 Urgent`,
-                            ]}
-                          />
-                        }
-                      />
-                      <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" />
-                      <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" />
-                      <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" />
-                    </BarChart>
-                  </ChartContainer>
+                  <div ref={mobileChartRef}>
+                    <ChartContainer config={monthlyChartConfig} className="w-full h-48">
+                      <BarChart data={helpRequestsChartData}>
+                        <CartesianGrid vertical={false} strokeDasharray="4 4" />
+                        <XAxis dataKey="period" axisLine={false} tickLine={false} />
+                        <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                        <ChartTooltip
+                          content={
+                            <ChartTooltipContent
+                              labelKey="fullLabel"
+                              labelFormatter={(value) => value}
+                              formatter={(value: any, name: string) => [
+                                value,
+                                name === "ok" ? `🟢 Good` : name === "attention" ? `🟡 Attention` : `🔴 Urgent`,
+                              ]}
+                            />
+                          }
+                        />
+                        <Bar dataKey="urgent" stackId="requests" fill="var(--color-urgent)" />
+                        <Bar dataKey="attention" stackId="requests" fill="var(--color-attention)" />
+                        <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" />
+                      </BarChart>
+                    </ChartContainer>
+                  </div>
                 </div>
               </div>
             </DialogContent>
