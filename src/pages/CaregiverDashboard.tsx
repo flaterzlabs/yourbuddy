@@ -43,6 +43,8 @@ import {
   XCircle,
   Download,
   ImageDown,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -487,6 +489,76 @@ export default function CaregiverDashboard() {
 
   const renderRequestsPagination = () => {
     const pages = [];
+    
+    // Mobile: Show only current page, ellipsis, and last page (max 3 buttons)
+    if (isMobile) {
+      if (totalRequestsPages <= 3) {
+        for (let i = 1; i <= totalRequestsPages; i++) {
+          pages.push(
+            <PaginationItem key={i}>
+              <PaginationLink
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setRequestsPage(i);
+                }}
+                isActive={requestsPage === i}
+                className="h-8 w-8 text-xs p-0"
+              >
+                {i}
+              </PaginationLink>
+            </PaginationItem>,
+          );
+        }
+      } else {
+        // Always show current page
+        pages.push(
+          <PaginationItem key={requestsPage}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              isActive={true}
+              className="h-8 w-8 text-xs p-0"
+            >
+              {requestsPage}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+        
+        // Show ellipsis if not near the end
+        if (requestsPage < totalRequestsPages) {
+          pages.push(
+            <PaginationItem key="ellipsis">
+              <PaginationEllipsis className="h-8 w-8" />
+            </PaginationItem>,
+          );
+        }
+        
+        // Always show last page if not current
+        if (requestsPage !== totalRequestsPages) {
+          pages.push(
+            <PaginationItem key={totalRequestsPages}>
+              <PaginationLink
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setRequestsPage(totalRequestsPages);
+                }}
+                isActive={false}
+                className="h-8 w-8 text-xs p-0"
+              >
+                {totalRequestsPages}
+              </PaginationLink>
+            </PaginationItem>,
+          );
+        }
+      }
+      return pages;
+    }
+    
+    // Desktop: Show up to 5 pages (existing logic)
     const maxVisiblePages = 5;
 
     if (totalRequestsPages <= maxVisiblePages) {
@@ -1262,27 +1334,55 @@ export default function CaregiverDashboard() {
                 {/* Pagination */}
                 {totalRequestsPages > 1 && (
                   <Pagination className="mt-4">
-                    <PaginationContent className="gap-1">
+                    <PaginationContent className="gap-1 justify-center">
                       <PaginationItem>
-                        <PaginationPrevious
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (requestsPage > 1) setRequestsPage(requestsPage - 1);
-                          }}
-                          className={`text-xs h-8 ${requestsPage === 1 ? "pointer-events-none opacity-50" : ""}`}
-                        />
+                        {isMobile ? (
+                          <PaginationLink
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (requestsPage > 1) setRequestsPage(requestsPage - 1);
+                            }}
+                            className={`h-8 w-8 p-0 ${requestsPage === 1 ? "pointer-events-none opacity-50" : ""}`}
+                            aria-label="Go to previous page"
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </PaginationLink>
+                        ) : (
+                          <PaginationPrevious
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (requestsPage > 1) setRequestsPage(requestsPage - 1);
+                            }}
+                            className={`text-xs h-8 ${requestsPage === 1 ? "pointer-events-none opacity-50" : ""}`}
+                          />
+                        )}
                       </PaginationItem>
                       {renderRequestsPagination()}
                       <PaginationItem>
-                        <PaginationNext
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
-                          }}
-                          className={`text-xs h-8 ${requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}`}
-                        />
+                        {isMobile ? (
+                          <PaginationLink
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
+                            }}
+                            className={`h-8 w-8 p-0 ${requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}`}
+                            aria-label="Go to next page"
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </PaginationLink>
+                        ) : (
+                          <PaginationNext
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
+                            }}
+                            className={`text-xs h-8 ${requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}`}
+                          />
+                        )}
                       </PaginationItem>
                     </PaginationContent>
                   </Pagination>
