@@ -10,7 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Clock, CheckCircle, XCircle, Download } from "lucide-react";
+import { Clock, CheckCircle, XCircle, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 import { subDays } from "date-fns";
 import { toast } from "@/hooks/use-toast";
@@ -116,9 +116,14 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
 
   const renderPageNumbers = () => {
     const pages = [];
-    const maxVisiblePages = 3; // Reduced for better mobile experience
+    const maxVisiblePages = 5; // Desktop
+    const maxVisibleMobile = 2; // Mobile - show current and one more
 
-    if (totalPages <= maxVisiblePages) {
+    // Check if mobile (simplified approach)
+    const isMobile = window.innerWidth < 640;
+    const maxVisible = isMobile ? maxVisibleMobile : maxVisiblePages;
+
+    if (totalPages <= maxVisible) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(
           <PaginationItem key={i}>
@@ -136,7 +141,92 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           </PaginationItem>,
         );
       }
+    } else if (isMobile) {
+      // Mobile: show current page and ellipsis to last page
+      if (currentPage > 1) {
+        pages.push(
+          <PaginationItem key={currentPage}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              isActive={true}
+              className="h-8 w-8 text-xs"
+            >
+              {currentPage}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      }
+      
+      if (currentPage < totalPages) {
+        if (currentPage < totalPages - 1) {
+          pages.push(
+            <PaginationItem key="ellipsis">
+              <PaginationEllipsis className="h-8 w-8" />
+            </PaginationItem>,
+          );
+        }
+        pages.push(
+          <PaginationItem key={totalPages}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(totalPages);
+              }}
+              isActive={false}
+              className="h-8 w-8 text-xs"
+            >
+              {totalPages}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      }
+      
+      if (currentPage === 1) {
+        pages.push(
+          <PaginationItem key={1}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              isActive={true}
+              className="h-8 w-8 text-xs"
+            >
+              1
+            </PaginationLink>
+          </PaginationItem>,
+        );
+        if (totalPages > 2) {
+          pages.push(
+            <PaginationItem key="ellipsis">
+              <PaginationEllipsis className="h-8 w-8" />
+            </PaginationItem>,
+          );
+        }
+        if (totalPages > 1) {
+          pages.push(
+            <PaginationItem key={totalPages}>
+              <PaginationLink
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(totalPages);
+                }}
+                isActive={false}
+                className="h-8 w-8 text-xs"
+              >
+                {totalPages}
+              </PaginationLink>
+            </PaginationItem>,
+          );
+        }
+      }
     } else {
+      // Desktop pagination
       // Show first page
       pages.push(
         <PaginationItem key={1}>
@@ -310,7 +400,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </div>
 
       {/* Requests List */}
-      <div className="space-y-3 overflow-y-auto pr-1 max-h-[340px]">
+      <div className="space-y-3 overflow-y-auto pr-1 max-h-[400px] sm:max-h-[340px]">
         {paginatedRequests.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">
             {periodFilter === "all"
@@ -357,7 +447,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       {/* Pagination */}
       {totalPages > 1 && (
         <Pagination className="mt-4">
-          <PaginationContent className="gap-1 overflow-x-auto flex-nowrap justify-center">
+          <PaginationContent className="gap-1 justify-center">
             <PaginationItem>
               <PaginationPrevious
                 href="#"
@@ -365,10 +455,13 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3" : "h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3"}
+                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:w-auto sm:h-10 sm:px-3" : "h-8 w-8 p-0 sm:w-auto sm:h-10 sm:px-3"}
               >
-                <span className="hidden sm:inline">Previous</span>
-                <span className="sm:hidden">Prev</span>
+                <ChevronLeft className="h-4 w-4 sm:hidden" />
+                <span className="hidden sm:flex sm:items-center sm:gap-1">
+                  <ChevronLeft className="h-4 w-4" />
+                  Previous
+                </span>
               </PaginationPrevious>
             </PaginationItem>
             {renderPageNumbers()}
@@ -379,10 +472,13 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3" : "h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3"}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:w-auto sm:h-10 sm:px-3" : "h-8 w-8 p-0 sm:w-auto sm:h-10 sm:px-3"}
               >
-                <span className="hidden sm:inline">Next</span>
-                <span className="sm:hidden">Next</span>
+                <ChevronRight className="h-4 w-4 sm:hidden" />
+                <span className="hidden sm:flex sm:items-center sm:gap-1">
+                  Next
+                  <ChevronRight className="h-4 w-4" />
+                </span>
               </PaginationNext>
             </PaginationItem>
           </PaginationContent>
