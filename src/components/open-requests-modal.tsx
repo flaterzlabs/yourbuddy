@@ -7,13 +7,12 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Clock, CheckCircle, XCircle, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 import { subDays } from "date-fns";
 import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 type HelpRequest = Database["public"]["Tables"]["help_requests"]["Row"];
 
@@ -464,31 +463,39 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         <Pagination className="mt-4">
           <PaginationContent className="gap-1 flex-nowrap justify-center">
             <PaginationItem>
-              <PaginationPrevious
+              <PaginationLink
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4" : "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4"}
+                className={cn(
+                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2",
+                  currentPage === 1 && "pointer-events-none opacity-50"
+                )}
+                aria-label="Go to previous page"
               >
                 <ChevronLeft className="h-4 w-4" />
-                <span className="hidden sm:inline sm:ml-2">Previous</span>
-              </PaginationPrevious>
+                <span className="hidden sm:inline">Previous</span>
+              </PaginationLink>
             </PaginationItem>
             {renderPageNumbers()}
             <PaginationItem>
-              <PaginationNext
+              <PaginationLink
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4" : "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4"}
+                className={cn(
+                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2",
+                  currentPage === totalPages && "pointer-events-none opacity-50"
+                )}
+                aria-label="Go to next page"
               >
-                <span className="hidden sm:inline sm:mr-2">Next</span>
+                <span className="hidden sm:inline">Next</span>
                 <ChevronRight className="h-4 w-4" />
-              </PaginationNext>
+              </PaginationLink>
             </PaginationItem>
           </PaginationContent>
         </Pagination>
