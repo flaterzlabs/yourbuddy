@@ -10,7 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Clock, CheckCircle, XCircle, Download } from "lucide-react";
+import { Clock, CheckCircle, XCircle, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 import { subDays } from "date-fns";
 import { toast } from "@/hooks/use-toast";
@@ -115,101 +115,206 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
   };
 
   const renderPageNumbers = () => {
-    const pages = [];
-    const maxVisiblePages = 3; // Reduced for better mobile experience
+    const pages: JSX.Element[] = [];
+    const isMobile = window.innerWidth < 640;
+    const maxVisiblePages = isMobile ? 2 : 3;
 
-    if (totalPages <= maxVisiblePages) {
+    if (isMobile && totalPages > maxVisiblePages) {
+      // Mobile: show only current, ellipsis, and last
+      pages.push(
+        <PaginationItem key={currentPage}>
+          <PaginationLink
+            href="#"
+            isActive={true}
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+            className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
+          >
+            {currentPage}
+          </PaginationLink>
+        </PaginationItem>
+      );
+
+      if (currentPage < totalPages - 1) {
+        pages.push(
+          <PaginationItem key="ellipsis">
+            <PaginationEllipsis className="h-8 w-8" />
+          </PaginationItem>
+        );
+      }
+
+      if (currentPage !== totalPages) {
+        pages.push(
+          <PaginationItem key={totalPages}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(totalPages);
+              }}
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            >
+              {totalPages}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+    } else if (totalPages <= maxVisiblePages + 2) {
+      // Show all pages if total is small
       for (let i = 1; i <= totalPages; i++) {
         pages.push(
           <PaginationItem key={i}>
             <PaginationLink
               href="#"
+              isActive={currentPage === i}
               onClick={(e) => {
                 e.preventDefault();
                 setCurrentPage(i);
               }}
-              isActive={currentPage === i}
-              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     } else {
-      // Show first page
-      pages.push(
-        <PaginationItem key={1}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage(1);
-            }}
-            isActive={currentPage === 1}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-          >
-            1
-          </PaginationLink>
-        </PaginationItem>,
-      );
-
-      // Show ellipsis if needed
-      if (currentPage > 3) {
+      // Show pages with ellipsis
+      if (currentPage <= maxVisiblePages) {
+        // Show first pages + ellipsis + last
+        for (let i = 1; i <= maxVisiblePages + 1; i++) {
+          pages.push(
+            <PaginationItem key={i}>
+              <PaginationLink
+                href="#"
+                isActive={currentPage === i}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(i);
+                }}
+                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
+              >
+                {i}
+              </PaginationLink>
+            </PaginationItem>
+          );
+        }
         pages.push(
-          <PaginationItem key="ellipsis-1">
-            <PaginationEllipsis />
-          </PaginationItem>,
+          <PaginationItem key="ellipsis">
+            <PaginationEllipsis className="h-8 w-8" />
+          </PaginationItem>
         );
-      }
-
-      // Show current page and surrounding pages
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = start; i <= end; i++) {
         pages.push(
-          <PaginationItem key={i}>
+          <PaginationItem key={totalPages}>
             <PaginationLink
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                setCurrentPage(i);
+                setCurrentPage(totalPages);
               }}
-              isActive={currentPage === i}
-              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
             >
-              {i}
+              {totalPages}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
-      }
-
-      // Show ellipsis if needed
-      if (currentPage < totalPages - 2) {
+      } else if (currentPage >= totalPages - maxVisiblePages) {
+        // Show first + ellipsis + last pages
         pages.push(
-          <PaginationItem key="ellipsis-2">
-            <PaginationEllipsis />
-          </PaginationItem>,
+          <PaginationItem key={1}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(1);
+              }}
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            >
+              1
+            </PaginationLink>
+          </PaginationItem>
+        );
+        pages.push(
+          <PaginationItem key="ellipsis">
+            <PaginationEllipsis className="h-8 w-8" />
+          </PaginationItem>
+        );
+        for (let i = totalPages - maxVisiblePages; i <= totalPages; i++) {
+          pages.push(
+            <PaginationItem key={i}>
+              <PaginationLink
+                href="#"
+                isActive={currentPage === i}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(i);
+                }}
+                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
+              >
+                {i}
+              </PaginationLink>
+            </PaginationItem>
+          );
+        }
+      } else {
+        // Show first + ellipsis + current range + ellipsis + last
+        pages.push(
+          <PaginationItem key={1}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(1);
+              }}
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            >
+              1
+            </PaginationLink>
+          </PaginationItem>
+        );
+        pages.push(
+          <PaginationItem key="ellipsis-start">
+            <PaginationEllipsis className="h-8 w-8" />
+          </PaginationItem>
+        );
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(
+            <PaginationItem key={i}>
+              <PaginationLink
+                href="#"
+                isActive={currentPage === i}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(i);
+                }}
+                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
+              >
+                {i}
+              </PaginationLink>
+            </PaginationItem>
+          );
+        }
+        pages.push(
+          <PaginationItem key="ellipsis-end">
+            <PaginationEllipsis className="h-8 w-8" />
+          </PaginationItem>
+        );
+        pages.push(
+          <PaginationItem key={totalPages}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPage(totalPages);
+              }}
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            >
+              {totalPages}
+            </PaginationLink>
+          </PaginationItem>
         );
       }
-
-      // Show last page
-      pages.push(
-        <PaginationItem key={totalPages}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage(totalPages);
-            }}
-            isActive={currentPage === totalPages}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
-          >
-            {totalPages}
-          </PaginationLink>
-        </PaginationItem>,
-      );
     }
 
     return pages;
@@ -365,10 +470,10 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3" : "h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3"}
+                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:h-10 sm:px-4" : "h-8 w-8 p-0 sm:h-10 sm:px-4"}
               >
+                <ChevronLeft className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Previous</span>
-                <span className="sm:hidden">Prev</span>
               </PaginationPrevious>
             </PaginationItem>
             {renderPageNumbers()}
@@ -379,10 +484,10 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3" : "h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3"}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:h-10 sm:px-4" : "h-8 w-8 p-0 sm:h-10 sm:px-4"}
               >
                 <span className="hidden sm:inline">Next</span>
-                <span className="sm:hidden">Next</span>
+                <ChevronRight className="h-4 w-4 sm:ml-2" />
               </PaginationNext>
             </PaginationItem>
           </PaginationContent>
