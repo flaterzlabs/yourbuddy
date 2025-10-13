@@ -462,7 +462,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       {/* Pagination */}
       {totalPages > 1 && (
         <Pagination className="mt-4">
-          <PaginationContent className="gap-1 overflow-x-auto flex-nowrap justify-center">
+          <PaginationContent className="gap-1 flex-nowrap justify-center">
             <PaginationItem>
               <PaginationPrevious
                 href="#"
@@ -470,10 +470,10 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:h-10 sm:px-4" : "h-8 w-8 p-0 sm:h-10 sm:px-4"}
+                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4" : "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4"}
               >
-                <ChevronLeft className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Previous</span>
+                <ChevronLeft className="h-4 w-4" />
+                <span className="hidden sm:inline sm:ml-2">Previous</span>
               </PaginationPrevious>
             </PaginationItem>
             {renderPageNumbers()}
@@ -484,10 +484,10 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:h-10 sm:px-4" : "h-8 w-8 p-0 sm:h-10 sm:px-4"}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4" : "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4"}
               >
-                <span className="hidden sm:inline">Next</span>
-                <ChevronRight className="h-4 w-4 sm:ml-2" />
+                <span className="hidden sm:inline sm:mr-2">Next</span>
+                <ChevronRight className="h-4 w-4" />
               </PaginationNext>
             </PaginationItem>
           </PaginationContent>
