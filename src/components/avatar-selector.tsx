@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Shuffle, Check } from 'lucide-react';
+import { Shuffle, Check, X } from 'lucide-react';
 
 interface AvatarSelectorProps {
   onSelect: (seed: string, style: string) => void;
   selectedSeed?: string;
   selectedStyle?: string;
+  onClose?: () => void;
 }
 
-export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: AvatarSelectorProps) {
+export function AvatarSelector({ onSelect, selectedSeed, selectedStyle, onClose }: AvatarSelectorProps) {
   const avatarStyles = [
     'adventurer',
     'adventurer-neutral',
@@ -52,7 +53,17 @@ export function AvatarSelector({ onSelect, selectedSeed, selectedStyle }: Avatar
   };
 
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6">
+      {onClose && (
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-0 top-0 rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          aria-label="Close avatar selection"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
       <div className="text-center">
         <h3 className="text-xl font-bold mb-2">Choose Your Avatar</h3>
         <p className="text-muted-foreground">Select an avatar that represents you</p>

@@ -1,4 +1,14 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const DEFAULT_DEV_API_BASE_URL = "http://localhost:4000";
+
+const rawEnvBaseUrl =
+  typeof import.meta.env.VITE_API_BASE_URL === "string" ? import.meta.env.VITE_API_BASE_URL.trim() : "";
+const API_BASE_URL =
+  rawEnvBaseUrl || (import.meta.env.DEV ? DEFAULT_DEV_API_BASE_URL : "");
+const HAS_API_BASE_URL = Boolean(API_BASE_URL);
+
+if (!rawEnvBaseUrl && import.meta.env.DEV) {
+  console.info(`[api] VITE_API_BASE_URL não configurada. Usando padrão ${DEFAULT_DEV_API_BASE_URL} em desenvolvimento.`);
+}
 
 export interface ApiResponse<T> {
   data: T | null;
@@ -7,7 +17,7 @@ export interface ApiResponse<T> {
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
-  if (!API_BASE_URL) {
+  if (!HAS_API_BASE_URL) {
     console.warn("VITE_API_BASE_URL não configurada");
     return { data: null, error: "API base URL não configurada", status: 0 };
   }

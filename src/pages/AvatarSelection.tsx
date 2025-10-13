@@ -137,6 +137,7 @@ export default function AvatarSelection() {
               onSelect={handleAvatarSelect}
               selectedSeed={selectedSeed}
               selectedStyle={selectedStyle}
+              onClose={() => navigate('/dashboard')}
             />
 
             <div className="flex justify-center mt-8 gap-3">

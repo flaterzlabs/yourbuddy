@@ -59,7 +59,7 @@ npm run dev --prefix server
 npm install
 ```
 
-2. Crie ou edite `.env.local` e defina `VITE_API_BASE_URL=http://localhost:4000` (ajuste se mudar a porta) / Create or edit `.env.local` and set `VITE_API_BASE_URL=http://localhost:4000` (update if you change the port).
+2. Copie `.env.example` para `.env.local` (ou `.env`) e ajuste `VITE_API_BASE_URL=http://localhost:4000` conforme o ambiente / Copy `.env.example` to `.env.local` (or `.env`) and update `VITE_API_BASE_URL=http://localhost:4000` for your environment.
 3. Inicie o app e acesse `http://localhost:5173` (Vite mostra a URL) / Start the app and open `http://localhost:5173` (Vite prints the URL).
 
 ```bash
