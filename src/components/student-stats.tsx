@@ -307,13 +307,13 @@ export function StudentStats({ userId }: StudentStatsProps) {
 
       {/* Stats Summary */}
       <div className="grid grid-cols-2 gap-2 sm:gap-3">
-        <div className="p-3 rounded-lg bg-muted/50 border">
-          <p className="text-xs text-muted-foreground mb-1">Total Requests</p>
-          <p className="text-2xl font-bold">{totalRequests}</p>
+        <div className="p-2 sm:p-3 rounded-lg bg-muted/50 border">
+          <p className="text-[10px] sm:text-xs text-muted-foreground mb-0.5 sm:mb-1">Total Requests</p>
+          <p className="text-xl sm:text-2xl font-bold">{totalRequests}</p>
         </div>
-        <div className="p-3 rounded-lg bg-muted/50 border">
-          <p className="text-xs text-muted-foreground mb-1">By Urgency</p>
-          <div className="flex gap-2 items-center text-sm">
+        <div className="p-2 sm:p-3 rounded-lg bg-muted/50 border">
+          <p className="text-[10px] sm:text-xs text-muted-foreground mb-0.5 sm:mb-1">By Urgency</p>
+          <div className="flex gap-1.5 sm:gap-2 items-center text-xs sm:text-sm">
             <span>🟢 {okCount}</span>
             <span>🟡 {attentionCount}</span>
             <span>🔴 {urgentCount}</span>
@@ -323,7 +323,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
 
       {/* Chart */}
       {chartData.length > 0 ? (
-        <div ref={chartContainerRef} className="h-[180px] sm:h-[200px] md:h-[250px] w-full overflow-hidden -mx-2 sm:mx-0">
+        <div ref={chartContainerRef} className="h-[180px] sm:h-[200px] md:h-[250px] w-full overflow-x-hidden">
           <ChartContainer
             config={{
               ok: {
@@ -339,22 +339,28 @@ export function StudentStats({ userId }: StudentStatsProps) {
                 color: 'hsl(var(--chart-3))',
               },
             }}
-            className="h-full w-full"
+            className="h-full w-full max-w-full"
           >
-            <BarChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 10 }}>
+            <BarChart 
+              data={chartData} 
+              margin={{ left: 0, right: 5, top: 5, bottom: 5 }}
+              className="max-w-full"
+            >
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis 
                 dataKey="period" 
-                fontSize={10}
+                fontSize={9}
                 tickLine={false}
                 axisLine={false}
+                className="sm:text-xs"
               />
               <YAxis 
-                fontSize={10}
+                fontSize={9}
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}
-                width={30}
+                width={25}
+                className="sm:text-xs"
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar 
