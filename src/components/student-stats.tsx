@@ -252,14 +252,14 @@ export function StudentStats({ userId }: StudentStatsProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Period Filter */}
-      <div className="flex gap-2">
+      <div className="flex gap-1.5 sm:gap-2">
         <Button
           variant={period === 'daily' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setPeriod('daily')}
-          className="flex-1"
+          className="flex-1 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
         >
           Daily
         </Button>
@@ -267,7 +267,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           variant={period === 'weekly' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setPeriod('weekly')}
-          className="flex-1"
+          className="flex-1 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
         >
           Weekly
         </Button>
@@ -275,36 +275,38 @@ export function StudentStats({ userId }: StudentStatsProps) {
           variant={period === 'monthly' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setPeriod('monthly')}
-          className="flex-1"
+          className="flex-1 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
         >
           Monthly
         </Button>
       </div>
-      <div className="flex flex-col sm:flex-row gap-2">
+      <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
         <Button
           variant="outline"
           size="sm"
-          className="w-full sm:w-auto gap-2"
+          className="w-full sm:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
           onClick={handleExportCsv}
           disabled={chartData.length === 0}
         >
-          <Download className="h-4 w-4" />
-          Export CSV
+          <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Export CSV</span>
+          <span className="sm:hidden">CSV</span>
         </Button>
         <Button
           variant="outline"
           size="sm"
-          className="w-full sm:w-auto gap-2"
+          className="w-full sm:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
           onClick={handleExportChart}
           disabled={chartData.length === 0}
         >
-          <ImageDown className="h-4 w-4" />
-          Export PNG
+          <ImageDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Export PNG</span>
+          <span className="sm:hidden">PNG</span>
         </Button>
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
         <div className="p-3 rounded-lg bg-muted/50 border">
           <p className="text-xs text-muted-foreground mb-1">Total Requests</p>
           <p className="text-2xl font-bold">{totalRequests}</p>
@@ -321,7 +323,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
 
       {/* Chart */}
       {chartData.length > 0 ? (
-        <div ref={chartContainerRef} className="h-[200px] md:h-[250px] w-full overflow-hidden">
+        <div ref={chartContainerRef} className="h-[180px] sm:h-[200px] md:h-[250px] w-full overflow-hidden -mx-2 sm:mx-0">
           <ChartContainer
             config={{
               ok: {
@@ -339,19 +341,20 @@ export function StudentStats({ userId }: StudentStatsProps) {
             }}
             className="h-full w-full"
           >
-            <BarChart data={chartData}>
+            <BarChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 10 }}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis 
                 dataKey="period" 
-                fontSize={12}
+                fontSize={10}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis 
-                fontSize={12}
+                fontSize={10}
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}
+                width={30}
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar 
@@ -376,8 +379,8 @@ export function StudentStats({ userId }: StudentStatsProps) {
           </ChartContainer>
         </div>
       ) : (
-        <div className="h-[200px] md:h-[250px] flex items-center justify-center border rounded-lg bg-muted/20">
-          <p className="text-sm text-muted-foreground">No data for this period</p>
+        <div className="h-[180px] sm:h-[200px] md:h-[250px] flex items-center justify-center border rounded-lg bg-muted/20">
+          <p className="text-xs sm:text-sm text-muted-foreground">No data for this period</p>
         </div>
       )}
     </div>

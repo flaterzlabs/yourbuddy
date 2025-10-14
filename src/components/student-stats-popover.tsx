@@ -26,7 +26,7 @@ export function StudentStatsPopover({ userId }: StudentStatsPopoverProps) {
       <AnimatePresence>
         {open && (
           <PopoverContent 
-            className="w-[90vw] md:w-[500px] p-4 md:p-6" 
+            className="w-[92vw] max-w-[500px] p-3 sm:p-4 md:p-6" 
             align="end"
             asChild
           >
@@ -36,10 +36,10 @@ export function StudentStatsPopover({ userId }: StudentStatsPopoverProps) {
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4 overflow-hidden">
                 <div>
-                  <h3 className="text-lg font-semibold mb-1">Help Request Statistics</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <h3 className="text-base sm:text-lg font-semibold mb-1">Help Request Statistics</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Your help request activity over time
                   </p>
                 </div>
