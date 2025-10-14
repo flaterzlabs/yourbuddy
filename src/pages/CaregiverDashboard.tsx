@@ -1514,7 +1514,7 @@ export default function CaregiverDashboard() {
 
           {/* Overview Modal */}
           <Dialog open={overviewModalOpen} onOpenChange={setOverviewModalOpen}>
-            <DialogContent className="max-w-sm mx-auto max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-sm mx-auto max-h-[90vh] overflow-y-auto overflow-x-hidden">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
@@ -1522,30 +1522,30 @@ export default function CaregiverDashboard() {
                 </DialogTitle>
               </DialogHeader>
 
-              <div className="space-y-4 py-4">
+              <div className="space-y-3 py-3 overflow-x-hidden max-w-full">
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
-                    <div className="text-2xl font-bold text-primary">{activeConnections.length}</div>
-                    <div className="text-xs text-muted-foreground">Connected</div>
+                  <div className="text-center p-2 bg-background/50 rounded-lg border border-border">
+                    <div className="text-xl font-bold text-primary">{activeConnections.length}</div>
+                    <div className="text-[10px] text-muted-foreground">Connected</div>
                   </div>
-                  <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
-                    <div className="text-2xl font-bold text-warning">{openHelpRequests.length}</div>
-                    <div className="text-xs text-muted-foreground">Open</div>
+                  <div className="text-center p-2 bg-background/50 rounded-lg border border-border">
+                    <div className="text-xl font-bold text-warning">{openHelpRequests.length}</div>
+                    <div className="text-[10px] text-muted-foreground">Open</div>
                   </div>
-                  <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
-                    <div className="text-2xl font-bold text-emerald-500">{closedHelpRequests.length}</div>
-                    <div className="text-xs text-muted-foreground">Closed</div>
+                  <div className="text-center p-2 bg-background/50 rounded-lg border border-border">
+                    <div className="text-xl font-bold text-emerald-500">{closedHelpRequests.length}</div>
+                    <div className="text-[10px] text-muted-foreground">Closed</div>
                   </div>
                 </div>
 
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-                    <h3 className="text-lg font-semibold">Requests Per Month</h3>
+                <div className="max-w-full overflow-x-hidden">
+                  <div className="mb-3">
+                    <h3 className="text-sm font-semibold mb-2">Requests Per Month</h3>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-1.5">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline">
+                          <Button variant="outline" size="sm" className="w-full h-8 text-xs">
                             {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
                           </Button>
                         </DropdownMenuTrigger>
@@ -1555,33 +1555,51 @@ export default function CaregiverDashboard() {
                           <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                        onClick={handleExportHelpRequestChart}
-                        disabled={!hasHelpRequestStats}
-                      >
-                        <ImageDown className="h-4 w-4" />
-                        Export PNG
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                        onClick={handleExportHelpRequestStats}
-                        disabled={!hasHelpRequestStats}
-                      >
-                        <Download className="h-4 w-4" />
-                        Export CSV
-                      </Button>
+                      <div className="flex gap-1.5">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 h-8 text-xs gap-1.5"
+                          onClick={handleExportHelpRequestChart}
+                          disabled={!hasHelpRequestStats}
+                        >
+                          <ImageDown className="h-3.5 w-3.5" />
+                          PNG
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 h-8 text-xs gap-1.5"
+                          onClick={handleExportHelpRequestStats}
+                          disabled={!hasHelpRequestStats}
+                        >
+                          <Download className="h-3.5 w-3.5" />
+                          CSV
+                        </Button>
+                      </div>
                     </div>
                   </div>
 
-                  <div ref={mobileChartRef}>
-                    <ChartContainer config={monthlyChartConfig} className="w-full h-48">
-                      <BarChart data={helpRequestsChartData}>
+                  <div ref={mobileChartRef} className="w-full overflow-x-hidden">
+                    <ChartContainer config={monthlyChartConfig} className="w-full h-[180px] max-w-full">
+                      <BarChart 
+                        data={helpRequestsChartData}
+                        margin={{ left: 0, right: 5, top: 5, bottom: 5 }}
+                      >
                         <CartesianGrid vertical={false} strokeDasharray="4 4" />
-                        <XAxis dataKey="period" axisLine={false} tickLine={false} />
-                        <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                        <XAxis 
+                          dataKey="period" 
+                          axisLine={false} 
+                          tickLine={false}
+                          fontSize={9}
+                        />
+                        <YAxis 
+                          allowDecimals={false} 
+                          axisLine={false} 
+                          tickLine={false}
+                          fontSize={9}
+                          width={25}
+                        />
                         <ChartTooltip
                           content={
                             <ChartTooltipContent
