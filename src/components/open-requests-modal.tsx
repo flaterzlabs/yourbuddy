@@ -449,7 +449,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   </Badge>
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {new Date(request.created_at).toLocaleDateString("pt-BR")}
+                  {new Date(request.created_at).toLocaleDateString("pt-BR")} {new Date(request.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
               {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
