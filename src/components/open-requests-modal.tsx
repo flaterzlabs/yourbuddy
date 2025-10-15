@@ -21,7 +21,7 @@ interface OpenRequestsModalContentProps {
   recipientsText: string;
 }
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 30;
 
 type PeriodFilter = "7days" | "30days" | "all";
 
@@ -132,14 +132,14 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           >
             {currentPage}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
 
       if (currentPage < totalPages - 1) {
         pages.push(
           <PaginationItem key="ellipsis">
             <PaginationEllipsis className="h-8 w-8" />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -156,7 +156,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     } else if (totalPages <= maxVisiblePages + 2) {
@@ -175,7 +175,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             >
               {i}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     } else {
@@ -196,13 +196,13 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
               >
                 {i}
               </PaginationLink>
-            </PaginationItem>
+            </PaginationItem>,
           );
         }
         pages.push(
           <PaginationItem key="ellipsis">
             <PaginationEllipsis className="h-8 w-8" />
-          </PaginationItem>
+          </PaginationItem>,
         );
         pages.push(
           <PaginationItem key={totalPages}>
@@ -216,7 +216,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       } else if (currentPage >= totalPages - maxVisiblePages) {
         // Show first + ellipsis + last pages
@@ -232,12 +232,12 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             >
               1
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
         pages.push(
           <PaginationItem key="ellipsis">
             <PaginationEllipsis className="h-8 w-8" />
-          </PaginationItem>
+          </PaginationItem>,
         );
         for (let i = totalPages - maxVisiblePages; i <= totalPages; i++) {
           pages.push(
@@ -253,7 +253,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
               >
                 {i}
               </PaginationLink>
-            </PaginationItem>
+            </PaginationItem>,
           );
         }
       } else {
@@ -270,12 +270,12 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             >
               1
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
         pages.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis className="h-8 w-8" />
-          </PaginationItem>
+          </PaginationItem>,
         );
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pages.push(
@@ -291,13 +291,13 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
               >
                 {i}
               </PaginationLink>
-            </PaginationItem>
+            </PaginationItem>,
           );
         }
         pages.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis className="h-8 w-8" />
-          </PaginationItem>
+          </PaginationItem>,
         );
         pages.push(
           <PaginationItem key={totalPages}>
@@ -311,7 +311,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     }
@@ -471,7 +471,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 }}
                 className={cn(
                   "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2",
-                  currentPage === 1 && "pointer-events-none opacity-50"
+                  currentPage === 1 && "pointer-events-none opacity-50",
                 )}
                 aria-label="Go to previous page"
               >
@@ -489,7 +489,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 }}
                 className={cn(
                   "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2",
-                  currentPage === totalPages && "pointer-events-none opacity-50"
+                  currentPage === totalPages && "pointer-events-none opacity-50",
                 )}
                 aria-label="Go to next page"
               >
