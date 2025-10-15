@@ -1021,7 +1021,7 @@ export default function CaregiverDashboard() {
                   <div className="flex items-center gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline">{chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}</Button>
+                        <Button variant="outline" className="filter-button-hover">{chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}</Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
@@ -1031,7 +1031,7 @@ export default function CaregiverDashboard() {
                     </DropdownMenu>
                     <Button
                       variant="outline"
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-2 filter-button-hover"
                       onClick={handleExportHelpRequestChart}
                       disabled={!hasHelpRequestStats}
                     >
@@ -1040,7 +1040,7 @@ export default function CaregiverDashboard() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-2 filter-button-hover"
                       onClick={handleExportHelpRequestStats}
                       disabled={!hasHelpRequestStats}
                     >
@@ -1092,7 +1092,7 @@ export default function CaregiverDashboard() {
                 <div className="flex gap-2 items-center justify-between">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="filter-button-hover">
                         {requestsPeriodFilter === "7days"
                           ? "Last 7 days"
                           : requestsPeriodFilter === "30days"
@@ -1257,7 +1257,7 @@ export default function CaregiverDashboard() {
                     variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleRequestsFilterChange("7days")}
-                    className="flex-1 text-xs h-8"
+                    className={`flex-1 text-xs h-8 ${requestsPeriodFilter !== "7days" ? "filter-button-hover" : ""}`}
                   >
                     7d
                   </Button>
@@ -1265,7 +1265,7 @@ export default function CaregiverDashboard() {
                     variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleRequestsFilterChange("30days")}
-                    className="flex-1 text-xs h-8"
+                    className={`flex-1 text-xs h-8 ${requestsPeriodFilter !== "30days" ? "filter-button-hover" : ""}`}
                   >
                     30d
                   </Button>
@@ -1273,7 +1273,7 @@ export default function CaregiverDashboard() {
                     variant={requestsPeriodFilter === "all" ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleRequestsFilterChange("all")}
-                    className="flex-1 text-xs h-8"
+                    className={`flex-1 text-xs h-8 ${requestsPeriodFilter !== "all" ? "filter-button-hover" : ""}`}
                   >
                     All ({helpRequests.length})
                   </Button>
@@ -1543,7 +1543,7 @@ export default function CaregiverDashboard() {
                     <div className="flex flex-col gap-1.5">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="w-full h-8 text-xs">
+                          <Button variant="outline" size="sm" className="w-full h-8 text-xs filter-button-hover">
                             {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
                           </Button>
                         </DropdownMenuTrigger>
@@ -1557,7 +1557,7 @@ export default function CaregiverDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex-1 h-8 text-xs gap-1.5"
+                          className="flex-1 h-8 text-xs gap-1.5 filter-button-hover"
                           onClick={handleExportHelpRequestChart}
                           disabled={!hasHelpRequestStats}
                         >
@@ -1567,7 +1567,7 @@ export default function CaregiverDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex-1 h-8 text-xs gap-1.5"
+                          className="flex-1 h-8 text-xs gap-1.5 filter-button-hover"
                           onClick={handleExportHelpRequestStats}
                           disabled={!hasHelpRequestStats}
                         >
