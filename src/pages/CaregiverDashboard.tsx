@@ -459,7 +459,7 @@ export default function CaregiverDashboard() {
   const StudentLabel = profile?.role === "caregiver" ? "Children" : "Students";
 
   // Filter and paginate help requests
-  const REQUESTS_PER_PAGE = 20;
+  const REQUESTS_PER_PAGE = 30;
 
   const filteredHelpRequests = useMemo(() => {
     const now = new Date();
@@ -489,7 +489,7 @@ export default function CaregiverDashboard() {
 
   const renderRequestsPagination = () => {
     const pages = [];
-    
+
     // Mobile: Show only current page, ellipsis, and last page (max 3 buttons)
     if (isMobile) {
       if (totalRequestsPages <= 3) {
@@ -526,7 +526,7 @@ export default function CaregiverDashboard() {
             </PaginationLink>
           </PaginationItem>,
         );
-        
+
         // Show ellipsis if not near the end
         if (requestsPage < totalRequestsPages) {
           pages.push(
@@ -535,7 +535,7 @@ export default function CaregiverDashboard() {
             </PaginationItem>,
           );
         }
-        
+
         // Always show last page if not current
         if (requestsPage !== totalRequestsPages) {
           pages.push(
@@ -557,7 +557,7 @@ export default function CaregiverDashboard() {
       }
       return pages;
     }
-    
+
     // Desktop: Show up to 5 pages (existing logic)
     const maxVisiblePages = 5;
 
@@ -705,10 +705,10 @@ export default function CaregiverDashboard() {
       counters.set(key, existing);
     });
 
-  return periods.map(({ key, date }) => {
-    const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
-    let label = "";
-    let fullLabel = "";
+    return periods.map(({ key, date }) => {
+      const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
+      let label = "";
+      let fullLabel = "";
 
       if (chartPeriod === "daily") {
         label = format(date, "dd/MM");
@@ -793,8 +793,8 @@ export default function CaregiverDashboard() {
       return;
     }
 
-    const containers = [desktopChartRef.current, mobileChartRef.current].filter(
-      (element): element is HTMLDivElement => Boolean(element),
+    const containers = [desktopChartRef.current, mobileChartRef.current].filter((element): element is HTMLDivElement =>
+      Boolean(element),
     );
     const visibleContainer =
       containers.find((element) => element.offsetWidth > 0 && element.offsetHeight > 0) ?? containers[0];
@@ -1021,9 +1021,7 @@ export default function CaregiverDashboard() {
                   <div className="flex items-center gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
-                          {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
-                        </Button>
+                        <Button variant="outline">{chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}</Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
@@ -1582,24 +1580,10 @@ export default function CaregiverDashboard() {
 
                   <div ref={mobileChartRef} className="w-full overflow-x-hidden">
                     <ChartContainer config={monthlyChartConfig} className="w-full h-[180px] max-w-full">
-                      <BarChart 
-                        data={helpRequestsChartData}
-                        margin={{ left: 0, right: 5, top: 5, bottom: 5 }}
-                      >
+                      <BarChart data={helpRequestsChartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }}>
                         <CartesianGrid vertical={false} strokeDasharray="4 4" />
-                        <XAxis 
-                          dataKey="period" 
-                          axisLine={false} 
-                          tickLine={false}
-                          fontSize={9}
-                        />
-                        <YAxis 
-                          allowDecimals={false} 
-                          axisLine={false} 
-                          tickLine={false}
-                          fontSize={9}
-                          width={25}
-                        />
+                        <XAxis dataKey="period" axisLine={false} tickLine={false} fontSize={9} />
+                        <YAxis allowDecimals={false} axisLine={false} tickLine={false} fontSize={9} width={25} />
                         <ChartTooltip
                           content={
                             <ChartTooltipContent
