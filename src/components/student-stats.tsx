@@ -254,7 +254,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
   return (
     <div className="space-y-3">
       {/* Period Filter */}
-      <div className="flex gap-1.5 sm:gap-2 md:justify-evenly">
+      <div className="flex gap-1.5 sm:gap-2">
         <Button
           variant={period === 'daily' ? 'default' : 'outline'}
           size="sm"
@@ -278,30 +278,6 @@ export function StudentStats({ userId }: StudentStatsProps) {
           className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
         >
           Monthly
-        </Button>
-      </div>
-      <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 md:justify-center">
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
-          onClick={handleExportCsv}
-          disabled={chartData.length === 0}
-        >
-          <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          <span className="hidden sm:inline">Export CSV</span>
-          <span className="sm:hidden">CSV</span>
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
-          onClick={handleExportChart}
-          disabled={chartData.length === 0}
-        >
-          <ImageDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          <span className="hidden sm:inline">Export PNG</span>
-          <span className="sm:hidden">PNG</span>
         </Button>
       </div>
       <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
