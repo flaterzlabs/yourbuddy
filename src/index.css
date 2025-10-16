@@ -264,15 +264,15 @@
   animation: toast-progress 4s linear forwards;
 }
 
-/* Filter buttons hover - blue in light mode, purple in dark mode */
+/* Filter buttons hover - gradient in light mode, purple in dark mode */
 .filter-button-hover {
   transition: all 0.3s ease;
 }
 
 .filter-button-hover:hover {
-  background: hsl(215 80% 52%) !important;
+  background: linear-gradient(135deg, hsl(215 80% 60%), hsl(340 70% 70%)) !important;
   color: hsl(0 0% 100%) !important;
-  border-color: hsl(215 80% 52%) !important;
+  border-color: transparent !important;
 }
 
 .dark .filter-button-hover:hover {
