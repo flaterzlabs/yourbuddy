@@ -259,7 +259,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           variant={period === 'daily' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setPeriod('daily')}
-          className="flex-1 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
+          className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
         >
           Daily
         </Button>
@@ -267,7 +267,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           variant={period === 'weekly' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setPeriod('weekly')}
-          className="flex-1 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
+          className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
         >
           Weekly
         </Button>
@@ -275,7 +275,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           variant={period === 'monthly' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setPeriod('monthly')}
-          className="flex-1 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
+          className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
         >
           Monthly
         </Button>
@@ -284,7 +284,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
         <Button
           variant="outline"
           size="sm"
-          className="w-full sm:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
+          className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
           onClick={handleExportCsv}
           disabled={chartData.length === 0}
         >
@@ -295,7 +295,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
         <Button
           variant="outline"
           size="sm"
-          className="w-full sm:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
+          className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
           onClick={handleExportChart}
           disabled={chartData.length === 0}
         >
