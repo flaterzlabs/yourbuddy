@@ -42,7 +42,6 @@ import {
   SunMoon,
   XCircle,
   Download,
-  ImageDown,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -1029,24 +1028,27 @@ export default function CaregiverDashboard() {
                         <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button
-                      variant="outline"
-                      className="flex items-center gap-2 filter-button-hover"
-                      onClick={handleExportHelpRequestChart}
-                      disabled={!hasHelpRequestStats}
-                    >
-                      <ImageDown className="h-4 w-4" />
-                      Export PNG
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="flex items-center gap-2 filter-button-hover"
-                      onClick={handleExportHelpRequestStats}
-                      disabled={!hasHelpRequestStats}
-                    >
-                      <Download className="h-4 w-4" />
-                      Export CSV
-                    </Button>
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="flex items-center gap-2 filter-button-hover"
+                          disabled={!hasHelpRequestStats}
+                        >
+                          <Download className="h-4 w-4" />
+                          Download
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={handleExportHelpRequestChart}>
+                          Export PNG
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleExportHelpRequestStats}>
+                          Export CSV
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
 
@@ -1553,28 +1555,27 @@ export default function CaregiverDashboard() {
                           <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                      <div className="flex gap-1.5">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 h-8 text-xs gap-1.5 filter-button-hover"
-                          onClick={handleExportHelpRequestChart}
-                          disabled={!hasHelpRequestStats}
-                        >
-                          <ImageDown className="h-3.5 w-3.5" />
-                          PNG
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 h-8 text-xs gap-1.5 filter-button-hover"
-                          onClick={handleExportHelpRequestStats}
-                          disabled={!hasHelpRequestStats}
-                        >
-                          <Download className="h-3.5 w-3.5" />
-                          CSV
-                        </Button>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 text-xs gap-1.5 filter-button-hover"
+                            disabled={!hasHelpRequestStats}
+                          >
+                            <Download className="h-3.5 w-3.5" />
+                            Download
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={handleExportHelpRequestChart}>
+                            Export PNG
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={handleExportHelpRequestStats}>
+                            Export CSV
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
 
