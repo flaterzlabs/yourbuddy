@@ -5,9 +5,15 @@ import { Database } from '@/integrations/supabase/types';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { subDays, subWeeks, subMonths, format, startOfWeek, endOfWeek } from 'date-fns';
-import { Download, ImageDown } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { exportChartAsPng } from '@/lib/export-chart';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 
@@ -253,56 +259,56 @@ export function StudentStats({ userId }: StudentStatsProps) {
 
   return (
     <div className="space-y-3">
-      {/* Period Filter */}
-      <div className="flex gap-1.5 sm:gap-2">
-        <Button
-          variant={period === 'daily' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setPeriod('daily')}
-          className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
-        >
-          Daily
-        </Button>
-        <Button
-          variant={period === 'weekly' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setPeriod('weekly')}
-          className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
-        >
-          Weekly
-        </Button>
-        <Button
-          variant={period === 'monthly' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setPeriod('monthly')}
-          className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
-        >
-          Monthly
-        </Button>
-      </div>
-      <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
-          onClick={handleExportCsv}
-          disabled={chartData.length === 0}
-        >
-          <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          <span className="hidden sm:inline">Export CSV</span>
-          <span className="sm:hidden">CSV</span>
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm"
-          onClick={handleExportChart}
-          disabled={chartData.length === 0}
-        >
-          <ImageDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          <span className="hidden sm:inline">Export PNG</span>
-          <span className="sm:hidden">PNG</span>
-        </Button>
+      {/* Period Filter and Export */}
+      <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 sm:justify-between sm:items-center">
+        <div className="flex gap-1.5 sm:gap-2">
+          <Button
+            variant={period === 'daily' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setPeriod('daily')}
+            className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
+          >
+            Daily
+          </Button>
+          <Button
+            variant={period === 'weekly' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setPeriod('weekly')}
+            className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
+          >
+            Weekly
+          </Button>
+          <Button
+            variant={period === 'monthly' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setPeriod('monthly')}
+            className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
+          >
+            Monthly
+          </Button>
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
+              disabled={chartData.length === 0}
+            >
+              <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              Download
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={handleExportChart}>
+              Export PNG
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleExportCsv}>
+              Export CSV
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Stats Summary */}
