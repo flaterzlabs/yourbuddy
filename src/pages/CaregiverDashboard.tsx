@@ -55,7 +55,7 @@ import { Database } from "@/integrations/supabase/types";
 import { useNavigate } from "react-router-dom";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { subMonths, subWeeks, subDays, startOfWeek, endOfWeek, format } from "date-fns";
+import { subMonths, subWeeks, subDays, startOfWeek, endOfWeek, format, subYears, startOfQuarter, endOfQuarter, subQuarters } from "date-fns";
 import { exportChartAsPng } from "@/lib/export-chart";
 type Connection = Database["public"]["Tables"]["connections"]["Row"] & {
   student_profile?: Database["public"]["Tables"]["profiles"]["Row"];
@@ -77,7 +77,7 @@ export default function CaregiverDashboard() {
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied">("idle");
   const [overviewModalOpen, setOverviewModalOpen] = useState(false);
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
-  const [chartPeriod, setChartPeriod] = useState<"daily" | "weekly" | "monthly">("monthly");
+  const [chartPeriod, setChartPeriod] = useState<"daily" | "weekly" | "monthly" | "quarterly" | "yearly" | "all">("monthly");
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [requestsPage, setRequestsPage] = useState(1);
   const [requestsPeriodFilter, setRequestsPeriodFilter] = useState<"7days" | "30days" | "all">("all");
@@ -668,7 +668,24 @@ export default function CaregiverDashboard() {
           date: weekStart,
         });
       }
-    } else {
+    } else if (chartPeriod === "quarterly") {
+      for (let i = 3; i >= 0; i--) {
+        const date = subQuarters(now, i);
+        const quarterStart = startOfQuarter(date);
+        periods.push({
+          key: `${quarterStart.getFullYear()}-Q${Math.floor(quarterStart.getMonth() / 3) + 1}`,
+          date: quarterStart,
+        });
+      }
+    } else if (chartPeriod === "yearly") {
+      for (let i = 4; i >= 0; i--) {
+        const date = subYears(now, i);
+        periods.push({
+          key: `${date.getFullYear()}`,
+          date: new Date(date.getFullYear(), 0, 1),
+        });
+      }
+    } else if (chartPeriod === "monthly") {
       for (let i = 5; i >= 0; i--) {
         const date = subMonths(now, i);
         periods.push({
@@ -676,6 +693,9 @@ export default function CaregiverDashboard() {
           date,
         });
       }
+    } else {
+      // "all" - don't filter by date
+      periods = [];
     }
 
     // Initialize counters for each urgency level
@@ -691,7 +711,15 @@ export default function CaregiverDashboard() {
       } else if (chartPeriod === "weekly") {
         const weekStart = startOfWeek(created);
         key = `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`;
+      } else if (chartPeriod === "quarterly") {
+        const quarterStart = startOfQuarter(created);
+        key = `${quarterStart.getFullYear()}-Q${Math.floor(quarterStart.getMonth() / 3) + 1}`;
+      } else if (chartPeriod === "yearly") {
+        key = `${created.getFullYear()}`;
+      } else if (chartPeriod === "monthly") {
+        key = `${created.getFullYear()}-${created.getMonth()}`;
       } else {
+        // "all" - use month-year as default grouping
         key = `${created.getFullYear()}-${created.getMonth()}`;
       }
 
@@ -703,6 +731,24 @@ export default function CaregiverDashboard() {
 
       counters.set(key, existing);
     });
+
+    if (chartPeriod === "all") {
+      // For "all", group all data by month regardless of date
+      const allKeys = Array.from(counters.keys()).sort();
+      return allKeys.map((key) => {
+        const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
+        const [year, month] = key.split("-").map(Number);
+        const date = new Date(year, month, 1);
+        return {
+          period: date.toLocaleDateString("en-US", { month: "short", year: "2-digit" }),
+          fullLabel: date.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+          ok: counts.ok,
+          attention: counts.attention,
+          urgent: counts.urgent,
+          total: counts.ok + counts.attention + counts.urgent,
+        };
+      });
+    }
 
     return periods.map(({ key, date }) => {
       const counts = counters.get(key) || { ok: 0, attention: 0, urgent: 0 };
@@ -716,6 +762,14 @@ export default function CaregiverDashboard() {
         const weekEnd = endOfWeek(date);
         label = `${format(date, "dd/MM")}`;
         fullLabel = `${format(date, "dd/MM")} - ${format(weekEnd, "dd/MM/yyyy")}`;
+      } else if (chartPeriod === "quarterly") {
+        const quarterEnd = endOfQuarter(date);
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        label = `Q${quarter} ${date.getFullYear().toString().slice(-2)}`;
+        fullLabel = `Q${quarter} ${date.getFullYear()} (${format(date, "MMM")} - ${format(quarterEnd, "MMM")})`;
+      } else if (chartPeriod === "yearly") {
+        label = date.getFullYear().toString();
+        fullLabel = date.getFullYear().toString();
       } else {
         label = date.toLocaleDateString("en-US", { month: "short" });
         fullLabel = date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -1026,6 +1080,9 @@ export default function CaregiverDashboard() {
                         <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => setChartPeriod("weekly")}>Weekly</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setChartPeriod("quarterly")}>Quarterly</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setChartPeriod("yearly")}>Yearly</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setChartPeriod("all")}>All Time</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
 
@@ -1553,6 +1610,9 @@ export default function CaregiverDashboard() {
                           <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => setChartPeriod("weekly")}>Weekly</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => setChartPeriod("monthly")}>Monthly</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setChartPeriod("quarterly")}>Quarterly</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setChartPeriod("yearly")}>Yearly</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setChartPeriod("all")}>All Time</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                       <DropdownMenu>
