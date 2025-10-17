@@ -4,8 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
-import { subDays, subWeeks, subMonths, format, startOfWeek, endOfWeek } from 'date-fns';
-import { Download } from 'lucide-react';
+import { subDays, subWeeks, subMonths, subYears, format, startOfWeek, endOfWeek, startOfQuarter, endOfQuarter, subQuarters } from 'date-fns';
+import { Download, ChevronDown } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { exportChartAsPng } from '@/lib/export-chart';
 import {
@@ -22,7 +22,7 @@ interface StudentStatsProps {
 }
 
 export function StudentStats({ userId }: StudentStatsProps) {
-  const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('weekly');
+  const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly' | 'all'>('weekly');
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -67,26 +67,39 @@ export function StudentStats({ userId }: StudentStatsProps) {
   }, [userId, period]);
 
   const fetchHelpRequests = async () => {
-    let startDate: Date;
-    
-    switch (period) {
-      case 'daily':
-        startDate = subDays(new Date(), 7);
-        break;
-      case 'weekly':
-        startDate = subWeeks(new Date(), 4);
-        break;
-      case 'monthly':
-        startDate = subMonths(new Date(), 6);
-        break;
-    }
-
-    const { data, error } = await supabase
+    let query = supabase
       .from('help_requests')
       .select('*')
       .eq('student_id', userId)
-      .gte('created_at', startDate.toISOString())
       .order('created_at', { ascending: true });
+
+    if (period !== 'all') {
+      let startDate: Date;
+      
+      switch (period) {
+        case 'daily':
+          startDate = subDays(new Date(), 7);
+          break;
+        case 'weekly':
+          startDate = subWeeks(new Date(), 4);
+          break;
+        case 'monthly':
+          startDate = subMonths(new Date(), 6);
+          break;
+        case 'quarterly':
+          startDate = subQuarters(new Date(), 4);
+          break;
+        case 'yearly':
+          startDate = subYears(new Date(), 3);
+          break;
+        default:
+          startDate = subWeeks(new Date(), 4);
+      }
+      
+      query = query.gte('created_at', startDate.toISOString());
+    }
+
+    const { data, error } = await query;
 
     if (!error && data) {
       setHelpRequests(data);
@@ -119,7 +132,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           fullLabel: `${format(weekStart, 'dd/MM')} - ${format(weekEnd, 'dd/MM/yyyy')}`
         });
       }
-    } else {
+    } else if (period === 'monthly') {
       for (let i = 5; i >= 0; i--) {
         const date = subMonths(now, i);
         periods.push({
@@ -129,6 +142,39 @@ export function StudentStats({ userId }: StudentStatsProps) {
           fullLabel: date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
         });
       }
+    } else if (period === 'quarterly') {
+      for (let i = 3; i >= 0; i--) {
+        const date = subQuarters(now, i);
+        const quarterStart = startOfQuarter(date);
+        const quarterEnd = endOfQuarter(quarterStart);
+        const quarter = Math.floor(quarterStart.getMonth() / 3) + 1;
+        periods.push({
+          key: `${quarterStart.getFullYear()}-Q${quarter}`,
+          date: quarterStart,
+          label: `Q${quarter}`,
+          fullLabel: `Q${quarter} ${quarterStart.getFullYear()} (${format(quarterStart, 'dd/MM')} - ${format(quarterEnd, 'dd/MM/yyyy')})`
+        });
+      }
+    } else if (period === 'yearly') {
+      for (let i = 2; i >= 0; i--) {
+        const date = subYears(now, i);
+        periods.push({
+          key: `${date.getFullYear()}`,
+          date,
+          label: `${date.getFullYear()}`,
+          fullLabel: `${date.getFullYear()}`
+        });
+      }
+    } else if (period === 'all') {
+      // Para "All Time", vamos mostrar por ano
+      const years = new Set(helpRequests.map(r => new Date(r.created_at).getFullYear()));
+      const sortedYears = Array.from(years).sort();
+      periods = sortedYears.map(year => ({
+        key: `${year}`,
+        date: new Date(year, 0, 1),
+        label: `${year}`,
+        fullLabel: `${year}`
+      }));
     }
     
     // Initialize counters for each urgency level
@@ -144,8 +190,14 @@ export function StudentStats({ userId }: StudentStatsProps) {
       } else if (period === 'weekly') {
         const weekStart = startOfWeek(created, { weekStartsOn: 0 });
         key = `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`;
-      } else {
+      } else if (period === 'monthly') {
         key = `${created.getFullYear()}-${created.getMonth()}`;
+      } else if (period === 'quarterly') {
+        const quarterStart = startOfQuarter(created);
+        const quarter = Math.floor(quarterStart.getMonth() / 3) + 1;
+        key = `${quarterStart.getFullYear()}-Q${quarter}`;
+      } else if (period === 'yearly' || period === 'all') {
+        key = `${created.getFullYear()}`;
       }
       
       const urgency = request.urgency || 'ok';
@@ -257,36 +309,51 @@ export function StudentStats({ userId }: StudentStatsProps) {
     }
   };
 
+  const periodLabels = {
+    daily: 'Daily',
+    weekly: 'Weekly',
+    monthly: 'Monthly',
+    quarterly: 'Quarterly',
+    yearly: 'Yearly',
+    all: 'All Time'
+  };
+
   return (
     <div className="space-y-3">
       {/* Period Filter and Export */}
       <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 sm:justify-between sm:items-center">
-        <div className="flex gap-1.5 sm:gap-2">
-          <Button
-            variant={period === 'daily' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setPeriod('daily')}
-            className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3 dark:hover:bg-primary dark:hover:text-primary-foreground"
-          >
-            Daily
-          </Button>
-          <Button
-            variant={period === 'weekly' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setPeriod('weekly')}
-            className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3 dark:hover:bg-primary dark:hover:text-primary-foreground"
-          >
-            Weekly
-          </Button>
-          <Button
-            variant={period === 'monthly' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setPeriod('monthly')}
-            className="flex-1 md:flex-none md:w-28 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3 dark:hover:bg-primary dark:hover:text-primary-foreground"
-          >
-            Monthly
-          </Button>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3 justify-between"
+            >
+              {periodLabels[period]}
+              <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => setPeriod('daily')}>
+              Daily
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setPeriod('weekly')}>
+              Weekly
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setPeriod('monthly')}>
+              Monthly
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setPeriod('quarterly')}>
+              Quarterly
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setPeriod('yearly')}>
+              Yearly
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setPeriod('all')}>
+              All Time
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
