@@ -209,7 +209,7 @@ export default function CaregiverDashboard() {
             variant: urgencyVariant as "caregiver-success" | "caregiver-warning" | "caregiver-urgent",
             duration: 4000,
           });
-          playNotificationSound();
+          playNotificationSound(rec.urgency || "ok");
           fetchHelpRequests();
         },
       )
@@ -250,7 +250,7 @@ export default function CaregiverDashboard() {
               variant: urgencyVariant as "caregiver-success" | "caregiver-warning" | "caregiver-urgent",
               duration: 4000,
             });
-            playNotificationSound();
+            playNotificationSound(rec.urgency || "ok");
           }
           fetchHelpRequests();
         },
