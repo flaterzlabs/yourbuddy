@@ -48,10 +48,12 @@ export function useNotificationSound() {
   }, [soundsByUrgency]);
 
   const updateSound = useCallback((urgency: UrgencyLevel, newSound: SoundOption) => {
-    const updated = { ...soundsByUrgency, [urgency]: newSound };
-    setSoundsByUrgency(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  }, [soundsByUrgency]);
+    setSoundsByUrgency(prev => {
+      const updated = { ...prev, [urgency]: newSound };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
 
   const previewSound = useCallback((sound: SoundOption) => {
     if (sound === 'off') return;
