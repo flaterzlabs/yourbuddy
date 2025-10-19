@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SoundOption, UrgencyLevel, useNotificationSound } from "@/hooks/use-notification-sound";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 
 const SOUND_OPTIONS: { value: SoundOption; label: string }[] = [
@@ -39,6 +39,13 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
   const { soundsByUrgency, updateSound, previewSound } = useNotificationSound();
   const [tempSounds, setTempSounds] = useState(soundsByUrgency);
   const [isOpen, setIsOpen] = useState(false);
+
+  // Sync tempSounds with soundsByUrgency when dropdown opens
+  useEffect(() => {
+    if (isOpen) {
+      setTempSounds(soundsByUrgency);
+    }
+  }, [isOpen, soundsByUrgency]);
 
   const hasAnySound = Object.values(soundsByUrgency).some(sound => sound !== "off");
 
