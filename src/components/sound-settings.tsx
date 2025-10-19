@@ -1,4 +1,4 @@
-import { Volume2, VolumeX, Play } from "lucide-react";
+import { Volume2, VolumeX, Play, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,20 +15,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SoundOption, UrgencyLevel, useNotificationSound } from "@/hooks/use-notification-sound";
+import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 const SOUND_OPTIONS: { value: SoundOption; label: string }[] = [
   { value: "off", label: "Off" },
   { value: "blip1", label: "Blip 1" },
   { value: "blip2", label: "Blip 2" },
   { value: "chime", label: "Chime" },
-  { value: "ding", label: "Ding" },
-  { value: "softbell", label: "Soft Bell" },
-  { value: "windchime", label: "Wind Chime" },
-  { value: "pop", label: "Pop" },
-  { value: "ping", label: "Ping" },
-  { value: "twinkle", label: "Twinkle" },
-  { value: "spark", label: "Spark" },
-  { value: "woodtap", label: "Wood Tap" },
 ];
 
 const URGENCY_CONFIG: { level: UrgencyLevel; emoji: string; label: string; color: string }[] = [
@@ -43,11 +37,28 @@ interface SoundSettingsProps {
 
 export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
   const { soundsByUrgency, updateSound, previewSound } = useNotificationSound();
+  const [tempSounds, setTempSounds] = useState(soundsByUrgency);
+  const [isOpen, setIsOpen] = useState(false);
 
   const hasAnySound = Object.values(soundsByUrgency).some(sound => sound !== "off");
 
+  const handleSave = () => {
+    Object.entries(tempSounds).forEach(([urgency, sound]) => {
+      updateSound(urgency as UrgencyLevel, sound);
+    });
+    toast({
+      title: "Preferências salvas",
+      description: "Suas configurações de som foram salvas com sucesso.",
+    });
+    setIsOpen(false);
+  };
+
+  const handleTempUpdate = (urgency: UrgencyLevel, sound: SoundOption) => {
+    setTempSounds(prev => ({ ...prev, [urgency]: sound }));
+  };
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         {trigger || (
           <Button variant="ghost" size="icon" className="rounded-full">
@@ -69,8 +80,8 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
               </label>
               <div className="flex items-center gap-2">
                 <Select
-                  value={soundsByUrgency[level]}
-                  onValueChange={(value) => updateSound(level, value as SoundOption)}
+                  value={tempSounds[level]}
+                  onValueChange={(value) => handleTempUpdate(level, value as SoundOption)}
                 >
                   <SelectTrigger className="flex-1">
                     <SelectValue />
@@ -84,11 +95,11 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
                   </SelectContent>
                 </Select>
                 
-                {soundsByUrgency[level] !== "off" && (
+                {tempSounds[level] !== "off" && (
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => previewSound(soundsByUrgency[level])}
+                    onClick={() => previewSound(tempSounds[level])}
                     className="shrink-0"
                   >
                     <Play className="h-4 w-4" />
@@ -101,8 +112,11 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
         </div>
 
         <DropdownMenuSeparator />
-        <div className="px-2 py-1.5 text-xs text-muted-foreground">
-          As configurações são salvas automaticamente
+        <div className="p-2">
+          <Button onClick={handleSave} className="w-full gap-2">
+            <Save className="h-4 w-4" />
+            Salvar Preferências
+          </Button>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

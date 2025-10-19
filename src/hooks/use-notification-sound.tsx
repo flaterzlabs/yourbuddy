@@ -1,20 +1,12 @@
 import { useCallback, useState } from 'react';
 
-export type SoundOption = 'off' | 'blip1' | 'blip2' | 'chime' | 'ding' | 'softbell' | 'windchime' | 'pop' | 'ping' | 'twinkle' | 'spark' | 'woodtap';
+export type SoundOption = 'off' | 'blip1' | 'blip2' | 'chime';
 export type UrgencyLevel = 'ok' | 'attention' | 'urgent';
 
 const SOUND_FILES: Record<Exclude<SoundOption, 'off'>, string> = {
   blip1: '/sounds/blip1.mp3',
   blip2: '/sounds/blip2.mp3',
   chime: '/sounds/chime.mp3',
-  ding: '/sounds/ding.mp3',
-  softbell: '/sounds/softbell.mp3',
-  windchime: '/sounds/windchime.mp3',
-  pop: '/sounds/pop.mp3',
-  ping: '/sounds/ping.mp3',
-  twinkle: '/sounds/twinkle.mp3',
-  spark: '/sounds/spark.mp3',
-  woodtap: '/sounds/woodtap.mp3',
 };
 
 const STORAGE_KEY = 'caregiver-notification-sounds-by-urgency';
@@ -32,10 +24,10 @@ export function useNotificationSound() {
       try {
         return JSON.parse(stored);
       } catch {
-        return { ok: 'blip1', attention: 'chime', urgent: 'ding' };
+        return { ok: 'blip1', attention: 'chime', urgent: 'blip2' };
       }
     }
-    return { ok: 'blip1', attention: 'chime', urgent: 'ding' };
+    return { ok: 'blip1', attention: 'chime', urgent: 'blip2' };
   });
 
   const playNotificationSound = useCallback((urgency: UrgencyLevel = 'ok') => {
