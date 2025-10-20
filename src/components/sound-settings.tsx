@@ -7,13 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SoundOption, UrgencyLevel, useNotificationSound } from "@/hooks/use-notification-sound";
 import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
@@ -47,21 +41,21 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
     }
   }, [isOpen, soundsByUrgency]);
 
-  const hasAnySound = Object.values(soundsByUrgency).some(sound => sound !== "off");
+  const hasAnySound = Object.values(soundsByUrgency).some((sound) => sound !== "off");
 
   const handleSave = () => {
     Object.entries(tempSounds).forEach(([urgency, sound]) => {
       updateSound(urgency as UrgencyLevel, sound);
     });
     toast({
-      title: "Preferências salvas",
-      description: "Suas configurações de som foram salvas com sucesso.",
+      title: "Preferences Saved",
+      description: "Your sound settings have been successfully saved.",
     });
     setIsOpen(false);
   };
 
   const handleTempUpdate = (urgency: UrgencyLevel, sound: SoundOption) => {
-    setTempSounds(prev => ({ ...prev, [urgency]: sound }));
+    setTempSounds((prev) => ({ ...prev, [urgency]: sound }));
   };
 
   return (
@@ -75,9 +69,9 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
-        <DropdownMenuLabel>Sons de Notificação por Urgência</DropdownMenuLabel>
+        <DropdownMenuLabel>Notifications Sound</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        
+
         <div className="space-y-4 p-2">
           {URGENCY_CONFIG.map(({ level, emoji, label, color }) => (
             <div key={level} className="space-y-2">
@@ -101,7 +95,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
                     ))}
                   </SelectContent>
                 </Select>
-                
+
                 {tempSounds[level] !== "off" && (
                   <Button
                     variant="ghost"
@@ -120,9 +114,9 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
 
         <DropdownMenuSeparator />
         <div className="p-2">
-          <Button onClick={handleSave} className="w-full gap-2">
+          <Button onClick={handleSave} className="w-auto gap-2">
             <Save className="h-4 w-4" />
-            Salvar Preferências
+            Save
           </Button>
         </div>
       </DropdownMenuContent>
