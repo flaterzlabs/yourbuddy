@@ -571,7 +571,7 @@ export default function CaregiverDashboard() {
     }
 
     // Desktop: Show up to 5 pages (existing logic)
-    const maxVisiblePages = 3;
+    const maxVisiblePages = 5;
 
     if (totalRequestsPages <= maxVisiblePages) {
       for (let i = 1; i <= totalRequestsPages; i++) {
