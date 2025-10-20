@@ -69,7 +69,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
-        <DropdownMenuLabel>Notifications Sound</DropdownMenuLabel>
+        <DropdownMenuLabel>Notification Sounds</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         <div className="space-y-4 p-2">
