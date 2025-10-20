@@ -116,7 +116,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
   const renderPageNumbers = () => {
     const pages: JSX.Element[] = [];
     const isMobile = window.innerWidth < 640;
-    const maxVisiblePages = isMobile ? 2 : 3;
+    const maxVisiblePages = isMobile ? 2 : 1;
 
     if (isMobile && totalPages > maxVisiblePages) {
       // Mobile: show only current, ellipsis, and last
