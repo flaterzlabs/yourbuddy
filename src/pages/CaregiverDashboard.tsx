@@ -94,6 +94,7 @@ export default function CaregiverDashboard() {
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [requestsPage, setRequestsPage] = useState(1);
   const [requestsPeriodFilter, setRequestsPeriodFilter] = useState<"7days" | "30days" | "all">("all");
+  const [requestsStatusFilter, setRequestsStatusFilter] = useState<"all" | "open" | "closed">("all");
   const desktopChartRef = useRef<HTMLDivElement | null>(null);
   const mobileChartRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -480,13 +481,24 @@ export default function CaregiverDashboard() {
     );
 
     return sortedRequests.filter((request) => {
-      if (requestsPeriodFilter === "all") return true;
-      const requestDate = new Date(request.created_at);
-      const daysAgo = requestsPeriodFilter === "7days" ? 7 : 30;
-      const cutoffDate = subDays(now, daysAgo);
-      return requestDate >= cutoffDate;
+      // Filter by period
+      if (requestsPeriodFilter !== "all") {
+        const requestDate = new Date(request.created_at);
+        const daysAgo = requestsPeriodFilter === "7days" ? 7 : 30;
+        const cutoffDate = subDays(now, daysAgo);
+        if (requestDate < cutoffDate) return false;
+      }
+
+      // Filter by status
+      if (requestsStatusFilter === "open") {
+        return request.status === "open";
+      } else if (requestsStatusFilter === "closed") {
+        return request.status === "answered" || request.status === "closed";
+      }
+
+      return true;
     });
-  }, [helpRequests, requestsPeriodFilter]);
+  }, [helpRequests, requestsPeriodFilter, requestsStatusFilter]);
 
   const totalRequestsPages = Math.ceil(filteredHelpRequests.length / REQUESTS_PER_PAGE);
   const paginatedHelpRequests = filteredHelpRequests.slice(
@@ -496,6 +508,11 @@ export default function CaregiverDashboard() {
 
   const handleRequestsFilterChange = (filter: "7days" | "30days" | "all") => {
     setRequestsPeriodFilter(filter);
+    setRequestsPage(1);
+  };
+
+  const handleRequestsStatusFilterChange = (filter: "all" | "open" | "closed") => {
+    setRequestsStatusFilter(filter);
     setRequestsPage(1);
   };
 
@@ -1158,32 +1175,59 @@ export default function CaregiverDashboard() {
               </div>
 
               <div className="space-y-4">
-                {/* Period Filter Dropdown */}
-                <div className="flex gap-2 items-center justify-between">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="filter-button-hover">
-                        {requestsPeriodFilter === "7days"
-                          ? "Last 7 days"
-                          : requestsPeriodFilter === "30days"
-                            ? "Last 30 days"
-                            : `All Requests (${helpRequests.length})`}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent side="top" align="start">
-                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("7days")}>
-                        Last 7 days
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("30days")}>
-                        Last 30 days
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("all")}>
-                        All Requests ({helpRequests.length})
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                {/* Filters */}
+                <div className="flex gap-2 items-center justify-between flex-wrap">
+                  <div className="flex gap-2">
+                    {/* Period Filter */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="filter-button-hover">
+                          {requestsPeriodFilter === "7days"
+                            ? "Last 7 days"
+                            : requestsPeriodFilter === "30days"
+                              ? "Last 30 days"
+                              : `All Requests (${helpRequests.length})`}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent side="top" align="start">
+                        <DropdownMenuItem onClick={() => handleRequestsFilterChange("7days")}>
+                          Last 7 days
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsFilterChange("30days")}>
+                          Last 30 days
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsFilterChange("all")}>
+                          All Requests ({helpRequests.length})
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
 
-                  {/* Header with Close All */}
+                    {/* Status Filter */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="filter-button-hover">
+                          {requestsStatusFilter === "all"
+                            ? "All Status"
+                            : requestsStatusFilter === "open"
+                              ? "Open"
+                              : "Closed"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent side="top" align="start">
+                        <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("all")}>
+                          All Status
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>
+                          Open
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("closed")}>
+                          Closed
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  {/* Close All Button */}
                   {openHelpRequests.length > 0 && (
                     <Button
                       variant="outline"
