@@ -476,6 +476,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 aria-label="Go to previous page"
               >
                 <ChevronLeft className="h-4 w-4" />
+                <span className="hidden sm:inline">Previous</span>
               </PaginationLink>
             </PaginationItem>
             {renderPageNumbers()}
@@ -492,6 +493,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 )}
                 aria-label="Go to next page"
               >
+                <span className="hidden sm:inline">Next</span>
                 <ChevronRight className="h-4 w-4" />
               </PaginationLink>
             </PaginationItem>
