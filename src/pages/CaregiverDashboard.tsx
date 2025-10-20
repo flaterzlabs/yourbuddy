@@ -55,7 +55,18 @@ import { Database } from "@/integrations/supabase/types";
 import { useNavigate } from "react-router-dom";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { subMonths, subWeeks, subDays, startOfWeek, endOfWeek, format, subYears, startOfQuarter, endOfQuarter, subQuarters } from "date-fns";
+import {
+  subMonths,
+  subWeeks,
+  subDays,
+  startOfWeek,
+  endOfWeek,
+  format,
+  subYears,
+  startOfQuarter,
+  endOfQuarter,
+  subQuarters,
+} from "date-fns";
 import { exportChartAsPng } from "@/lib/export-chart";
 type Connection = Database["public"]["Tables"]["connections"]["Row"] & {
   student_profile?: Database["public"]["Tables"]["profiles"]["Row"];
@@ -77,7 +88,9 @@ export default function CaregiverDashboard() {
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied">("idle");
   const [overviewModalOpen, setOverviewModalOpen] = useState(false);
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
-  const [chartPeriod, setChartPeriod] = useState<"daily" | "weekly" | "monthly" | "quarterly" | "yearly" | "all">("monthly");
+  const [chartPeriod, setChartPeriod] = useState<"daily" | "weekly" | "monthly" | "quarterly" | "yearly" | "all">(
+    "monthly",
+  );
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [requestsPage, setRequestsPage] = useState(1);
   const [requestsPeriodFilter, setRequestsPeriodFilter] = useState<"7days" | "30days" | "all">("all");
@@ -558,7 +571,7 @@ export default function CaregiverDashboard() {
     }
 
     // Desktop: Show up to 5 pages (existing logic)
-    const maxVisiblePages = 5;
+    const maxVisiblePages = 3;
 
     if (totalRequestsPages <= maxVisiblePages) {
       for (let i = 1; i <= totalRequestsPages; i++) {
@@ -1074,7 +1087,9 @@ export default function CaregiverDashboard() {
                   <div className="flex items-center gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="filter-button-hover">{chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}</Button>
+                        <Button variant="outline" className="filter-button-hover">
+                          {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+                        </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
@@ -1098,12 +1113,8 @@ export default function CaregiverDashboard() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={handleExportHelpRequestChart}>
-                          Export PNG
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleExportHelpRequestStats}>
-                          Export CSV
-                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleExportHelpRequestChart}>Export PNG</DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleExportHelpRequestStats}>Export CSV</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
@@ -1628,12 +1639,8 @@ export default function CaregiverDashboard() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={handleExportHelpRequestChart}>
-                            Export PNG
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={handleExportHelpRequestStats}>
-                            Export CSV
-                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={handleExportHelpRequestChart}>Export PNG</DropdownMenuItem>
+                          <DropdownMenuItem onClick={handleExportHelpRequestStats}>Export CSV</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
