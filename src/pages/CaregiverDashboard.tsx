@@ -1267,25 +1267,33 @@ export default function CaregiverDashboard() {
                   <Pagination className="mt-4">
                     <PaginationContent>
                       <PaginationItem>
-                        <PaginationPrevious
+                        <PaginationLink
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
                             if (requestsPage > 1) setRequestsPage(requestsPage - 1);
                           }}
                           className={requestsPage === 1 ? "pointer-events-none opacity-50" : ""}
-                        />
+                          size="icon"
+                          aria-label="Go to previous page"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </PaginationLink>
                       </PaginationItem>
                       {renderRequestsPagination()}
                       <PaginationItem>
-                        <PaginationNext
+                        <PaginationLink
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
                             if (requestsPage < totalRequestsPages) setRequestsPage(requestsPage + 1);
                           }}
                           className={requestsPage === totalRequestsPages ? "pointer-events-none opacity-50" : ""}
-                        />
+                          size="icon"
+                          aria-label="Go to next page"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </PaginationLink>
                       </PaginationItem>
                     </PaginationContent>
                   </Pagination>
