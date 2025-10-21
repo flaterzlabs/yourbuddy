@@ -377,34 +377,40 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:justify-between">
         <div className="flex gap-1.5 sm:gap-2">
           <Button
-            variant={periodFilter === "7days" ? "default" : "outline"}
+            variant={periodFilter === "7days" ? "outline" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("7days")}
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
-              periodFilter !== "7days" && "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground"
+              periodFilter === "7days" 
+                ? "bg-gradient-hero text-white border-transparent dark:bg-primary dark:text-primary-foreground dark:bg-none" 
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground dark:hover:bg-none"
             )}
           >
             7 days
           </Button>
           <Button
-            variant={periodFilter === "30days" ? "default" : "outline"}
+            variant={periodFilter === "30days" ? "outline" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("30days")}
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
-              periodFilter !== "30days" && "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground"
+              periodFilter === "30days" 
+                ? "bg-gradient-hero text-white border-transparent dark:bg-primary dark:text-primary-foreground dark:bg-none" 
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground dark:hover:bg-none"
             )}
           >
             30 days
           </Button>
           <Button
-            variant={periodFilter === "all" ? "default" : "outline"}
+            variant={periodFilter === "all" ? "outline" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("all")}
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
-              periodFilter !== "all" && "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground"
+              periodFilter === "all" 
+                ? "bg-gradient-hero text-white border-transparent dark:bg-primary dark:text-primary-foreground dark:bg-none" 
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground dark:hover:bg-none"
             )}
           >
             All ({helpRequests.length})
@@ -413,7 +419,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         <Button
           variant="outline"
           size="sm"
-          className="flex items-center gap-2 text-xs px-2 h-8 sm:text-sm sm:px-3 sm:h-9 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground"
+          className="flex items-center gap-2 text-xs px-2 h-8 sm:text-sm sm:px-3 sm:h-9 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground dark:hover:bg-none"
           onClick={handleExportRequests}
           disabled={filteredRequests.length === 0}
         >
