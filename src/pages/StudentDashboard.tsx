@@ -496,7 +496,7 @@ export default function StudentDashboard() {
                     : ""
             }`}
           >
-            <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
+            <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
               <AnimatePresence>
                 {showSuccessAnimation && (
                   <motion.div
