@@ -473,7 +473,7 @@ export default function CaregiverDashboard() {
   const StudentLabel = profile?.role === "caregiver" ? "Children" : "Students";
 
   // Filter and paginate help requests
-  const REQUESTS_PER_PAGE = 30;
+  const REQUESTS_PER_PAGE = 50;
 
   const filteredHelpRequests = useMemo(() => {
     const now = new Date();
