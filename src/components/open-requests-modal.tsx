@@ -473,47 +473,57 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         )}
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <Pagination className="mt-4">
-          <PaginationContent className="gap-1 flex-nowrap justify-center">
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage > 1) setCurrentPage(currentPage - 1);
-                }}
-                className={cn(
-                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent",
-                  currentPage === 1 && "pointer-events-none opacity-50",
-                )}
-                aria-label="Go to previous page"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                <span className="hidden sm:inline">Previous</span>
-              </PaginationLink>
-            </PaginationItem>
-            {renderPageNumbers()}
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-                }}
-                className={cn(
-                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent",
-                  currentPage === totalPages && "pointer-events-none opacity-50",
-                )}
-                aria-label="Go to next page"
-              >
-                <span className="hidden sm:inline">Next</span>
-                <ChevronRight className="h-4 w-4" />
-              </PaginationLink>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+    {/* Pagination */}
+{totalPages > 1 && (
+  <Pagination className="mt-4">
+    <PaginationContent className="gap-1 flex-nowrap justify-center">
+      {/* Botão Previous */}
+      <PaginationItem>
+        <PaginationLink
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            if (currentPage > 1) setCurrentPage(currentPage - 1);
+          }}
+          className={cn(
+            "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2",
+            // Hover claro e escuro
+            "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-purple-600 dark:hover:text-white dark:hover:border-transparent",
+            currentPage === 1 && "pointer-events-none opacity-50"
+          )}
+          aria-label="Go to previous page"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          <span className="hidden sm:inline">Previous</span>
+        </PaginationLink>
+      </PaginationItem>
+
+      {renderPageNumbers()}
+
+      {/* Botão Next */}
+      <PaginationItem>
+        <PaginationLink
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+          }}
+          className={cn(
+            "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2",
+            // Hover claro e escuro
+            "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-purple-600 dark:hover:text-white dark:hover:border-transparent",
+            currentPage === totalPages && "pointer-events-none opacity-50"
+          )}
+          aria-label="Go to next page"
+        >
+          <span className="hidden sm:inline">Next</span>
+          <ChevronRight className="h-4 w-4" />
+        </PaginationLink>
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+)}
+
       )}
     </div>
   );
