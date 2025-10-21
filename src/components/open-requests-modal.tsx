@@ -523,8 +523,6 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
     </PaginationContent>
   </Pagination>
 )}
-
-      )}
     </div>
   );
 }
