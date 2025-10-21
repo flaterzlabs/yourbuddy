@@ -486,7 +486,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
                 className={cn(
-                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none",
+                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:bg-accent",
                   currentPage === 1 && "pointer-events-none opacity-50",
                 )}
                 aria-label="Go to previous page"
