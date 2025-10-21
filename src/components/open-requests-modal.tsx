@@ -382,9 +382,9 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             onClick={() => handleFilterChange("7days")}
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
-              periodFilter === "7days" 
-                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none" 
-                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
+              periodFilter === "7days"
+                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none"
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none",
             )}
           >
             7 days
@@ -395,9 +395,9 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             onClick={() => handleFilterChange("30days")}
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
-              periodFilter === "30days" 
-                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none" 
-                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
+              periodFilter === "30days"
+                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none"
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none",
             )}
           >
             30 days
@@ -408,9 +408,9 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             onClick={() => handleFilterChange("all")}
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
-              periodFilter === "all" 
-                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none" 
-                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
+              periodFilter === "all"
+                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none"
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none",
             )}
           >
             All ({helpRequests.length})
@@ -464,7 +464,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   </Badge>
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {new Date(request.created_at).toLocaleDateString("pt-BR")} {new Date(request.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                  {new Date(request.created_at).toLocaleDateString("pt-BR")}{" "}
+                  {new Date(request.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
               {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
@@ -485,7 +486,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
                 className={cn(
-                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent",
+                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none",
                   currentPage === 1 && "pointer-events-none opacity-50",
                 )}
                 aria-label="Go to previous page"
