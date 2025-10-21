@@ -380,7 +380,10 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             variant={periodFilter === "7days" ? "default" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("7days")}
-            className="flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9"
+            className={cn(
+              "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
+              periodFilter !== "7days" && "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground"
+            )}
           >
             7 days
           </Button>
@@ -388,7 +391,10 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             variant={periodFilter === "30days" ? "default" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("30days")}
-            className="flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9"
+            className={cn(
+              "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
+              periodFilter !== "30days" && "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground"
+            )}
           >
             30 days
           </Button>
@@ -396,7 +402,10 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             variant={periodFilter === "all" ? "default" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("all")}
-            className="flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9"
+            className={cn(
+              "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
+              periodFilter !== "all" && "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground"
+            )}
           >
             All ({helpRequests.length})
           </Button>
@@ -404,7 +413,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         <Button
           variant="outline"
           size="sm"
-          className="flex items-center gap-2 text-xs px-2 h-8 sm:text-sm sm:px-3 sm:h-9"
+          className="flex items-center gap-2 text-xs px-2 h-8 sm:text-sm sm:px-3 sm:h-9 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground"
           onClick={handleExportRequests}
           disabled={filteredRequests.length === 0}
         >
