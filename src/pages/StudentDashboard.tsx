@@ -196,8 +196,8 @@ export default function StudentDashboard() {
   const handleConnectionAdded = () => {
     fetchConnections();
     toast({
-      title: "Conexão estabelecida!",
-      description: "Você foi conectado com sucesso ao professor/responsável.",
+      title: "Connected!",
+      description: "You’re now connected to the teacher / caregiver.",
       duration: 3000,
       variant: "student",
     });
@@ -233,8 +233,8 @@ export default function StudentDashboard() {
           if (data?.status) {
             const statusText = data.status === "answered" ? "respondido" : "finalizado";
             toast({
-              title: "Pedido atualizado!",
-              description: `Seu pedido foi ${statusText} pelo professor/responsável.`,
+              title: "Request updated!",
+              description: `Your request was ${statusText} by the teacher / caregiver.`,
               variant: "student",
               duration: 4000,
             });
@@ -496,7 +496,7 @@ export default function StudentDashboard() {
                     : ""
             }`}
           >
-            <Card className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
+            <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg mb-8 relative overflow-hidden">
               <AnimatePresence>
                 {showSuccessAnimation && (
                   <motion.div
