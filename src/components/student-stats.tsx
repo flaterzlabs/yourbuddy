@@ -422,18 +422,18 @@ export function StudentStats({ userId }: StudentStatsProps) {
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis 
                 dataKey="period" 
-                fontSize={16}
+                fontSize={10}
                 tickLine={false}
                 axisLine={false}
-                className="sm:text-xs md:text-lg"
+                className="sm:text-xs md:text-sm"
               />
               <YAxis 
-                fontSize={12}
+                fontSize={10}
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}
                 width={25}
-                className="sm:text-xs md:text-lg"
+                className="sm:text-xs md:text-sm"
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar 
