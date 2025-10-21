@@ -290,8 +290,8 @@ export default function CaregiverDashboard() {
       };
       if (result.success && result.student) {
         toast({
-          title: "Estudante conectado!",
-          description: `Conectado com ${result.student.username} (${result.student.student_code})`,
+          title: "Student connected!",
+          description: `Connected with ${result.student.username} (${result.student.student_code})`,
           variant: "caregiver-success",
           duration: 4000,
         });
@@ -301,7 +301,7 @@ export default function CaregiverDashboard() {
         // === Alteração: Adicionado viewportId ===
         toast({
           title: "Erro",
-          description: result.error || "Código inválido",
+          description: result.error || "Invalid Code",
           variant: "destructive",
         });
       }
@@ -309,8 +309,8 @@ export default function CaregiverDashboard() {
       console.error("Error connecting to student:", error);
       // === Alteração: Adicionado viewportId ===
       toast({
-        title: "Erro",
-        description: "Não foi possível conectar. Tente novamente.",
+        title: "Error",
+        description: "Couldn’t connect. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -333,9 +333,10 @@ export default function CaregiverDashboard() {
 
       // === Alteração: Adicionado viewportId ===
       toast({
-        title: action === "answered" ? "Marcado como respondido" : "Pedido finalizado",
-        description: "O estudante foi notificado.",
-        variant: "caregiver-success",
+        title: action === "answered" ? "Marked as answered" : "Request completed",
+        description: "The student has been notified.",
+
+        variant: "student",
       });
 
       // Notify the student via broadcast
@@ -372,8 +373,8 @@ export default function CaregiverDashboard() {
       console.error("Error updating help request:", error);
       // === Alteração: Adicionado viewportId ===
       toast({
-        title: "Erro",
-        description: "Não foi possível atualizar o pedido.",
+        title: "Error",
+        description: "Couldn’t update the request.",
         variant: "destructive",
       });
     }
