@@ -231,7 +231,7 @@ export default function StudentDashboard() {
         (payload) => {
           const data = payload.payload;
           if (data?.status) {
-            const statusText = data.status === "answered" ? "respondido" : "finalizado";
+            const statusText = data.status === "answered" ? "answered" : "closed";
             toast({
               title: "Request updated!",
               description: `Your request was ${statusText} by the teacher / caregiver.`,
