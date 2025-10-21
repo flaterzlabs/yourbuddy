@@ -128,7 +128,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             onClick={(e) => {
               e.preventDefault();
             }}
-            className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+            className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
           >
             {currentPage}
           </PaginationLink>
@@ -152,7 +152,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 e.preventDefault();
                 setCurrentPage(totalPages);
               }}
-              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
             >
               {totalPages}
             </PaginationLink>
@@ -171,7 +171,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 e.preventDefault();
                 setCurrentPage(i);
               }}
-              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
             >
               {i}
             </PaginationLink>
@@ -192,7 +192,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   setCurrentPage(i);
                 }}
-                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
               >
                 {i}
               </PaginationLink>
@@ -212,7 +212,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 e.preventDefault();
                 setCurrentPage(totalPages);
               }}
-              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
             >
               {totalPages}
             </PaginationLink>
@@ -228,7 +228,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 e.preventDefault();
                 setCurrentPage(1);
               }}
-              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
             >
               1
             </PaginationLink>
@@ -249,7 +249,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   setCurrentPage(i);
                 }}
-                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
               >
                 {i}
               </PaginationLink>
@@ -266,7 +266,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 e.preventDefault();
                 setCurrentPage(1);
               }}
-              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
             >
               1
             </PaginationLink>
@@ -287,7 +287,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   setCurrentPage(i);
                 }}
-                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+                className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
               >
                 {i}
               </PaginationLink>
@@ -307,7 +307,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 e.preventDefault();
                 setCurrentPage(totalPages);
               }}
-              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent"
+              className="h-8 w-8 p-0 text-xs sm:h-10 sm:w-10 sm:text-sm hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground"
             >
               {totalPages}
             </PaginationLink>
@@ -485,7 +485,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
                 className={cn(
-                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent",
+                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground",
                   currentPage === 1 && "pointer-events-none opacity-50",
                 )}
                 aria-label="Go to previous page"
@@ -503,7 +503,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
                 className={cn(
-                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent",
+                  "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground",
                   currentPage === totalPages && "pointer-events-none opacity-50",
                 )}
                 aria-label="Go to next page"
