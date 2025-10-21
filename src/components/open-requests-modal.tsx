@@ -383,8 +383,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
               periodFilter === "7days" 
-                ? "bg-gradient-hero text-white border-transparent dark:bg-primary dark:text-primary-foreground dark:bg-none" 
-                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground dark:hover:bg-none"
+                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none" 
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
             )}
           >
             7 days
@@ -396,8 +396,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
               periodFilter === "30days" 
-                ? "bg-gradient-hero text-white border-transparent dark:bg-primary dark:text-primary-foreground dark:bg-none" 
-                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground dark:hover:bg-none"
+                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none" 
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
             )}
           >
             30 days
@@ -409,8 +409,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
             className={cn(
               "flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9",
               periodFilter === "all" 
-                ? "bg-gradient-hero text-white border-transparent dark:bg-primary dark:text-primary-foreground dark:bg-none" 
-                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground dark:hover:bg-none"
+                ? "bg-gradient-hero text-white border-transparent dark:bg-accent dark:text-accent-foreground dark:bg-none" 
+                : "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
             )}
           >
             All ({helpRequests.length})
@@ -419,7 +419,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         <Button
           variant="outline"
           size="sm"
-          className="flex items-center gap-2 text-xs px-2 h-8 sm:text-sm sm:px-3 sm:h-9 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-primary dark:hover:text-primary-foreground dark:hover:bg-none"
+          className="flex items-center gap-2 text-xs px-2 h-8 sm:text-sm sm:px-3 sm:h-9 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
           onClick={handleExportRequests}
           disabled={filteredRequests.length === 0}
         >
