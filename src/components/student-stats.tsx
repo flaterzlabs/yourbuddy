@@ -414,17 +414,17 @@ export function StudentStats({ userId }: StudentStatsProps) {
             }}
             className="h-full w-full max-w-full"
           >
-            <BarChart data={chartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }} className="max-w-full px-4">
+            <BarChart data={chartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }} className="max-w-full">
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis
                 dataKey="period"
-                fontSize={10}
+                fontSize={12}
                 tickLine={false}
                 axisLine={false}
                 className="sm:text-xs md:text-sm"
               />
               <YAxis
-                fontSize={10}
+                fontSize={14}
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}
@@ -432,7 +432,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
                 className="sm:text-xs md:text-sm"
               />
               <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="ok" stackId="a" fill="hsl(142 76% 36%)" radius={[0, 0, 0, 0]} />
+              <Bar dataKey="ok" stackId="a" fill="hsl(142 76% 36%)" radius={[0, 0, 4, 4]} />
               <Bar dataKey="attention" stackId="a" fill="hsl(48 96% 53%)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="urgent" stackId="a" fill="hsl(0 84% 60%)" radius={[4, 4, 0, 0]} />
             </BarChart>
