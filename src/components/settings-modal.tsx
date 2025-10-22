@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Link, UserPlus, Users, GraduationCap } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SettingsModalProps {
   onConnectionAdded?: () => void;
