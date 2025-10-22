@@ -56,7 +56,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
       } else {
         toast({
           title: "Connection failed",
-          description: result.error ?? "Invalid code or caregiver not found",
+          description: "Invalid code or caregiver not found",
           variant: "destructive",
         });
       }
