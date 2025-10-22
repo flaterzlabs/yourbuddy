@@ -1380,7 +1380,7 @@ export default function CaregiverDashboard() {
                           ? "7d"
                           : requestsPeriodFilter === "30days"
                             ? "30d"
-                            : "All"}
+                            : `All (${helpRequests.length})`}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
@@ -1401,7 +1401,7 @@ export default function CaregiverDashboard() {
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2 flex-1">
                         {requestsStatusFilter === "all"
-                          ? "All"
+                          ? "All Status"
                           : requestsStatusFilter === "open"
                             ? "Open"
                             : "Closed"}
