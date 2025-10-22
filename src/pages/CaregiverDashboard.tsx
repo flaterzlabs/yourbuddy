@@ -1380,7 +1380,7 @@ export default function CaregiverDashboard() {
                           ? "7d"
                           : requestsPeriodFilter === "30days"
                             ? "30d"
-                            : `All (${helpRequests.length})`}
+                            : `Requests (${helpRequests.length})`}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
