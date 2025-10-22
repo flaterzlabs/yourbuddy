@@ -327,7 +327,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
             <Button
               variant="outline"
               size="sm"
-              className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3 justify-between"
+              className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3 justify-between hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
             >
               {periodLabels[period]}
               <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -360,7 +360,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
             <Button
               variant="outline"
               size="sm"
-              className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3"
+              className="w-full md:w-auto gap-2 h-8 text-xs sm:h-9 sm:text-sm px-2 sm:px-3 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
               disabled={chartData.length === 0}
             >
               <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
