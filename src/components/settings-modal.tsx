@@ -110,7 +110,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
             className={cn(
               "w-[50%] mx-auto block text-base font-medium transition-all duration-200",
               "bg-gradient-hero text-white border-transparent hover:opacity-90",
-              "dark:bg-accent dark:text-accent-foreground dark:hover:bg-accent/90",
+              "dark:bg-accent dark:text-accent-foreground dark:hover:bg-accent/90 dark:bg-none",
               "disabled:opacity-60 disabled:cursor-not-allowed",
             )}
           >
