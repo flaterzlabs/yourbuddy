@@ -18,7 +18,7 @@ export function StudentStatsPopover({ userId }: StudentStatsPopoverProps) {
         <Button 
           variant="ghost" 
           size="icon" 
-          className="relative transition-colors duration-200"
+          className="relative transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
         >
           <BarChart3 className="h-5 w-5" />
         </Button>
