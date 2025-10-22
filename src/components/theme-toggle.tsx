@@ -26,7 +26,7 @@ export function ThemeToggle({ trigger }: ThemeToggleProps) {
       variant="ghost"
       size="icon"
       onClick={handleToggle}
-      className="transition-colors duration-200 rounded-full"
+      className="transition-colors duration-200 rounded-full hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
     >
       <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />

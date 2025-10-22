@@ -68,7 +68,7 @@ function MobileMenu({
     <div className="md:hidden">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="transition-colors duration-200">
+          <Button variant="ghost" size="icon" className="transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
             <Menu className="h-6 w-6" />
           </Button>
         </DropdownMenuTrigger>
@@ -77,7 +77,7 @@ function MobileMenu({
           {/* Request history */}
           <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
+              <Button variant="ghost" size="icon" className="relative transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
                 <ClipboardList className="h-5 w-5" />
                 {openRequestsCount > 0 && (
                   <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
@@ -96,7 +96,7 @@ function MobileMenu({
             onConnectionAdded={handleConnectionAdded}
             connections={connections}
             trigger={
-              <Button variant="ghost" size="icon" className="transition-colors duration-200">
+              <Button variant="ghost" size="icon" className="transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
                 <Link className="h-5 w-5" />
               </Button>
             }
@@ -109,7 +109,7 @@ function MobileMenu({
           <Button
             variant="ghost"
             size="icon"
-            className="transition-colors duration-200"
+            className="transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
             onClick={() => navigate("/avatar-selection")}
           >
             <UserCircle className="h-5 w-5" />
@@ -122,7 +122,7 @@ function MobileMenu({
           <Button
             variant="ghost"
             size="icon"
-            className="transition-colors duration-200 hover:bg-purple-600 hover:text-white"
+            className="transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
             onClick={async () => {
               await signOut();
               toast({
@@ -400,7 +400,7 @@ export default function StudentDashboard() {
           <div className="hidden md:flex items-center gap-4">
             <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
               <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
+                <Button variant="ghost" size="icon" className="relative transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
                   <ClipboardList className="h-5 w-5" />
                   {openRequestsCount > 0 && (
                     <span className="absolute -top-1 -right-1 h-6 w-6 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
@@ -418,7 +418,7 @@ export default function StudentDashboard() {
               onConnectionAdded={handleConnectionAdded}
               connections={connections}
               trigger={
-                <Button variant="ghost" size="icon" className="transition-colors duration-200">
+                <Button variant="ghost" size="icon" className="transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
                   <Link className="h-5 w-5" />
                 </Button>
               }
@@ -430,7 +430,7 @@ export default function StudentDashboard() {
             <Button
               variant="ghost"
               size="icon"
-              className="transition-colors duration-200"
+              className="transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
               onClick={() => navigate("/avatar-selection")}
             >
               <UserCircle className="h-5 w-5" />
@@ -440,7 +440,7 @@ export default function StudentDashboard() {
 
             <Button
               variant="ghost"
-              className="transition-colors duration-200 hover:bg-purple-600 hover:text-white"
+              className="transition-colors duration-200 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
               onClick={async () => {
                 await signOut();
                 toast({
