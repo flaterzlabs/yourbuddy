@@ -118,7 +118,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
               "disabled:opacity-60 disabled:cursor-not-allowed",
             )}
           >
-            {isConnecting ? "Conectando..." : "Conectar"}
+            {isConnecting ? "Connecting..." : "Connect"}
           </Button>
         </form>
 
