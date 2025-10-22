@@ -116,7 +116,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
         <div className="p-2">
           <Button onClick={handleSave} className="w-full px-4 gap-2 bg-secondary filter-button-hover">
             <Save className="h-4 w-4" />
-            Save Changes
+            SAVE
           </Button>
         </div>
       </DropdownMenuContent>
