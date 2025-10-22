@@ -473,7 +473,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
         )}
       </div>
 
-    {/* Pagination */}
+   {/* Pagination */}
 {totalPages > 1 && (
   <Pagination className="mt-4">
     <PaginationContent className="gap-1 flex-nowrap justify-center">
@@ -488,7 +488,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           className={cn(
             "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2",
             // Hover claro e escuro
-            "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-purple-600 dark:hover:text-white dark:hover:border-transparent",
+            "hover:bg-gradient-hero hover:text-white hover:border-transparent",
+            "dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:border-transparent dark:hover:bg-none",
             currentPage === 1 && "pointer-events-none opacity-50"
           )}
           aria-label="Go to previous page"
@@ -511,7 +512,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
           className={cn(
             "h-8 w-8 p-0 sm:h-10 sm:w-auto sm:px-4 sm:gap-2",
             // Hover claro e escuro
-            "hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-purple-600 dark:hover:text-white dark:hover:border-transparent",
+            "hover:bg-gradient-hero hover:text-white hover:border-transparent",
+            "dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:border-transparent dark:hover:bg-none",
             currentPage === totalPages && "pointer-events-none opacity-50"
           )}
           aria-label="Go to next page"
@@ -522,6 +524,8 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </PaginationItem>
     </PaginationContent>
   </Pagination>
+)}
+
 )}
     </div>
   );
