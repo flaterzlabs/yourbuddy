@@ -1370,47 +1370,68 @@ export default function CaregiverDashboard() {
               </div>
 
               <div className="space-y-3">
-                {/* Header with Close All */}
-                {openHelpRequests.length > 0 && (
-                  <div className="flex justify-end">
+                {/* Filters Row */}
+                <div className="flex gap-1.5 items-center">
+                  {/* Period Filter Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2 flex-1">
+                        {requestsPeriodFilter === "7days"
+                          ? "7d"
+                          : requestsPeriodFilter === "30days"
+                            ? "30d"
+                            : "All"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
+                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("7days")}>
+                        Last 7 days
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("30days")}>
+                        Last 30 days
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("all")}>
+                        All Requests ({helpRequests.length})
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {/* Status Filter Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2 flex-1">
+                        {requestsStatusFilter === "all"
+                          ? "All"
+                          : requestsStatusFilter === "open"
+                            ? "Open"
+                            : "Closed"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
+                      <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("all")}>
+                        All Status
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>
+                        Open
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("closed")}>
+                        Closed
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {/* Close All Button */}
+                  {openHelpRequests.length > 0 && (
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handleCloseAllRequests}
-                      className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8 px-3"
+                      className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8 px-2 flex-1"
                     >
                       <XCircle className="h-3 w-3 mr-1" />
                       Close All
                     </Button>
-                  </div>
-                )}
-
-                {/* Period Filters */}
-                <div className="flex gap-2">
-                  <Button
-                    variant={requestsPeriodFilter === "7days" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleRequestsFilterChange("7days")}
-                    className={`flex-1 text-xs h-8 ${requestsPeriodFilter !== "7days" ? "filter-button-hover" : ""}`}
-                  >
-                    7d
-                  </Button>
-                  <Button
-                    variant={requestsPeriodFilter === "30days" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleRequestsFilterChange("30days")}
-                    className={`flex-1 text-xs h-8 ${requestsPeriodFilter !== "30days" ? "filter-button-hover" : ""}`}
-                  >
-                    30d
-                  </Button>
-                  <Button
-                    variant={requestsPeriodFilter === "all" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleRequestsFilterChange("all")}
-                    className={`flex-1 text-xs h-8 ${requestsPeriodFilter !== "all" ? "filter-button-hover" : ""}`}
-                  >
-                    All ({helpRequests.length})
-                  </Button>
+                  )}
                 </div>
 
                 {/* Requests List */}
