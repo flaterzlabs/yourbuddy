@@ -300,7 +300,7 @@ export default function CaregiverDashboard() {
       } else {
         // === Alteração: Adicionado viewportId ===
         toast({
-          title: "Erro",
+          title: "Error",
           description: result.error || "Invalid Code",
           variant: "destructive",
         });

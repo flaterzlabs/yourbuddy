@@ -24,7 +24,7 @@ export function Toaster() {
 
   return (
     <ToastProvider>
-      {/* Viewport para toasts de estudante - bottom-right */}
+      {/* Viewport for student toasts - bottom-right */}
       <ToastViewport className="bottom-0 right-0 top-auto left-auto md:max-w-md">
         {studentToasts.map(function ({ id, title, description, action, variant, ...props }) {
           return (
@@ -40,7 +40,7 @@ export function Toaster() {
         })}
       </ToastViewport>
       
-      {/* Viewport para toasts de caregiver - top-center */}
+      {/* Viewport for caregiver toasts - top-center */}
       <ToastViewport className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-auto sm:right-auto sm:top-4 sm:flex-col md:max-w-[420px]">
         {caregiverToasts.map(function ({ id, title, description, action, variant, ...props }) {
           return (

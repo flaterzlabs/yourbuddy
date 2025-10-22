@@ -18,7 +18,7 @@ export function StudentAvatar({
     return (
       <img
         src={imageUrl}
-        alt="Avatar do estudante"
+        alt="Student avatar"
         className={`rounded-full ${className}`}
         style={{ width: size, height: size }}
       />
@@ -41,7 +41,7 @@ export function StudentAvatar({
   return (
     <img
       src={avatarUrl}
-      alt="Avatar do estudante"
+      alt="Student avatar"
       className={`rounded-full ${className}`}
       style={{ width: size, height: size }}
     />

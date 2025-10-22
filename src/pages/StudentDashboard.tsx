@@ -74,7 +74,7 @@ function MobileMenu({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="flex flex-col gap-2 p-2 min-w-[3rem]">
-          {/* Histórico de pedidos */}
+          {/* Request history */}
           <Dialog open={historyModalOpen} onOpenChange={setHistoryModalOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="icon" className="relative transition-colors duration-200">
@@ -91,7 +91,7 @@ function MobileMenu({
             </DialogContent>
           </Dialog>
 
-          {/* Conexões */}
+          {/* Connections */}
           <SettingsModal
             onConnectionAdded={handleConnectionAdded}
             connections={connections}
@@ -102,7 +102,7 @@ function MobileMenu({
             }
           />
 
-          {/* Estatísticas */}
+          {/* Statistics */}
           <StudentStatsPopover userId={userId} />
 
           {/* Change Avatar */}
@@ -115,7 +115,7 @@ function MobileMenu({
             <UserCircle className="h-5 w-5" />
           </Button>
 
-          {/* Tema */}
+          {/* Theme */}
           <ThemeToggle />
 
           {/* Logout */}
@@ -183,7 +183,7 @@ export default function StudentDashboard() {
         return {
           ...connection,
           caregiver_profile: caregiverProfile || {
-            username: "Professor/Responsável",
+            username: "Teacher/Caregiver",
             role: "caregiver",
           },
         };
