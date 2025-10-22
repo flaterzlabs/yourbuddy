@@ -961,7 +961,7 @@ export default function CaregiverDashboard() {
                 });
                 navigate("/auth");
               }}
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-purple-600 hover:text-white transition-all duration-300 px-4"
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-accent hover:text-white transition-all duration-300 px-4"
             >
               Logout
             </Button>
