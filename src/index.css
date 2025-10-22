@@ -69,9 +69,17 @@
     --gradient-card: linear-gradient(145deg, hsl(210 60% 90%), hsl(210 55% 85%)); /* Azul suave → Azul médio */
     --gradient-background: linear-gradient(135deg, hsl(210 65% 92%), hsl(210 55% 85%)); /* Azul claro → Azul médio */
 
+    /* 🌤️ Claro e Suave */
     --gradient-light: linear-gradient(180deg, #e8d9ff 0%, #fce6ff 100%);
+    /* De lavanda (#e8d9ff) → rosa-claro (#fce6ff) */
+
+    /* 🌈 Brilhante e Vibrante */
     --gradient-bright: linear-gradient(180deg, #d3b7ff 0%, #ffb7eb 100%);
+    /* De lilás (#d3b7ff) → rosa-vivo (#ffb7eb) */
+
+    /* 🌙 Escuro e Profundo */
     --gradient-dark: linear-gradient(180deg, #1a093e 0%, #4b006e 100%);
+    /* De roxo-escuro (#1a093e) → violeta-intenso (#4b006e) */
 
     /* ========================================
      SOMBRAS (Depth)
