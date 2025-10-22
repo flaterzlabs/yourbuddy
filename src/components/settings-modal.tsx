@@ -55,7 +55,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
       } else {
         toast({
           title: "Connection failed",
-          description: "Invalid code or caregiver not found",
+          description: result.error ?? "Invalid code or caregiver not found",
           variant: "destructive",
         });
       }
@@ -103,7 +103,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
             />
             <p className="text-sm text-muted-foreground">Ask your caregiver or educator for their connection code</p>
           </div>
-          <Button type="submit" className="w-full" disabled={isConnecting || !caregiverCode.trim()}>
+          <Button type="submit" className="w-[50%]" disabled={isConnecting || !caregiverCode.trim()}>
             {isConnecting ? "Connecting..." : "Connect"}
           </Button>
         </form>
