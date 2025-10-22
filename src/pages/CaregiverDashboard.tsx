@@ -1377,11 +1377,11 @@ export default function CaregiverDashboard() {
 
               <div className="space-y-3">
                 {/* Filters Row */}
-                <div className="flex gap-1.5 items-center">
+                <div className="flex justify-between items-center gap-2">
                   {/* Period Filter Dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2 flex-1">
+                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2">
                         {requestsPeriodFilter === "7days"
                           ? "7d"
                           : requestsPeriodFilter === "30days"
@@ -1405,7 +1405,7 @@ export default function CaregiverDashboard() {
                   {/* Status Filter Dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2 flex-1">
+                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2">
                         {requestsStatusFilter === "all"
                           ? "All Status"
                           : requestsStatusFilter === "open"
@@ -1430,7 +1430,7 @@ export default function CaregiverDashboard() {
                       variant="outline"
                       size="sm"
                       onClick={handleCloseAllRequests}
-                      className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8 px-2 flex-1"
+                      className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8 px-2"
                     >
                       <XCircle className="h-3 w-3 mr-1" />
                       Close All
@@ -1699,10 +1699,10 @@ export default function CaregiverDashboard() {
                   <div className="mb-3">
                     <h3 className="text-sm font-semibold mb-2">Requests Per Month</h3>
 
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex justify-between items-center gap-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="w-full h-8 text-xs filter-button-hover">
+                          <Button variant="outline" size="sm" className="h-8 text-xs filter-button-hover">
                             {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
                           </Button>
                         </DropdownMenuTrigger>
