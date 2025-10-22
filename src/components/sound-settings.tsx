@@ -62,7 +62,11 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         {trigger || (
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full filter-button-hover">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
+          >
             {!hasAnySound ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
             <span className="sr-only">Notification sound settings</span>
           </Button>
@@ -89,7 +93,11 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
                   </SelectTrigger>
                   <SelectContent>
                     {SOUND_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value} className="filter-button-hover cursor-pointer">
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                        className="filter-button-hover cursor-pointer"
+                      >
                         {option.label}
                       </SelectItem>
                     ))}
@@ -114,7 +122,10 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
 
         <DropdownMenuSeparator />
         <div className="p-2">
-          <Button onClick={handleSave} className="w-full px-4 gap-2 bg-gradient-hero dark:bg-accent filter-button-hover">
+          <Button
+            onClick={handleSave}
+            className="w-full px-4 gap-2 bg-gradient-hero dark:bg-accent filter-button-hover"
+          >
             <Save className="h-4 w-4" />
             Save Changes
           </Button>
