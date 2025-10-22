@@ -418,13 +418,13 @@ export function StudentStats({ userId }: StudentStatsProps) {
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis
                 dataKey="period"
-                fontSize={12}
+                fontSize={14}
                 tickLine={false}
                 axisLine={false}
                 className="sm:text-xs md:text-sm"
               />
               <YAxis
-                fontSize={14}
+                fontSize={12}
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}
