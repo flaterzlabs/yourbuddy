@@ -62,7 +62,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         {trigger || (
-          <Button variant="ghost" size="icon" className="rounded-full hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
+          <Button variant="ghost" size="icon" className="rounded-full filter-button-hover">
             {!hasAnySound ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
             <span className="sr-only">Notification sound settings</span>
           </Button>
@@ -101,7 +101,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
                     variant="ghost"
                     size="icon"
                     onClick={() => previewSound(tempSounds[level])}
-                    className="shrink-0"
+                    className="shrink-0 filter-button-hover"
                   >
                     <Play className="h-4 w-4" />
                     <span className="sr-only">Preview sound</span>
@@ -114,7 +114,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
 
         <DropdownMenuSeparator />
         <div className="p-2">
-          <Button onClick={handleSave} className="w-full px-4 gap-2 bg-secondary">
+          <Button onClick={handleSave} className="w-full px-4 gap-2 bg-secondary filter-button-hover">
             <Save className="h-4 w-4" />
             SAVE
           </Button>
