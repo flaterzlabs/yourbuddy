@@ -414,7 +414,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
             }}
             className="h-full w-full max-w-full"
           >
-            <BarChart data={chartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }} className="max-w-full">
+            <BarChart data={chartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }} className="max-w-full px-4">
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis
                 dataKey="period"
