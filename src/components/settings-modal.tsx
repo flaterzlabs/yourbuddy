@@ -103,7 +103,23 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
             />
             <p className="text-sm text-muted-foreground">Ask your caregiver or educator for their connection code</p>
           </div>
-          <Button type="submit" className="w-[50%]" disabled={isConnecting || !caregiverCode.trim()}>
+         <Button
+  type="submit"
+  disabled={isConnecting || !caregiverCode.trim()}
+  className={cn(
+    "w-[50%] mx-auto block text-base font-medium transition-all duration-200",
+    // Estilo base
+    "text-white border-transparent",
+    // Hover claro e escuro
+    "hover:bg-gradient-hero hover:text-white hover:border-transparent",
+    "dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:border-transparent dark:hover:bg-none",
+    // Estado desabilitado
+    "disabled:opacity-60 disabled:cursor-not-allowed"
+  )}
+>
+  {isConnecting ? "Conectando..." : "Conectar"}
+</Button>
+
             {isConnecting ? "Connecting..." : "Connect"}
           </Button>
         </form>
