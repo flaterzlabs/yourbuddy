@@ -264,21 +264,21 @@
   animation: toast-progress 4s linear forwards;
 }
 
-/* Filter buttons hover - blue in light mode, purple in dark mode */
+/* Filter buttons hover - gradient in light mode, accent in dark mode */
 .filter-button-hover {
   transition: all 0.3s ease;
 }
 
 .filter-button-hover:hover {
-  background: hsl(215 80% 52%) !important;
+  background: linear-gradient(135deg, hsl(215 80% 52%), hsl(280 65% 60%)) !important;
   color: hsl(0 0% 100%) !important;
-  border-color: hsl(215 80% 52%) !important;
+  border-color: transparent !important;
 }
 
 .dark .filter-button-hover:hover {
-  background: hsl(280 65% 60%) !important;
-  color: hsl(220 20% 95%) !important;
-  border-color: hsl(280 65% 60%) !important;
+  background: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+  border-color: transparent !important;
 }
 
 }
