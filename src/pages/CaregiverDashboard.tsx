@@ -945,7 +945,7 @@ export default function CaregiverDashboard() {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
+              className="rounded-full border border-border/50 bg-background/50 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none transition-all duration-300"
             >
               <ThemeToggle />
             </Button>
@@ -961,7 +961,7 @@ export default function CaregiverDashboard() {
                 });
                 navigate("/auth");
               }}
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-purple-600 hover:text-white transition-all duration-300 px-4"
+              className="rounded-xl border border-border/50 bg-background/50 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none transition-all duration-300 px-4"
             >
               Logout
             </Button>
@@ -973,7 +973,7 @@ export default function CaregiverDashboard() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
+                className="md:hidden rounded-xl border border-border/50 bg-background/50 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none transition-all duration-300"
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -990,7 +990,7 @@ export default function CaregiverDashboard() {
                 <Button
                   variant="ghost"
                   onClick={() => setOverviewModalOpen(true)}
-                  className="justify-center gap-3 h-12"
+                  className="justify-center gap-3 h-12 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
                 >
                   <BarChart3 className="h-5 w-5" />
                   Overview
@@ -999,7 +999,7 @@ export default function CaregiverDashboard() {
                 <Button
                   variant="ghost"
                   onClick={() => setStudentsModalOpen(true)}
-                  className="justify-center gap-3 h-12"
+                  className="justify-center gap-3 h-12 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
                 >
                   <GraduationCap className="h-5 w-5" />
                   My {StudentLabel}
@@ -1008,7 +1008,7 @@ export default function CaregiverDashboard() {
                 {/* Sound Settings */}
                 <SoundSettings
                   trigger={
-                    <Button variant="ghost" className="w-full justify-center gap-3 h-12">
+                    <Button variant="ghost" className="w-full justify-center gap-3 h-12 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
                       <svg
                         className="h-5 w-5"
                         xmlns="http://www.w3.org/2000/svg"
@@ -1033,7 +1033,7 @@ export default function CaregiverDashboard() {
                 {/* theme */}
                 <ThemeToggle
                   trigger={
-                    <Button variant="ghost" className="w-full justify-center gap-3 h-12">
+                    <Button variant="ghost" className="w-full justify-center gap-3 h-12 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
                       <SunMoon className="h-5 w-5" />
                       Theme
                     </Button>
@@ -1051,7 +1051,7 @@ export default function CaregiverDashboard() {
                     });
                     navigate("/auth");
                   }}
-                  className="justify-center gap-3 h-12 w-full font-semibold text-destructive"
+                  className="justify-center gap-3 h-12 w-full font-semibold text-destructive hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
                 >
                   <LogOut className="h-5 w-5" />
                   Logout
