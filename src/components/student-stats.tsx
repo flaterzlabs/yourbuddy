@@ -414,7 +414,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
             }}
             className="h-full w-full max-w-full"
           >
-            <BarChart data={chartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }} className="max-w-full px-6">
+            <BarChart data={chartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }} className="max-w-full">
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis
                 dataKey="period"
@@ -424,7 +424,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
                 className="sm:text-xs md:text-sm"
               />
               <YAxis
-                fontSize={12}
+                fontSize={10}
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}
