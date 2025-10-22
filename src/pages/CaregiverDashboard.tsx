@@ -1699,7 +1699,7 @@ export default function CaregiverDashboard() {
                   <div className="mb-3">
                     <h3 className="text-sm font-semibold mb-2">Requests Per Month</h3>
 
-                    <div className="flex justify-between items-center gap-4">
+                    <div className="flex justify-between items-center gap-6">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" size="sm" className="h-8 text-xs filter-button-hover">
