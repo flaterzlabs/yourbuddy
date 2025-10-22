@@ -945,7 +945,7 @@ export default function CaregiverDashboard() {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
+              className="rounded-full hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
             >
               <ThemeToggle />
             </Button>
@@ -961,7 +961,7 @@ export default function CaregiverDashboard() {
                 });
                 navigate("/auth");
               }}
-              className="rounded-xl border border-border/50 bg-background/50 hover:bg-purple-600 hover:text-white transition-all duration-300 px-4"
+              className="rounded-xl hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none px-4"
             >
               Logout
             </Button>
@@ -973,7 +973,7 @@ export default function CaregiverDashboard() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 transition-all duration-300"
+                className="md:hidden rounded-xl hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
               >
                 <Menu className="h-5 w-5" />
               </Button>
