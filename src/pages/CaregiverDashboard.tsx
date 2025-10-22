@@ -1350,11 +1350,6 @@ export default function CaregiverDashboard() {
                             )}
                           </Badge>
                         </div>
-                        {request.message && (
-                          <p className="text-sm mb-3 p-3 bg-background rounded border border-border">
-                            "{request.message}"
-                          </p>
-                        )}
                         {request.status === "open" && (
                           <Button
                             size="sm"
@@ -1514,11 +1509,6 @@ export default function CaregiverDashboard() {
                             {request.status === "closed" && "Closed"}
                           </Badge>
                         </div>
-                        {request.message && (
-                          <p className="text-xs mb-2 p-2 bg-background rounded border border-border line-clamp-2">
-                            "{request.message}"
-                          </p>
-                        )}
                         {request.status === "open" && (
                           <Button
                             size="sm"

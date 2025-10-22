@@ -329,12 +329,11 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
     }
 
     const rows = [
-      ["Created At", "Urgency", "Status", "Message"],
+      ["Created At", "Urgency", "Status"],
       ...filteredRequests.map((request) => [
         request.created_at ? new Date(request.created_at).toLocaleString("en-US") : "-",
         `${getUrgencyEmoji(request.urgency || "ok")} ${getUrgencyLabel(request.urgency)}`,
         getStatusLabel(request.status),
-        request.message || "",
       ]),
     ];
 
@@ -467,7 +466,6 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   {new Date(request.created_at).toLocaleDateString("pt-BR")} {new Date(request.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
-              {request.message && <p className="text-sm text-muted-foreground">{request.message}</p>}
             </div>
           ))
         )}
