@@ -106,7 +106,16 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
           <Button
             type="submit"
             disabled={isConnecting || !caregiverCode.trim()}
-            className="w-[50%] mx-auto block text-base font-medium transition-all duration-200 text-white border-transparent hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:border-transparent dark:hover:bg-none disabled:opacity-60 disabled:cursor-not-allowed"
+            className={cn(
+              // Layout e tipografia
+              "w-[50%] mx-auto block text-base font-medium transition-all duration-200",
+              // Fundo claro (gradient padrão)
+              "bg-gradient-hero text-white border-transparent hover:opacity-90",
+              // Fundo dark (accent fixo)
+              "dark:bg-accent dark:text-accent-foreground dark:hover:opacity-90 dark:hover:bg-accent",
+              // Estado desabilitado
+              "disabled:opacity-60 disabled:cursor-not-allowed",
+            )}
           >
             {isConnecting ? "Conectando..." : "Conectar"}
           </Button>
