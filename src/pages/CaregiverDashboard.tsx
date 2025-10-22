@@ -44,7 +44,6 @@ import {
   Download,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -1114,6 +1113,7 @@ export default function CaregiverDashboard() {
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="filter-button-hover">
                           {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
+                          <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
@@ -1700,12 +1700,11 @@ export default function CaregiverDashboard() {
                   <div className="mb-3">
                     <h3 className="text-sm font-semibold mb-2">Requests Per Month</h3>
 
-                    <div className="flex justify-between items-center gap-2 px-4">
+                    <div className="flex justify-between items-center gap-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" size="sm" className="h-8 text-xs filter-button-hover">
                             {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
-                            <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
