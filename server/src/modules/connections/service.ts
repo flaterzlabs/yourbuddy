@@ -58,11 +58,11 @@ export async function connectByCaregiverCode(studentId: string, input: unknown) 
 
   emitToRoom(`caregiver:${caregiver.user_id}`, "connection:created", {
     caregiver_id: caregiver.user_id,
-    student_id,
+    student_id: studentId,
   });
   emitToRoom(`student:${studentId}`, "connection:created", {
     caregiver_id: caregiver.user_id,
-    student_id,
+    student_id: studentId,
   });
 
   return { connection, caregiver };
