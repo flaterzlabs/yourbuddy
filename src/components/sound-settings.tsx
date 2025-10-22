@@ -62,8 +62,8 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         {trigger || (
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full filter-button-hover">
-            {!hasAnySound ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          <Button variant="ghost" size="icon" className="rounded-full filter-button-hover">
+            {!hasAnySound ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
             <span className="sr-only">Notification sound settings</span>
           </Button>
         )}
@@ -84,12 +84,12 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
                   value={tempSounds[level]}
                   onValueChange={(value) => handleTempUpdate(level, value as SoundOption)}
                 >
-                  <SelectTrigger className="flex-1 filter-button-hover">
+                  <SelectTrigger className="flex-1">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {SOUND_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value} className="filter-button-hover cursor-pointer">
+                      <SelectItem key={option.value} value={option.value}>
                         {option.label}
                       </SelectItem>
                     ))}
