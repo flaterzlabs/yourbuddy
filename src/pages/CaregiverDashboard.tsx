@@ -1615,7 +1615,7 @@ export default function CaregiverDashboard() {
             <Card
               className={`mt-6 p-4 ${isMobile ? "p-4" : "p-5"} bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg`}
             >
-              <div className={`${isMobile ? "flex flex-col items-center gap-8" : "flex items-center justify-between"}`}>
+              <div className={`${isMobile ? "flex flex-col items-center gap-4 justify-between" : "flex items-center justify-between"}`}>
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-primary/20 rounded-xl">
                     <UserPlus className="h-6 w-6 text-primary" />
