@@ -337,7 +337,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
   return (
     <div className="space-y-3">
       {/* Period Filter and Export */}
-      <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 sm:justify-between sm:items-center px-2">
+      <div className="flex justify-between items-center gap-1.5 px-4 sm:gap-2 sm:px-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
