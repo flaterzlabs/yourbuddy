@@ -108,13 +108,9 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
             type="submit"
             disabled={isConnecting || !caregiverCode.trim()}
             className={cn(
-              // Layout e tipografia
               "w-[50%] mx-auto block text-base font-medium transition-all duration-200",
-              // Fundo claro (gradient padrão)
               "bg-gradient-hero text-white border-transparent hover:opacity-90",
-              // Fundo dark (accent fixo)
-              "dark:bg-accent dark:text-accent-foreground dark:hover:opacity-90 dark:hover:bg-accent",
-              // Estado desabilitado
+              "dark:bg-accent dark:text-accent-foreground dark:hover:bg-accent/90",
               "disabled:opacity-60 disabled:cursor-not-allowed",
             )}
           >
