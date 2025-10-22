@@ -1008,7 +1008,10 @@ export default function CaregiverDashboard() {
                 {/* Sound Settings */}
                 <SoundSettings
                   trigger={
-                    <Button variant="ghost" className="w-full justify-center gap-3 h-12 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-center gap-3 h-12 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
+                    >
                       <svg
                         className="h-5 w-5"
                         xmlns="http://www.w3.org/2000/svg"
@@ -1033,7 +1036,10 @@ export default function CaregiverDashboard() {
                 {/* theme */}
                 <ThemeToggle
                   trigger={
-                    <Button variant="ghost" className="w-full justify-center gap-3 h-12 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-center gap-3 h-12 hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none"
+                    >
                       <SunMoon className="h-5 w-5" />
                       Theme
                     </Button>
@@ -1411,9 +1417,7 @@ export default function CaregiverDashboard() {
                       <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("all")}>
                         All Status
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>
-                        Open
-                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>Open</DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("closed")}>
                         Closed
                       </DropdownMenuItem>
@@ -1611,7 +1615,7 @@ export default function CaregiverDashboard() {
             <Card
               className={`mt-6 p-4 ${isMobile ? "p-4" : "p-5"} bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 shadow-lg`}
             >
-              <div className={`${isMobile ? "flex flex-col gap-4" : "flex items-center justify-between"}`}>
+              <div className={`${isMobile ? "flex flex-col items-center gap-4" : "flex items-center justify-between"}`}>
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-primary/20 rounded-xl">
                     <UserPlus className="h-6 w-6 text-primary" />
