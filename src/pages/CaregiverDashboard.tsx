@@ -1112,10 +1112,13 @@ export default function CaregiverDashboard() {
                   <div className="flex items-center gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="filter-button-hover">
-                          {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
-                          <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                        </Button>
+                       <Button
+  variant="outline"
+  className="filter-button-hover flex items-center justify-between gap-3"
+>
+  <span>{chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}</span>
+  <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+</Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
