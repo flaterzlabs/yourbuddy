@@ -15,14 +15,6 @@ const SOUND_OPTIONS: { value: SoundOption; label: string; description: string }[
   { value: "blip1", label: "Blip 1", description: "Short soft beep" },
   { value: "blip2", label: "Blip 2", description: "Gentle notification" },
   { value: "chime", label: "Chime", description: "Subtle bell tone" },
-  { value: "ding", label: "Ding", description: "Bright bell ring" },
-  { value: "softbell", label: "Soft Bell", description: "Warm ambient chime" },
-  { value: "windchime", label: "Windchime", description: "Calming cascading chimes" },
-  { value: "pop", label: "Pop", description: "Playful pop cue" },
-  { value: "ping", label: "Ping", description: "Classic notification ping" },
-  { value: "twinkle", label: "Twinkle", description: "Sparkling twinkle tone" },
-  { value: "spark", label: "Spark", description: "Short sparkling effect" },
-  { value: "woodtap", label: "Wood Tap", description: "Soft wooden tap" },
 ];
 
 interface SoundSettingsProps {

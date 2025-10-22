@@ -2,7 +2,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
@@ -39,13 +38,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function DashboardRouter() {
-  const { profile, user, thriveSprite, loading, refreshProfile } = useAuth();
-
-  useEffect(() => {
-    if (user && !profile) {
-      refreshProfile();
-    }
-  }, [user, profile, refreshProfile]);
+  const { profile, thriveSprite, loading } = useAuth();
 
   if (loading) {
     return (
@@ -58,15 +51,13 @@ function DashboardRouter() {
     );
   }
 
-  const role = profile?.role ?? user?.role;
-
-  if (role === 'student') {
+  if (profile?.role === 'student') {
     // Check if student has selected an avatar (thrive sprite)
     if (!thriveSprite) {
       return <Navigate to="/avatar-selection" replace />;
     }
     return <StudentDashboard />;
-  } else if (role === 'caregiver' || role === 'educator') {
+  } else if (profile?.role === 'caregiver' || profile?.role === 'educator') {
     return <CaregiverDashboard />;
   }
   // If user exists but profile is not determined, keep showing loader

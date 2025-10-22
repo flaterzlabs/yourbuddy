@@ -94,7 +94,7 @@ export function SettingsModal({ onConnectionAdded, connections = [], trigger }: 
               placeholder="Enter connection code"
               value={caregiverCode}
               onChange={(e) => setCaregiverCode(e.target.value.toUpperCase())}
-              maxLength={8}
+              maxLength={11}
               className="text-center text-lg tracking-wider"
             />
             <p className="text-sm text-muted-foreground">

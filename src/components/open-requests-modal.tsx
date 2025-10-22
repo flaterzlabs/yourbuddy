@@ -129,7 +129,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 setCurrentPage(i);
               }}
               isActive={currentPage === i}
-              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+              className="h-8 w-8 text-xs p-0 sm:h-10 sm:w-10 sm:text-sm sm:p-0"
             >
               {i}
             </PaginationLink>
@@ -147,7 +147,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
               setCurrentPage(1);
             }}
             isActive={currentPage === 1}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            className="h-8 w-8 text-xs p-0 sm:h-10 sm:w-10 sm:text-sm sm:p-0"
           >
             1
           </PaginationLink>
@@ -158,7 +158,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       if (currentPage > 3) {
         pages.push(
           <PaginationItem key="ellipsis-1">
-            <PaginationEllipsis />
+            <PaginationEllipsis className="h-8 w-8" />
           </PaginationItem>,
         );
       }
@@ -177,7 +177,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                 setCurrentPage(i);
               }}
               isActive={currentPage === i}
-              className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+              className="h-8 w-8 text-xs p-0 sm:h-10 sm:w-10 sm:text-sm sm:p-0"
             >
               {i}
             </PaginationLink>
@@ -189,7 +189,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       if (currentPage < totalPages - 2) {
         pages.push(
           <PaginationItem key="ellipsis-2">
-            <PaginationEllipsis />
+            <PaginationEllipsis className="h-8 w-8" />
           </PaginationItem>,
         );
       }
@@ -204,7 +204,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
               setCurrentPage(totalPages);
             }}
             isActive={currentPage === totalPages}
-            className="h-8 w-8 text-xs sm:h-10 sm:w-10 sm:text-sm"
+            className="h-8 w-8 text-xs p-0 sm:h-10 sm:w-10 sm:text-sm sm:p-0"
           >
             {totalPages}
           </PaginationLink>
@@ -270,41 +270,41 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       </div>
 
       {/* Period Filter */}
-      <div className="flex flex-wrap items-center gap-2 sm:justify-between">
-        <div className="flex gap-2 flex-1 sm:flex-none">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:justify-between">
+        <div className="flex gap-1.5 sm:gap-2">
           <Button
             variant={periodFilter === "7days" ? "default" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("7days")}
-            className="flex-1 sm:flex-none"
+            className="flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9"
           >
-            Last 7 days
+            7 days
           </Button>
           <Button
             variant={periodFilter === "30days" ? "default" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("30days")}
-            className="flex-1 sm:flex-none"
+            className="flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9"
           >
-            Last 30 days
+            30 days
           </Button>
           <Button
             variant={periodFilter === "all" ? "default" : "outline"}
             size="sm"
             onClick={() => handleFilterChange("all")}
-            className="flex-1 sm:flex-none"
+            className="flex-1 text-xs px-2 h-8 sm:flex-none sm:text-sm sm:px-3 sm:h-9"
           >
-            All Requests ({helpRequests.length})
+            All ({helpRequests.length})
           </Button>
         </div>
         <Button
           variant="outline"
           size="sm"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 text-xs px-2 h-8 sm:text-sm sm:px-3 sm:h-9"
           onClick={handleExportRequests}
           disabled={filteredRequests.length === 0}
         >
-          <Download className="h-4 w-4" />
+          <Download className="h-3 w-3 sm:h-4 sm:w-4" />
           Export CSV
         </Button>
       </div>
@@ -357,7 +357,7 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
       {/* Pagination */}
       {totalPages > 1 && (
         <Pagination className="mt-4">
-          <PaginationContent className="flex-wrap gap-1">
+          <PaginationContent className="gap-1 overflow-x-auto flex-nowrap justify-center">
             <PaginationItem>
               <PaginationPrevious
                 href="#"
@@ -365,8 +365,15 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage > 1) setCurrentPage(currentPage - 1);
                 }}
-                className={currentPage === 1 ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
-              />
+                className={
+                  currentPage === 1
+                    ? "pointer-events-none opacity-50 h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3"
+                    : "h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3"
+                }
+              >
+                <span className="hidden sm:inline">Previous</span>
+                <span className="sm:hidden">Prev</span>
+              </PaginationPrevious>
             </PaginationItem>
             {renderPageNumbers()}
             <PaginationItem>
@@ -376,8 +383,15 @@ export function OpenRequestsModalContent({ helpRequests, recipientsText }: OpenR
                   e.preventDefault();
                   if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                 }}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50 h-8 text-xs sm:h-10 sm:text-sm" : "h-8 text-xs sm:h-10 sm:text-sm"}
-              />
+                className={
+                  currentPage === totalPages
+                    ? "pointer-events-none opacity-50 h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3"
+                    : "h-8 text-xs px-2 sm:h-10 sm:text-sm sm:px-3"
+                }
+              >
+                <span className="hidden sm:inline">Next</span>
+                <span className="sm:hidden">Next</span>
+              </PaginationNext>
             </PaginationItem>
           </PaginationContent>
         </Pagination>

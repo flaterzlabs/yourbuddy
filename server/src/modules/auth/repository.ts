@@ -89,10 +89,12 @@ export async function getProfileWithSprite(userId: string) {
   const query = `
     select
       p.*,
+      u.role,
       t.id as sprite_id,
       t.image_url,
       t.options
     from profiles p
+    join users u on u.id = p.user_id
     left join thrive_sprites t on t.student_id = p.user_id
     where p.user_id = $1
     limit 1
@@ -109,6 +111,7 @@ export async function getProfileWithSprite(userId: string) {
       username: row.username,
       caregiver_code: row.caregiver_code,
       student_code: row.student_code,
+      role: row.role,
       created_at: row.created_at,
       updated_at: row.updated_at,
     },

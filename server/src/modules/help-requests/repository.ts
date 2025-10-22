@@ -24,10 +24,22 @@ export async function listStudentRequests(studentId: string) {
 
 export async function listCaregiverRequests(caregiverId: string) {
   const query = `
-    select hr.*, row_to_json(p) as student_profile
+    select
+      hr.*,
+      json_build_object(
+        'id', p.id,
+        'user_id', p.user_id,
+        'username', p.username,
+        'caregiver_code', p.caregiver_code,
+        'student_code', p.student_code,
+        'role', u.role,
+        'created_at', p.created_at,
+        'updated_at', p.updated_at
+      ) as student_profile
     from help_requests hr
     join connections c on c.student_id = hr.student_id
     join profiles p on p.user_id = hr.student_id
+    join users u on u.id = p.user_id
     where c.caregiver_id = $1
     order by hr.created_at desc
   `;

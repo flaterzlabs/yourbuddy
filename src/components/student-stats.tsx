@@ -170,20 +170,17 @@ export function StudentStats({ userId }: StudentStatsProps) {
       };
     });
   }, [helpRequests, period]);
-  const hasChartData = useMemo(() => chartData.some((item) => item.total > 0), [chartData]);
-
   const handleExportCsv = () => {
-    if (!hasChartData) {
+    if (chartData.length === 0) {
       toast({
         title: 'No data to export',
-        description: 'There is no help request activity for the selected period.',
-        variant: 'caregiver-warning',
+        description: 'There are no help requests for the selected period.',
       });
       return;
     }
 
     const rows = [
-      ['Period', 'Low Priority', 'Medium Priority', 'High Priority', 'Total'],
+      ['Period', 'OK', 'Attention', 'Urgent', 'Total'],
       ...chartData.map((item) => [
         item.fullLabel,
         item.ok.toString(),
@@ -207,7 +204,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
     const link = document.createElement('a');
     const timestamp = new Date().toISOString().split('T')[0];
     link.href = url;
-    link.download = `student-help-request-stats-${period}-${timestamp}.csv`;
+    link.download = `student-help-requests-${period}-${timestamp}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -216,16 +213,14 @@ export function StudentStats({ userId }: StudentStatsProps) {
     toast({
       title: 'Export started',
       description: 'Help request statistics exported as CSV.',
-      variant: 'caregiver-success',
     });
   };
 
   const handleExportChart = async () => {
-    if (!hasChartData) {
+    if (chartData.length === 0) {
       toast({
         title: 'No data to export',
-        description: 'There is no help request activity for the selected period.',
-        variant: 'caregiver-warning',
+        description: 'There are no help requests for the selected period.',
       });
       return;
     }
@@ -234,26 +229,25 @@ export function StudentStats({ userId }: StudentStatsProps) {
     if (!container) {
       toast({
         title: 'Export unavailable',
-        description: 'Chart area was not found on screen.',
-        variant: 'caregiver-warning',
+        description: 'Chart area not found. Try reopening the statistics.',
+        variant: 'destructive',
       });
       return;
     }
 
     try {
       const timestamp = new Date().toISOString().split('T')[0];
-      await exportChartAsPng(container, `student-help-request-chart-${period}-${timestamp}`);
+      await exportChartAsPng(container, `student-help-requests-${period}-${timestamp}`);
       toast({
         title: 'Export started',
         description: 'Help request chart exported as PNG.',
-        variant: 'caregiver-success',
       });
     } catch (error) {
       console.error('Error exporting student chart image:', error);
       toast({
         title: 'Export failed',
         description: 'Unable to export the chart right now. Please try again.',
-        variant: 'caregiver-warning',
+        variant: 'destructive',
       });
     }
   };
@@ -299,7 +293,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           size="sm"
           className="w-full sm:w-auto gap-2"
           onClick={handleExportCsv}
-          disabled={!hasChartData}
+          disabled={chartData.length === 0}
         >
           <Download className="h-4 w-4" />
           Export CSV
@@ -309,7 +303,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           size="sm"
           className="w-full sm:w-auto gap-2"
           onClick={handleExportChart}
-          disabled={!hasChartData}
+          disabled={chartData.length === 0}
         >
           <ImageDown className="h-4 w-4" />
           Export PNG
