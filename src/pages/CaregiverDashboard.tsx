@@ -1710,6 +1710,7 @@ export default function CaregiverDashboard() {
                           <Button variant="outline" size="sm" className="h-8 text-xs filter-button-hover">
                             {chartPeriod.charAt(0).toUpperCase() + chartPeriod.slice(1)}
                           </Button>
+                          <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                           <DropdownMenuItem onClick={() => setChartPeriod("daily")}>Daily</DropdownMenuItem>
