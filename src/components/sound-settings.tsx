@@ -62,7 +62,7 @@ export function SoundSettings({ trigger }: SoundSettingsProps = {}) {
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         {trigger || (
-          <Button variant="ghost" size="icon" className="rounded-full">
+          <Button variant="ghost" size="icon" className="rounded-full hover:bg-gradient-hero hover:text-white hover:border-transparent dark:hover:bg-accent dark:hover:text-accent-foreground dark:hover:bg-none">
             {!hasAnySound ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
             <span className="sr-only">Notification sound settings</span>
           </Button>
