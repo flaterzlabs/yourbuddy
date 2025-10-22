@@ -1146,7 +1146,7 @@ export default function CaregiverDashboard() {
                         dataKey="period"
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fontSize: 14, fill: "currentColor", dy: 4 }} // ← aumenta o tamanho da fonte
+                        tick={{ fontSize: 14, fill: "currentColor", dy: 10 }} // ← aumenta o tamanho da fonte
                       />
                       <YAxis
                         allowDecimals={false}
