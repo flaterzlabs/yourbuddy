@@ -28,6 +28,7 @@ export function StudentStatsPopover({ userId }: StudentStatsPopoverProps) {
           <PopoverContent 
             className="w-[95vw] max-w-[500px] p-2.5 sm:p-4 md:p-6" 
             align="end"
+            asChild
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
