@@ -414,7 +414,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
             }}
             className="h-full w-full max-w-full"
           >
-            <BarChart data={chartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }} className="max-w-full">
+            <BarChart data={chartData} margin={{ left: 0, right: 5, top: 5, bottom: 5 }} className="max-w-full px-4">
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis
                 dataKey="period"
@@ -432,7 +432,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
                 className="sm:text-xs md:text-sm"
               />
               <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="ok" stackId="a" fill="hsl(142 76% 36%)" radius={[0, 0, 4, 4]} />
+              <Bar dataKey="ok" stackId="a" fill="hsl(142 76% 36%)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="attention" stackId="a" fill="hsl(48 96% 53%)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="urgent" stackId="a" fill="hsl(0 84% 60%)" radius={[4, 4, 0, 0]} />
             </BarChart>
