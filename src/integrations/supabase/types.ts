@@ -60,7 +60,6 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          message: string | null
           resolved_at: string | null
           resolved_by: string | null
           status: Database["public"]["Enums"]["request_status"] | null
@@ -71,7 +70,6 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
-          message?: string | null
           resolved_at?: string | null
           resolved_by?: string | null
           status?: Database["public"]["Enums"]["request_status"] | null
@@ -82,7 +80,6 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
-          message?: string | null
           resolved_at?: string | null
           resolved_by?: string | null
           status?: Database["public"]["Enums"]["request_status"] | null
@@ -228,25 +225,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_connection_by_code: {
-        Args: { input_code: string }
-        Returns: Json
-      }
+      create_connection_by_code: { Args: { input_code: string }; Returns: Json }
       create_student_connection_by_caregiver_code: {
         Args: { input_code: string }
         Returns: Json
       }
-      generate_student_code: {
-        Args: Record<PropertyKey, never>
+      generate_student_code: { Args: never; Returns: string }
+      get_email_by_username: {
+        Args: { input_username: string }
         Returns: string
       }
       get_user_role: {
         Args: { user_uuid: string }
         Returns: Database["public"]["Enums"]["user_role"]
-      }
-      get_email_by_username: {
-        Args: { input_username: string }
-        Returns: string | null
       }
       is_connected_to_student: {
         Args: { caregiver_uuid: string; student_uuid: string }

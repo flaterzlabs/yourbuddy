@@ -18,6 +18,16 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -45,6 +55,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
+  Unplug,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -96,6 +107,8 @@ export default function CaregiverDashboard() {
   const [requestsPage, setRequestsPage] = useState(1);
   const [requestsPeriodFilter, setRequestsPeriodFilter] = useState<"7days" | "30days" | "all">("all");
   const [requestsStatusFilter, setRequestsStatusFilter] = useState<"all" | "open" | "closed">("all");
+  const [unlinkDialogOpen, setUnlinkDialogOpen] = useState(false);
+  const [connectionToUnlink, setConnectionToUnlink] = useState<Connection | null>(null);
   const desktopChartRef = useRef<HTMLDivElement | null>(null);
   const mobileChartRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -135,6 +148,35 @@ export default function CaregiverDashboard() {
     }));
     setConnections(connectionsWithSprites);
     console.timeEnd("caregiver:fetchConnections");
+  };
+
+  const handleUnlinkStudent = async (connectionId: string) => {
+    try {
+      const { error } = await supabase
+        .from("connections")
+        .delete()
+        .eq("id", connectionId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Connection removed",
+        description: "Student has been unlinked successfully",
+        variant: "caregiver-success",
+      });
+
+      // Close dialog and refresh connections
+      setUnlinkDialogOpen(false);
+      setConnectionToUnlink(null);
+      fetchConnections();
+    } catch (error) {
+      console.error("Error unlinking student:", error);
+      toast({
+        title: "Error",
+        description: "Failed to remove connection",
+        variant: "destructive",
+      });
+    }
   };
   const fetchHelpRequests = async () => {
     console.time("caregiver:fetchHelpRequests");
@@ -1601,10 +1643,22 @@ export default function CaregiverDashboard() {
                             variant="ghost"
                             size="icon"
                             onClick={() => setSelectedStudentId(connection.student_id)}
-                            className="h-8 w-8 rounded-lg hover:bg-primary/10 transition-colors"
+                            className="h-8 w-8 rounded-lg border border-border/40 hover:bg-primary/10 transition-colors"
                             title="View Statistics"
                           >
                             <BarChart3 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              setConnectionToUnlink(connection);
+                              setUnlinkDialogOpen(true);
+                            }}
+                            className="h-8 w-8 rounded-lg border border-border/40 hover:bg-destructive/10 hover:text-destructive transition-colors"
+                            title="Remove Connection"
+                          >
+                            <Unplug className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
@@ -1819,10 +1873,22 @@ export default function CaregiverDashboard() {
                               variant="ghost"
                               size="icon"
                               onClick={() => setSelectedStudentId(connection.student_id)}
-                              className="h-7 w-7 rounded-lg hover:bg-primary/10 transition-colors"
+                              className="h-7 w-7 rounded-lg border border-border/40 hover:bg-primary/10 transition-colors"
                               title="View Statistics"
                             >
                               <BarChart3 className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                setConnectionToUnlink(connection);
+                                setUnlinkDialogOpen(true);
+                              }}
+                              className="h-7 w-7 rounded-lg border border-border/40 hover:bg-destructive/10 hover:text-destructive transition-colors"
+                              title="Remove Connection"
+                            >
+                              <Unplug className="h-3.5 w-3.5" />
                             </Button>
                           </div>
                         </div>
@@ -1850,6 +1916,32 @@ export default function CaregiverDashboard() {
               )}
             </DialogContent>
           </Dialog>
+
+          {/* Unlink Confirmation Dialog */}
+          <AlertDialog open={unlinkDialogOpen} onOpenChange={setUnlinkDialogOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Remove connection?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to unlink this student? This action cannot be undone. 
+                  You will need to reconnect using a connection code again.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    if (connectionToUnlink) {
+                      handleUnlinkStudent(connectionToUnlink.id);
+                    }
+                  }}
+                  className="bg-destructive hover:bg-destructive/90"
+                >
+                  Remove
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </div>
