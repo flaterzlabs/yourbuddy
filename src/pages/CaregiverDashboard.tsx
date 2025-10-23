@@ -1415,7 +1415,7 @@ export default function CaregiverDashboard() {
                               size="sm"
                               variant="success"
                               onClick={() => handleHelpRequestAction(request.id, "closed")}
-                              className="px-3 py-1 text-sm text-white"
+                              className="px-3 py-1 text-sm"
                             >
                               <CheckCircle className="h-4 w-4 mr-1" />
                               Mark as Complete
