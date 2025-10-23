@@ -107,6 +107,7 @@ export default function CaregiverDashboard() {
   const [requestsPage, setRequestsPage] = useState(1);
   const [requestsPeriodFilter, setRequestsPeriodFilter] = useState<"7days" | "30days" | "all">("all");
   const [requestsStatusFilter, setRequestsStatusFilter] = useState<"all" | "open" | "closed">("all");
+  const [requestsUrgencyFilter, setRequestsUrgencyFilter] = useState<"all" | "ok" | "attention" | "urgent">("all");
   const [unlinkDialogOpen, setUnlinkDialogOpen] = useState(false);
   const [connectionToUnlink, setConnectionToUnlink] = useState<Connection | null>(null);
   const desktopChartRef = useRef<HTMLDivElement | null>(null);
@@ -535,9 +536,14 @@ export default function CaregiverDashboard() {
 
       // Filter by status
       if (requestsStatusFilter === "open") {
-        return request.status === "open";
+        if (request.status !== "open") return false;
       } else if (requestsStatusFilter === "closed") {
-        return request.status === "answered" || request.status === "closed";
+        if (request.status !== "answered" && request.status !== "closed") return false;
+      }
+
+      // Filter by urgency
+      if (requestsUrgencyFilter !== "all") {
+        if (request.urgency !== requestsUrgencyFilter) return false;
       }
 
       return true;
@@ -557,6 +563,11 @@ export default function CaregiverDashboard() {
 
   const handleRequestsStatusFilterChange = (filter: "all" | "open" | "closed") => {
     setRequestsStatusFilter(filter);
+    setRequestsPage(1);
+  };
+
+  const handleRequestsUrgencyFilterChange = (filter: "all" | "ok" | "attention" | "urgent") => {
+    setRequestsUrgencyFilter(filter);
     setRequestsPage(1);
   };
 
@@ -1290,6 +1301,35 @@ export default function CaregiverDashboard() {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
+
+                    {/* Urgency Filter */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="filter-button-hover">
+                          {requestsUrgencyFilter === "all"
+                            ? "Urgency"
+                            : requestsUrgencyFilter === "ok"
+                              ? "🟢 OK"
+                              : requestsUrgencyFilter === "attention"
+                                ? "🟡 Attention"
+                                : "🔴 Urgent"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent side="top" align="start">
+                        <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("all")}>
+                          All Urgency
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("ok")}>
+                          🟢 OK
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("attention")}>
+                          🟡 Attention
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("urgent")}>
+                          🔴 Urgent
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   {/* Close All Button */}
@@ -1462,6 +1502,35 @@ export default function CaregiverDashboard() {
                       <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>Open</DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("closed")}>
                         Closed
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {/* Urgency Filter Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2">
+                        {requestsUrgencyFilter === "all"
+                          ? "Urgency"
+                          : requestsUrgencyFilter === "ok"
+                            ? "🟢"
+                            : requestsUrgencyFilter === "attention"
+                              ? "🟡"
+                              : "🔴"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
+                      <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("all")}>
+                        All
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("ok")}>
+                        🟢 OK
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("attention")}>
+                        🟡 Attention
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("urgent")}>
+                        🔴 Urgent
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
