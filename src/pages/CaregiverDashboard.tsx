@@ -1240,7 +1240,7 @@ export default function CaregiverDashboard() {
 
                 {/* Total Requests */}
                 <div className="flex justify-center mt-4">
-                  <div className="text-center p-6 bg-background/50 rounded-lg border border-border">
+                  <div className="text-center px-6 py-2 bg-background/50 rounded-lg border border-border">
                     <div className="text-3xl font-bold text-primary">
                       {helpRequestsChartData.reduce((sum, item) => sum + (item.total || 0), 0)}
                     </div>
