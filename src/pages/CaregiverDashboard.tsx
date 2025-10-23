@@ -745,7 +745,7 @@ export default function CaregiverDashboard() {
         });
       }
     } else if (chartPeriod === "weekly") {
-      for (let i = 5; i >= 0; i--) {
+      for (let i = 3; i >= 0; i--) {
         const date = subWeeks(now, i);
         const weekStart = startOfWeek(date);
         periods.push({
@@ -1240,10 +1240,11 @@ export default function CaregiverDashboard() {
 
                 {/* Total Requests */}
                 <div className="flex justify-center mt-4">
-                  <div className="text-center">
-                    <p className="text-lg font-semibold text-foreground">
-                      Total: {helpRequestsChartData.reduce((sum, item) => sum + (item.total || 0), 0)} requests
-                    </p>
+                  <div className="text-center p-4 bg-background/50 rounded-lg border border-border">
+                    <div className="text-3xl font-bold text-primary">
+                      {helpRequestsChartData.reduce((sum, item) => sum + (item.total || 0), 0)}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Total Requests</div>
                   </div>
                 </div>
               </div>
@@ -1892,10 +1893,11 @@ export default function CaregiverDashboard() {
 
                   {/* Total Requests */}
                   <div className="flex justify-center mt-3">
-                    <div className="text-center">
-                      <p className="text-sm font-semibold text-foreground">
-                        Total: {helpRequestsChartData.reduce((sum, item) => sum + (item.total || 0), 0)} requests
-                      </p>
+                    <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
+                      <div className="text-2xl font-bold text-primary">
+                        {helpRequestsChartData.reduce((sum, item) => sum + (item.total || 0), 0)}
+                      </div>
+                      <div className="text-xs text-muted-foreground">Total Requests</div>
                     </div>
                   </div>
                 </div>
