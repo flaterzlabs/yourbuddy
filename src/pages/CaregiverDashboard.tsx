@@ -1897,7 +1897,7 @@ export default function CaregiverDashboard() {
                                 </div>
                               )}
                               labelFormatter={(label, payload) => (
-                                <div className="space-y-1 p-2">
+                                <div className="space-y-1 p-4">
                                   <div className="text-sm font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
                                   <div className="text-sm text-muted-foreground font-normal">
                                     Total: {payload?.reduce((sum, item) => sum + (Number(item.value) || 0), 0)}
