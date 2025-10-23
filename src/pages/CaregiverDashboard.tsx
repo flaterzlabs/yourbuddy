@@ -1224,16 +1224,16 @@ export default function CaregiverDashboard() {
                           <ChartTooltipContent
                             formatter={(value, name, item) => (
                               <div className="flex w-full items-center justify-between gap-2">
-                                <span className="text-muted-foreground">
+                                <span className="text-sm text-muted-foreground">
                                   {name === "ok" ? "🟢 Good" : name === "attention" ? "🟡 Attention" : "🔴 Urgent"}
                                 </span>
-                                <span className="font-mono font-medium tabular-nums text-foreground">{value}</span>
+                                <span className="text-sm font-mono font-medium tabular-nums text-foreground">{value}</span>
                               </div>
                             )}
                             labelFormatter={(label, payload) => (
                               <div className="space-y-1">
-                                <div className="font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
-                                <div className="text-xs text-muted-foreground font-normal">
+                                <div className="text-sm font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
+                                <div className="text-sm text-muted-foreground font-normal">
                                   Total: {payload?.reduce((sum, item) => sum + (Number(item.value) || 0), 0)}
                                 </div>
                               </div>
@@ -1887,16 +1887,16 @@ export default function CaregiverDashboard() {
                             <ChartTooltipContent
                               formatter={(value, name, item) => (
                                 <div className="flex w-full items-center justify-between gap-2">
-                                  <span className="text-muted-foreground">
+                                  <span className="text-sm text-muted-foreground">
                                     {name === "ok" ? "🟢 Good" : name === "attention" ? "🟡 Attention" : "🔴 Urgent"}
                                   </span>
-                                  <span className="font-mono font-medium tabular-nums text-foreground">{value}</span>
+                                  <span className="text-sm font-mono font-medium tabular-nums text-foreground">{value}</span>
                                 </div>
                               )}
                               labelFormatter={(label, payload) => (
                                 <div className="space-y-1">
-                                  <div className="font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
-                                  <div className="text-xs text-muted-foreground font-normal">
+                                  <div className="text-sm font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
+                                  <div className="text-sm text-muted-foreground font-normal">
                                     Total: {payload?.reduce((sum, item) => sum + (Number(item.value) || 0), 0)}
                                   </div>
                                 </div>
