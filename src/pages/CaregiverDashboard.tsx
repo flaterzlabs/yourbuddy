@@ -1459,7 +1459,7 @@ export default function CaregiverDashboard() {
 
               <div className="space-y-3">
                 {/* Filters Row */}
-                <div className="space-y-2 px-4">
+                <div className="space-y-2 px-1">
                   {/* Three filter buttons in a grid */}
                   <div className="grid grid-cols-3 gap-2">
                     {/* Period Filter Dropdown */}
