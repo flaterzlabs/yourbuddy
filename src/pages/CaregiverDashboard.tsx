@@ -1237,6 +1237,15 @@ export default function CaregiverDashboard() {
                     </BarChart>
                   </ChartContainer>
                 </div>
+
+                {/* Total Requests */}
+                <div className="flex justify-center mt-4">
+                  <div className="text-center">
+                    <p className="text-lg font-semibold text-foreground">
+                      Total: {helpRequestsChartData.reduce((sum, item) => sum + (item.total || 0), 0)} requests
+                    </p>
+                  </div>
+                </div>
               </div>
             </Card>
 
@@ -1879,6 +1888,15 @@ export default function CaregiverDashboard() {
                         <Bar dataKey="ok" stackId="requests" fill="var(--color-ok)" />
                       </BarChart>
                     </ChartContainer>
+                  </div>
+
+                  {/* Total Requests */}
+                  <div className="flex justify-center mt-3">
+                    <div className="text-center">
+                      <p className="text-sm font-semibold text-foreground">
+                        Total: {helpRequestsChartData.reduce((sum, item) => sum + (item.total || 0), 0)} requests
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
