@@ -1459,89 +1459,92 @@ export default function CaregiverDashboard() {
 
               <div className="space-y-3">
                 {/* Filters Row */}
-                <div className="flex justify-between items-center gap-2 px-4">
-                  {/* Period Filter Dropdown */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2">
-                        {requestsPeriodFilter === "7days"
-                          ? "7d"
-                          : requestsPeriodFilter === "30days"
-                            ? "30d"
-                            : `Requests (${helpRequests.length})`}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
-                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("7days")}>
-                        Last 7 days
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("30days")}>
-                        Last 30 days
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsFilterChange("all")}>
-                        All Requests ({helpRequests.length})
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                <div className="space-y-2 px-4">
+                  {/* Three filter buttons in a grid */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {/* Period Filter Dropdown */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 w-full">
+                          {requestsPeriodFilter === "7days"
+                            ? "7d"
+                            : requestsPeriodFilter === "30days"
+                              ? "30d"
+                              : `Requests (${helpRequests.length})`}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
+                        <DropdownMenuItem onClick={() => handleRequestsFilterChange("7days")}>
+                          Last 7 days
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsFilterChange("30days")}>
+                          Last 30 days
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsFilterChange("all")}>
+                          All Requests ({helpRequests.length})
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
 
-                  {/* Status Filter Dropdown */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2">
-                        {requestsStatusFilter === "all"
-                          ? "All Status"
-                          : requestsStatusFilter === "open"
-                            ? "Open"
-                            : "Closed"}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
-                      <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("all")}>
-                        All Status
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>Open</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("closed")}>
-                        Closed
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    {/* Status Filter Dropdown */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 w-full">
+                          {requestsStatusFilter === "all"
+                            ? "All Status"
+                            : requestsStatusFilter === "open"
+                              ? "Open"
+                              : "Closed"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
+                        <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("all")}>
+                          All Status
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>Open</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("closed")}>
+                          Closed
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
 
-                  {/* Urgency Filter Dropdown */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 px-2">
-                        {requestsUrgencyFilter === "all"
-                          ? "Urgency"
-                          : requestsUrgencyFilter === "ok"
-                            ? "🟢"
-                            : requestsUrgencyFilter === "attention"
-                              ? "🟡"
-                              : "🔴"}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
-                      <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("all")}>
-                        All
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("ok")}>
-                        🟢 OK
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("attention")}>
-                        🟡 Attention
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("urgent")}>
-                        🔴 Urgent
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    {/* Urgency Filter Dropdown */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="filter-button-hover text-xs h-8 w-full">
+                          {requestsUrgencyFilter === "all"
+                            ? "Urgency"
+                            : requestsUrgencyFilter === "ok"
+                              ? "🟢"
+                              : requestsUrgencyFilter === "attention"
+                                ? "🟡"
+                                : "🔴"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start" className="z-50 bg-background border border-border">
+                        <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("all")}>
+                          All
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("ok")}>
+                          🟢 OK
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("attention")}>
+                          🟡 Attention
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsUrgencyFilterChange("urgent")}>
+                          🔴 Urgent
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
 
-                  {/* Close All Button */}
+                  {/* Close All Button - Full width below */}
                   {openHelpRequests.length > 0 && (
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handleCloseAllRequests}
-                      className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8 px-2"
+                      className="w-full border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs h-8"
                     >
                       <XCircle className="h-3 w-3 mr-1" />
                       Close All
