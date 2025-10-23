@@ -1410,15 +1410,17 @@ export default function CaregiverDashboard() {
                           </Badge>
                         </div>
                         {request.status === "open" && (
-                          <Button
-                            size="sm"
-                            variant="success"
-                            onClick={() => handleHelpRequestAction(request.id, "closed")}
-                            className="w-[50%]"
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Mark as Complete
-                          </Button>
+                          <div className="flex justify-end">
+                            <Button
+                              size="sm"
+                              variant="success"
+                              onClick={() => handleHelpRequestAction(request.id, "closed")}
+                              className="px-3 py-1 text-sm"
+                            >
+                              <CheckCircle className="h-4 w-4 mr-1" />
+                              Mark as Complete
+                            </Button>
+                          </div>
                         )}
                       </div>
                     ))
