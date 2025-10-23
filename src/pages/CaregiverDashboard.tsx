@@ -1380,10 +1380,10 @@ export default function CaregiverDashboard() {
                           <div className="flex items-center gap-2">
                             <span>{getUrgencyEmoji(request.urgency || "ok")}</span>
                             <div>
-                              <h4 className="font-semibold text-sm">
+                              <h4 className="font-semibold text-md">
                                 {request.student_profile?.username || "Unknown Student"}
                               </h4>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-sm text-muted-foreground">
                                 {new Date(request.created_at).toLocaleString("en-US")}
                               </p>
                             </div>
