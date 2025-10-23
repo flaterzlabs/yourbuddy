@@ -548,7 +548,7 @@ export default function CaregiverDashboard() {
 
       return true;
     });
-  }, [helpRequests, requestsPeriodFilter, requestsStatusFilter]);
+  }, [helpRequests, requestsPeriodFilter, requestsStatusFilter, requestsUrgencyFilter]);
 
   const totalRequestsPages = Math.ceil(filteredHelpRequests.length / REQUESTS_PER_PAGE);
   const paginatedHelpRequests = filteredHelpRequests.slice(
