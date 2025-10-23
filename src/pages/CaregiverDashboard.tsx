@@ -153,10 +153,7 @@ export default function CaregiverDashboard() {
 
   const handleUnlinkStudent = async (connectionId: string) => {
     try {
-      const { error } = await supabase
-        .from("connections")
-        .delete()
-        .eq("id", connectionId);
+      const { error } = await supabase.from("connections").delete().eq("id", connectionId);
 
       if (error) throw error;
 
@@ -1227,7 +1224,9 @@ export default function CaregiverDashboard() {
                                 <span className="text-sm text-muted-foreground">
                                   {name === "ok" ? "🟢 Good" : name === "attention" ? "🟡 Attention" : "🔴 Urgent"}
                                 </span>
-                                <span className="text-sm font-mono font-medium tabular-nums text-foreground">{value}</span>
+                                <span className="text-sm font-mono font-medium tabular-nums text-foreground">
+                                  {value}
+                                </span>
                               </div>
                             )}
                             labelFormatter={(label, payload) => (
@@ -1521,7 +1520,9 @@ export default function CaregiverDashboard() {
                         <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("all")}>
                           All Status
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>Open</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("open")}>
+                          Open
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleRequestsStatusFilterChange("closed")}>
                           Closed
                         </DropdownMenuItem>
@@ -1890,11 +1891,13 @@ export default function CaregiverDashboard() {
                                   <span className="text-sm text-muted-foreground">
                                     {name === "ok" ? "🟢 Good" : name === "attention" ? "🟡 Attention" : "🔴 Urgent"}
                                   </span>
-                                  <span className="text-sm font-mono font-medium tabular-nums text-foreground">{value}</span>
+                                  <span className="text-sm font-mono font-medium tabular-nums text-foreground">
+                                    {value}
+                                  </span>
                                 </div>
                               )}
                               labelFormatter={(label, payload) => (
-                                <div className="space-y-1">
+                                <div className="space-y-1 p-2">
                                   <div className="text-sm font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
                                   <div className="text-sm text-muted-foreground font-normal">
                                     Total: {payload?.reduce((sum, item) => sum + (Number(item.value) || 0), 0)}
@@ -2025,8 +2028,8 @@ export default function CaregiverDashboard() {
               <AlertDialogHeader>
                 <AlertDialogTitle>Remove connection?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to unlink this student? This action cannot be undone. 
-                  You will need to reconnect using a connection code again.
+                  Are you sure you want to unlink this student? This action cannot be undone. You will need to reconnect
+                  using a connection code again.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
