@@ -135,8 +135,8 @@ export function StudentStats({ userId }: StudentStatsProps) {
         periods.push({
           key: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
           date,
-          label: format(date, "dd/MM"),
-          fullLabel: format(date, "dd/MM/yyyy"),
+          label: format(date, "MM/dd"),
+          fullLabel: format(date, "MM/dd/yyyy"),
         });
       }
     } else if (period === "weekly") {
@@ -147,8 +147,8 @@ export function StudentStats({ userId }: StudentStatsProps) {
         periods.push({
           key: `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`,
           date: weekStart,
-          label: format(weekStart, "dd/MM"),
-          fullLabel: `${format(weekStart, "dd/MM")} - ${format(weekEnd, "dd/MM/yyyy")}`,
+          label: format(weekStart, "MM/dd"),
+          fullLabel: `${format(weekStart, "MM/dd")} - ${format(weekEnd, "MM/dd/yyyy")}`,
         });
       }
     } else if (period === "monthly") {
@@ -157,8 +157,8 @@ export function StudentStats({ userId }: StudentStatsProps) {
         periods.push({
           key: `${date.getFullYear()}-${date.getMonth()}`,
           date,
-          label: date.toLocaleDateString("pt-BR", { month: "short" }),
-          fullLabel: date.toLocaleDateString("pt-BR", { month: "long", year: "numeric" }),
+          label: date.toLocaleDateString("en-US", { month: "short" }),
+          fullLabel: date.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
         });
       }
     } else if (period === "quarterly") {
@@ -171,7 +171,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
           key: `${quarterStart.getFullYear()}-Q${quarter}`,
           date: quarterStart,
           label: `Q${quarter}`,
-          fullLabel: `Q${quarter} ${quarterStart.getFullYear()} (${format(quarterStart, "dd/MM")} - ${format(quarterEnd, "dd/MM/yyyy")})`,
+          fullLabel: `Q${quarter} ${quarterStart.getFullYear()} (${format(quarterStart, "MM/dd")} - ${format(quarterEnd, "MM/dd/yyyy")})`,
         });
       }
     } else if (period === "yearly") {
@@ -435,7 +435,7 @@ export function StudentStats({ userId }: StudentStatsProps) {
                 content={<ChartTooltipContent 
                   formatter={(value, name, item) => (
                     <div className="flex w-full items-center justify-between gap-2">
-                      <span className="text-muted-foreground">{name === "ok" ? "OK" : name === "attention" ? "Attention" : "Urgent"}</span>
+                      <span className="text-muted-foreground">{name === "ok" ? "🟢 OK" : name === "attention" ? "🟡 Attention" : "🔴 Urgent"}</span>
                       <span className="font-mono font-medium tabular-nums text-foreground">{value}</span>
                     </div>
                   )}
