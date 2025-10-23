@@ -431,7 +431,24 @@ export function StudentStats({ userId }: StudentStatsProps) {
                 width={25}
                 className="sm:text-xs md:text-sm"
               />
-              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartTooltip 
+                content={<ChartTooltipContent 
+                  formatter={(value, name, item) => (
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <span className="text-muted-foreground">{name === "ok" ? "OK" : name === "attention" ? "Attention" : "Urgent"}</span>
+                      <span className="font-mono font-medium tabular-nums text-foreground">{value}</span>
+                    </div>
+                  )}
+                  labelFormatter={(label, payload) => (
+                    <div className="space-y-1">
+                      <div className="font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
+                      <div className="text-xs text-muted-foreground font-normal">
+                        Total: {payload?.reduce((sum, item) => sum + (Number(item.value) || 0), 0)}
+                      </div>
+                    </div>
+                  )}
+                />} 
+              />
               <Bar dataKey="ok" stackId="a" fill="hsl(142 76% 36%)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="attention" stackId="a" fill="hsl(48 96% 53%)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="urgent" stackId="a" fill="hsl(0 84% 60%)" radius={[4, 4, 0, 0]} />
