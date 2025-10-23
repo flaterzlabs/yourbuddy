@@ -841,12 +841,12 @@ export default function CaregiverDashboard() {
       let fullLabel = "";
 
       if (chartPeriod === "daily") {
-        label = format(date, "dd/MM");
-        fullLabel = format(date, "dd/MM/yyyy");
+        label = format(date, "MM/dd");
+        fullLabel = format(date, "MM/dd/yyyy");
       } else if (chartPeriod === "weekly") {
         const weekEnd = endOfWeek(date);
-        label = `${format(date, "dd/MM")}`;
-        fullLabel = `${format(date, "dd/MM")} - ${format(weekEnd, "dd/MM/yyyy")}`;
+        label = `${format(date, "MM/dd")}`;
+        fullLabel = `${format(date, "MM/dd")} - ${format(weekEnd, "MM/dd/yyyy")}`;
       } else if (chartPeriod === "quarterly") {
         const quarterEnd = endOfQuarter(date);
         const quarter = Math.floor(date.getMonth() / 3) + 1;
@@ -1222,12 +1222,22 @@ export default function CaregiverDashboard() {
                       <ChartTooltip
                         content={
                           <ChartTooltipContent
-                            labelKey="fullLabel"
-                            labelFormatter={(value) => value}
-                            formatter={(value: any, name: string) => [
-                              value,
-                              name === "ok" ? `🟢 Good` : name === "attention" ? `🟡 Attention` : `🔴 Urgent`,
-                            ]}
+                            formatter={(value, name, item) => (
+                              <div className="flex w-full items-center justify-between gap-2">
+                                <span className="text-muted-foreground">
+                                  {name === "ok" ? "🟢 Good" : name === "attention" ? "🟡 Attention" : "🔴 Urgent"}
+                                </span>
+                                <span className="font-mono font-medium tabular-nums text-foreground">{value}</span>
+                              </div>
+                            )}
+                            labelFormatter={(label, payload) => (
+                              <div className="space-y-1">
+                                <div className="font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
+                                <div className="text-xs text-muted-foreground font-normal">
+                                  Total: {payload?.reduce((sum, item) => sum + (Number(item.value) || 0), 0)}
+                                </div>
+                              </div>
+                            )}
                           />
                         }
                       />
@@ -1875,12 +1885,22 @@ export default function CaregiverDashboard() {
                         <ChartTooltip
                           content={
                             <ChartTooltipContent
-                              labelKey="fullLabel"
-                              labelFormatter={(value) => value}
-                              formatter={(value: any, name: string) => [
-                                value,
-                                name === "ok" ? `🟢 Good` : name === "attention" ? `🟡 Attention` : `🔴 Urgent`,
-                              ]}
+                              formatter={(value, name, item) => (
+                                <div className="flex w-full items-center justify-between gap-2">
+                                  <span className="text-muted-foreground">
+                                    {name === "ok" ? "🟢 Good" : name === "attention" ? "🟡 Attention" : "🔴 Urgent"}
+                                  </span>
+                                  <span className="font-mono font-medium tabular-nums text-foreground">{value}</span>
+                                </div>
+                              )}
+                              labelFormatter={(label, payload) => (
+                                <div className="space-y-1">
+                                  <div className="font-medium">{payload?.[0]?.payload?.fullLabel || label}</div>
+                                  <div className="text-xs text-muted-foreground font-normal">
+                                    Total: {payload?.reduce((sum, item) => sum + (Number(item.value) || 0), 0)}
+                                  </div>
+                                </div>
+                              )}
                             />
                           }
                         />
